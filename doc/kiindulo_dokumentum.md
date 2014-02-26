@@ -1,4 +1,5 @@
-h1. Carcassonne
+Carcassonne
+===========
 
 A project célja a Carcassonne nevű társasjáték számítógépes megvalósítása. A játékban a játékosok egy négyzetrács alakú térképet építenek, úgy, hogy az végig folytonos maradjon, és eközben céljuk minél több pont szerzése.
 
