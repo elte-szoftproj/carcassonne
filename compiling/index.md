@@ -46,6 +46,9 @@ Eclipse projektet két módon hozhatunk létre a forráskódból:
 
 Mindkét opció ugyanúgy több projektet vesz fel, amik a különböző platformoknak felelnek meg.
 
+Ezek után a megfelelő projektekhez hozzáadhatjuk a megfelelő futtatási konfigurációkat (pl. a desktophoz a java application-t), vagy akár maven
+taskként is létrehozhatjuk őket, ugyanolyan paraméterekkel, mint a parancssori esetben.
+
 Bővebb információ
 =================
 
