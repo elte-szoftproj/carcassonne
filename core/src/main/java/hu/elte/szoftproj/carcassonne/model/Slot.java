@@ -7,8 +7,11 @@ public interface Slot {
     public static final String THIEF  = "T";
     public static final String MONK   = "M";
 
-    Tile getTile();
+    Suare getSquare();
 
-    Area getArea();
-
+    Area   getArea();
+    Place[] getPlaceList();
+    
+    void  setPiece(Piece piece);
+    Piece getPiece();
 }

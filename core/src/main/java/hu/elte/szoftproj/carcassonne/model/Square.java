@@ -9,10 +9,9 @@ public interface Square {
     int y();
 
     Tile getTile();
-    void placeTile(Tile tile);
+    // 
+    void placeTile(Tile tile, Rotation rotation);
 
     Slot[] getSlotList();
-    Slot   getSlotForSide(Facing direction);
-    Slot   getSlotForMiddle();
-
+    Slot[] getSlotListForPosition(Position position);
 }

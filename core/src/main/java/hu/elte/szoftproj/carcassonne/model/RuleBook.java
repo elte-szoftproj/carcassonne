@@ -3,7 +3,7 @@ package hu.elte.szoftproj.carcassonne.model;
 public interface RuleBook {
 
     // calculates rules for placing tiles
-    boolean canPlaceTile(Tile tile, Square square);
+    boolean canPlaceTile(Tile tile, Square square, Rotation rotation);
     boolean canPlacePiece(Piece piece, Square square, Slot slot);
 
     // turn with special semantics
@@ -14,5 +14,5 @@ public interface RuleBook {
 
     // calculates score
     float   getScoreForPiece(Piece piece);
-    int     getScoreForPlayer(Player player);
+    float   getScoreForPlayer(Player player);
 }
