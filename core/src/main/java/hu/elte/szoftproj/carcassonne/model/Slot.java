@@ -7,7 +7,7 @@ public interface Slot {
     public static final String THIEF  = "T";
     public static final String MONK   = "M";
 
-    Suare getSquare();
+    Square getSquare();
 
     Area   getArea();
     Place[] getPlaceList();

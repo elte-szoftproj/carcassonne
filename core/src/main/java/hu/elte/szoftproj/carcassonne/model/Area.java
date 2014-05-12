@@ -1,7 +1,7 @@
 package hu.elte.szoftproj.carcassonne.model;
 
 /**
- *
+ * Represents a closed area on the map
  */
 public interface Area {
 
@@ -12,7 +12,7 @@ public interface Area {
     public static final String CHATEDRAL = "Chatedral";
 
     // area type
-    Object  getType();
+    String  getType();
 
     // returns true if the area is completed
     boolean isComplete();

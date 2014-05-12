@@ -1,9 +1,12 @@
 package hu.elte.szoftproj.carcassonne.model;
 
+import java.util.Set;
+
 // type of the tiles that
 public interface Tile {
 
-    Side[] getSideList();
-    Side   getSide(Facing direction);
+    Set<Side> getSideList();
+    Side   getSide(Place direction);
 
+    boolean canPlacePieceType(String pieceType);
 }
