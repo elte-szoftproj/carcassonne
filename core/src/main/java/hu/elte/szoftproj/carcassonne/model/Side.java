@@ -1,5 +1,7 @@
 package hu.elte.szoftproj.carcassonne.model;
 
+import java.util.Set;
+
 public interface Side {
 
 	/**
@@ -14,4 +16,6 @@ public interface Side {
 	 * @return
 	 */
 	public boolean compatibleWith(Side s);
+	
+	Set<Place> getPlaces();
 }

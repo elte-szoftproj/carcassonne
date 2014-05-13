@@ -226,20 +226,73 @@ public class BasicBoard implements Board {
 	
 	private void calculateAreas(BasicSquare s) {
 		for(Place p : Place.values()) {
-			Position oth = modifyPositionFor(s.position, p);
-			if (!squares.containsKey(oth)) {
-				// nothing there => good for now
-				continue;
-			}
-			BasicSquare bs = squares.get(oth);
 			
-			if (s.getSlotAt(p).getArea() != null) {
-				// we already have an area there
+			Position oth = modifyPositionFor(s.position, p);
+			BasicSquare otherSquare = squares.get(oth);
+			
+			BasicSlot mySlot = (BasicSlot)s.getSlotAt(p);
+			BasicSlot otherSlot = otherSquare == null ? null : (BasicSlot)otherSquare.getSlotAt(p.opposite());
+			
+			if (p == Place.CENTER) {
+				// special case!
+				if (mySlot.getPlaces().size() == 1) {
+					// egydarabos area, pl. kolostor, szimplan felvesszuk
+					mySlot.setArea(new BasicArea(s, Place.CENTER));
+				} else {
+					// majd foglalkozunk vele az egyik rendes oldalnal...
+					continue;
+				}
+			}
+			
+			if (mySlot.getArea() != null) {
+				if (otherSquare != null && mySlot.getSide().getSlotType().equals(otherSlot.getSide().getSlotType())) {
+					if (!mySlot.getArea().equals(otherSlot.getArea())) {
+						// - van szembe masik terulet
+						// - azonos tipusu
+						// - masik area resze
+						mySlot.getArea().mergeTo(otherSlot.getArea());
+						// TODO: remove original area from the list
+					} else {
+						// nop, mar amugy is ugyanazok
+					}
+				} else {
+					// nem azonos tipusuak => hanyjuk, csak jelezzuk, hogy egyel kevesebb szomszedjuk / elemuk van
+					mySlot.getArea().addPart(s, p);
+					mySlot.getArea().addNeighbour(otherSlot.getArea());
+					otherSlot.getArea().addNeighbour(mySlot.getArea());
+				}
 			} else {
-				sdasdzasdasdas
+				if (otherSquare != null) {
+					if (mySlot.getSide().getSlotType().equals(otherSlot.getSide().getSlotType())) {
+						otherSlot.getArea().addPart(s, p);
+					} else {
+						mySlot.setArea(new BasicArea(s, p));
+						mySlot.getArea().addPart(s, p);
+						mySlot.getArea().addNeighbour(otherSlot.getArea());
+						otherSlot.getArea().addNeighbour(mySlot.getArea());
+					}
+					
+				} else {
+					mySlot.setArea(new BasicArea(s, p));
+				}
 			}
 		}
-		// create remaining areas
+		
+		for(Place p : Place.values()) {
+			if (p == Place.CENTER) {
+				continue;
+			}
+			
+			if (!s.getSlotAt(p).getArea().equals(s.getSlotAt(Place.CENTER).getArea())) {
+				((BasicArea)s.getSlotAt(Place.CENTER).getArea()).neighbours.add(s.getSlotAt(p).getArea());
+				((BasicArea)s.getSlotAt(p).getArea()).neighbours.add(s.getSlotAt(Place.CENTER).getArea());
+			}
+			
+			if (!s.getSlotAt(p).getArea().equals(s.getSlotAt(p.next()).getArea())) {
+				((BasicArea)s.getSlotAt(p.next()).getArea()).neighbours.add(s.getSlotAt(p).getArea());
+				((BasicArea)s.getSlotAt(p).getArea()).neighbours.add(s.getSlotAt(p.next()).getArea());
+			}
+		}
 		
 	}
 

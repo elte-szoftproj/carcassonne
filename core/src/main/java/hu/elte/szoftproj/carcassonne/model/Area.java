@@ -1,16 +1,12 @@
 package hu.elte.szoftproj.carcassonne.model;
 
+import java.util.Set;
+
 /**
  * Represents a closed area on the map
  */
 public interface Area {
-
-    // type of area (quasi enum)
-    public static final String FIELD     = "Field";
-    public static final String ROAD      = "Road";
-    public static final String CITY      = "City";
-    public static final String CHATEDRAL = "Chatedral";
-
+	
     // area type
     String  getType();
 
@@ -21,6 +17,17 @@ public interface Area {
     Piece[] getPieceList();
 
     // neighbouring areas
-    Area[] getNeighbourList();
-    Square getSquareList();
+    Set<Area> getNeighbours();
+    Set<Square> getSquares();
+    Set<Slot> getSlots();
+    
+    void addNeighbour(Area a);
+
+    /**
+     * Merges this area into the other one
+     * @param area
+     */
+	void mergeTo(Area area);
+
+	void addPart(Square s, Place direction);
 }

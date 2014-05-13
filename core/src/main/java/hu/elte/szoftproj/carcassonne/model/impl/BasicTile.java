@@ -24,6 +24,15 @@ public class BasicTile implements Tile {
 			this.slotType = slotType;
 			this.directions = directions;
 		}
+		
+		@Override
+		public Set<Place> getPlaces() {
+			Set<Place> s = new HashSet<Place>();
+			for(Place p: directions) {
+				s.add(p);
+			}
+			return s;
+		}
 
 		@Override
 		public String getSlotType() {

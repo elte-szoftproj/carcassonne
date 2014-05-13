@@ -67,4 +67,25 @@ public enum Place {
 		
 		throw new RuntimeException("Unknown enum value!");
 	}
+	
+	public Place next() {
+		switch(this) {
+		case TOP: return TOP_RIGHT_TOP;
+		case TOP_RIGHT_TOP: return TOP_RIGHT_RIGHT;
+		case TOP_RIGHT_RIGHT: return RIGHT;
+		case RIGHT: return BOTTOM_RIGHT_RIGHT;
+		case BOTTOM_RIGHT_RIGHT: return BOTTOM_RIGHT_BOTTOM;
+		case BOTTOM_RIGHT_BOTTOM: return BOTTOM;
+		case BOTTOM: return BOTTOM_LEFT_BOTTOM;
+		case BOTTOM_LEFT_BOTTOM: return BOTTOM_LEFT_LEFT;
+		case BOTTOM_LEFT_LEFT: return LEFT;
+		case LEFT: return TOP_LEFT_LEFT;
+		case TOP_LEFT_LEFT: return TOP_LEFT_TOP;
+		case TOP_LEFT_TOP: return TOP;
+		
+		case CENTER: return CENTER;
+		}
+		
+		throw new RuntimeException("Unknown enum value!");
+	}
 }
