@@ -9,6 +9,8 @@ public interface Deck {
 
 	BasicTile getStarterTile();
 
+	int getRemainingPieceCount();
+
     // TODO: statistics
 
 }

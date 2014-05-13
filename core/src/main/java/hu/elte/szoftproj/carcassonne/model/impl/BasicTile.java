@@ -15,24 +15,25 @@ public class BasicTile implements Tile {
 	Map<Place, Side> sideMap;
 	Set<Side> sides;
 	
+	String name;
+	
 	public class BasicSide implements Side {
 
 		AreaType slotType;
-		Place[] directions;
+		Set<Place> directions;
 		
 		public BasicSide(AreaType slotType, Place[] directions) {
 			super();
 			this.slotType = slotType;
-			this.directions = directions;
+			this.directions = new HashSet<Place>();
+			for(Place p: directions) {
+				this.directions.add(p);
+			}
 		}
 		
 		@Override
 		public Set<Place> getPlaces() {
-			Set<Place> s = new HashSet<Place>();
-			for(Place p: directions) {
-				s.add(p);
-			}
-			return s;
+			return directions;
 		}
 
 		@Override
@@ -47,9 +48,15 @@ public class BasicTile implements Tile {
 		
 	}
 	
-	public BasicTile() {
+	public BasicTile(String name) {
 		sideMap = new HashMap<>();
 		sides = new HashSet<>();
+		this.name = name;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
 	}
 	
 	void addSlot(AreaType type, Place[] places) {
@@ -66,6 +73,11 @@ public class BasicTile implements Tile {
 		
 	}
 	
+	void addSideToSlot(Side s, Place p) {
+		((BasicSide)s).directions.add(p);
+		sideMap.put(p,  s);
+	}
+	
 	@Override
 	public Set<Side> getSideList() {
 		return sides;
@@ -74,6 +86,13 @@ public class BasicTile implements Tile {
 	@Override
 	public Side getSide(Place direction) {
 		return sideMap.get(direction);
+	}
+	
+	void deleteSide(Side s) {
+		sides.remove(s);
+		for(Place p: s.getPlaces()) {
+			sideMap.remove(p);
+		}
 	}
 
 	@Override

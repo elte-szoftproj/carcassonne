@@ -16,8 +16,17 @@ public class BasicDeckTest {
 	}
 
 	@Test
-	public void test() {
-		fail("Not yet implemented");
+	public void testStartTile() {
+		assertEquals("city1rwe", deck.getStarterTile().getName());
 	}
 
+	@Test
+	public void testDrawing() {
+		int prev = deck.getRemainingPieceCount(); // assert terminate
+		while (deck.getRemainingPieceCount() > 0) {
+			assertNotNull(deck.drawTile());
+			assertEquals(prev-1, deck.getRemainingPieceCount());
+			prev = deck.getRemainingPieceCount();
+		}
+	}
 }

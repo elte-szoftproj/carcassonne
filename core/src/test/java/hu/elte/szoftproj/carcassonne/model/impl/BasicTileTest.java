@@ -12,7 +12,7 @@ public class BasicTileTest {
 	
 	@Before
 	public void constructTile() {
-		t = new BasicTile();
+		t = new BasicTile("randomname");
 		t.addSlot(new CityAreaType(), new Place[]{ Place.TOP, Place.TOP_LEFT_TOP, Place.TOP_RIGHT_TOP });
 		t.addSlot(new RoadAreaType(), new Place[]{ Place.CENTER, Place.BOTTOM });
 		t.addSlot(new FieldAreaType(), new Place[]{ Place.LEFT, Place.BOTTOM_LEFT_BOTTOM, Place.BOTTOM_LEFT_LEFT, Place.TOP_LEFT_LEFT });

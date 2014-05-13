@@ -25,4 +25,6 @@ public interface Tile {
      * @return true if the given type can be placed on this tile
      */
     boolean canPlacePieceType(AreaType pieceType);
+    
+    String getName();
 }
