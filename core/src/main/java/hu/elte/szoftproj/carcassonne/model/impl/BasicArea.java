@@ -71,7 +71,7 @@ public class BasicArea implements Area {
 			mergedWith.addPart(s, direction);
 			return;
 		}
-		if (s.getSlotAt(direction).getArea() != null) {
+		if (s.getSlotAt(direction).getArea() != null && s.getSlotAt(direction).getArea() != this) {
 			throw new RuntimeException("Already already set! " + direction);
 		}
 		((BasicSlot)s.getSlotAt(direction)).setArea(this);

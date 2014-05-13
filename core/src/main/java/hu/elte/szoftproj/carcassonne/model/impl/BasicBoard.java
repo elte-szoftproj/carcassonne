@@ -226,8 +226,10 @@ public class BasicBoard implements Board {
 				} else {
 					// nem azonos tipusuak => hanyjuk, csak jelezzuk, hogy egyel kevesebb szomszedjuk / elemuk van
 					mySlot.getArea().addPart(s, p);
-					mySlot.getArea().addNeighbour(otherSlot.getArea());
-					otherSlot.getArea().addNeighbour(mySlot.getArea());
+					if (otherSlot != null) {
+						mySlot.getArea().addNeighbour(otherSlot.getArea());
+						otherSlot.getArea().addNeighbour(mySlot.getArea());
+					}
 				}
 			} else {
 				if (otherSquare != null) {

@@ -20,6 +20,7 @@ public class BasicSlot implements Slot {
 		super();
 		this.square = square;
 		this.side = side;
+		this.area = null;
 	}
 
 	@Override
