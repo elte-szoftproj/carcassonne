@@ -24,5 +24,5 @@ public interface Tile {
      * @param pieceType
      * @return true if the given type can be placed on this tile
      */
-    boolean canPlacePieceType(String pieceType);
+    boolean canPlacePieceType(AreaType pieceType);
 }

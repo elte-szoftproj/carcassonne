@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import hu.elte.szoftproj.carcassonne.model.AreaType;
 import hu.elte.szoftproj.carcassonne.model.Place;
 import hu.elte.szoftproj.carcassonne.model.Side;
 import hu.elte.szoftproj.carcassonne.model.Tile;
@@ -16,10 +17,10 @@ public class BasicTile implements Tile {
 	
 	public class BasicSide implements Side {
 
-		String slotType;
+		AreaType slotType;
 		Place[] directions;
 		
-		public BasicSide(String slotType, Place[] directions) {
+		public BasicSide(AreaType slotType, Place[] directions) {
 			super();
 			this.slotType = slotType;
 			this.directions = directions;
@@ -35,13 +36,13 @@ public class BasicTile implements Tile {
 		}
 
 		@Override
-		public String getSlotType() {
+		public AreaType getType() {
 			return slotType;
 		}
 
 		@Override
 		public boolean compatibleWith(Side s) {
-			return s.getSlotType().equals(getSlotType());
+			return s.getType().equals(getType());
 		}
 		
 	}
@@ -51,7 +52,7 @@ public class BasicTile implements Tile {
 		sides = new HashSet<>();
 	}
 	
-	void addSlot(String type, Place[] places) {
+	void addSlot(AreaType type, Place[] places) {
 	
 		BasicSide bs = new BasicSide(type, places);
 		
@@ -76,7 +77,7 @@ public class BasicTile implements Tile {
 	}
 
 	@Override
-	public boolean canPlacePieceType(String pieceType) {
+	public boolean canPlacePieceType(AreaType pieceType) {
 		for (Side bs: sides) {
 			if (((BasicSide)bs).slotType.equals(pieceType)) {
 				return true;

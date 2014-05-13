@@ -8,7 +8,7 @@ public interface Side {
 	 * Returns the slot type of the side
 	 * @return
 	 */
-	String getSlotType();
+	AreaType getType();
 	
 	/**
 	 * True if the two sides can be neighboars

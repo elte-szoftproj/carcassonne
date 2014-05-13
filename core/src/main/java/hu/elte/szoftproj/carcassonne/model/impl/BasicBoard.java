@@ -245,7 +245,7 @@ public class BasicBoard implements Board {
 			}
 			
 			if (mySlot.getArea() != null) {
-				if (otherSquare != null && mySlot.getSide().getSlotType().equals(otherSlot.getSide().getSlotType())) {
+				if (otherSquare != null && mySlot.getSide().getType().equals(otherSlot.getSide().getType())) {
 					if (!mySlot.getArea().equals(otherSlot.getArea())) {
 						// - van szembe masik terulet
 						// - azonos tipusu
@@ -263,7 +263,7 @@ public class BasicBoard implements Board {
 				}
 			} else {
 				if (otherSquare != null) {
-					if (mySlot.getSide().getSlotType().equals(otherSlot.getSide().getSlotType())) {
+					if (mySlot.getSide().getType().equals(otherSlot.getSide().getType())) {
 						otherSlot.getArea().addPart(s, p);
 					} else {
 						mySlot.setArea(new BasicArea(s, p));

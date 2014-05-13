@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import hu.elte.szoftproj.carcassonne.model.Area;
+import hu.elte.szoftproj.carcassonne.model.AreaType;
 import hu.elte.szoftproj.carcassonne.model.Piece;
 import hu.elte.szoftproj.carcassonne.model.Place;
 import hu.elte.szoftproj.carcassonne.model.Slot;
@@ -11,7 +12,7 @@ import hu.elte.szoftproj.carcassonne.model.Square;
 
 public class BasicArea implements Area {
 
-	private String type;
+	private AreaType type;
 	
 	private int openPlaces;// TODO: how to manage this?
 	
@@ -32,10 +33,12 @@ public class BasicArea implements Area {
 		squares.add(s);
 		containedSlots.add(ss);
 		mergedWith = null;
+		
+		type = ss.getSide().getType();
 	}
 	
 	@Override
-	public String getType() {
+	public AreaType getType() {
 		return (mergedWith == null ? type : mergedWith.getType());
 	}
 

@@ -8,7 +8,7 @@ import java.util.Set;
 public interface Area {
 	
     // area type
-    String  getType();
+    AreaType getType();
 
     // returns true if the area is completed
     boolean isComplete();
