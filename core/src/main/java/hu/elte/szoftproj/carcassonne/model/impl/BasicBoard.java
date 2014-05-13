@@ -2,19 +2,18 @@ package hu.elte.szoftproj.carcassonne.model.impl;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import hu.elte.szoftproj.carcassonne.model.Area;
 import hu.elte.szoftproj.carcassonne.model.Board;
 import hu.elte.szoftproj.carcassonne.model.Place;
+import hu.elte.szoftproj.carcassonne.model.PositionInterface;
 import hu.elte.szoftproj.carcassonne.model.Rotation;
-import hu.elte.szoftproj.carcassonne.model.Slot;
 import hu.elte.szoftproj.carcassonne.model.Square;
 import hu.elte.szoftproj.carcassonne.model.Tile;
 
 public class BasicBoard implements Board {
 
-	public class Position implements Comparable<Position>{
+	public class Position implements Comparable<Position>, PositionInterface{
 		int x;
 		int y;
 		
@@ -22,6 +21,22 @@ public class BasicBoard implements Board {
 			super();
 			this.x = x;
 			this.y = y;
+		}
+		
+		/* (non-Javadoc)
+		 * @see hu.elte.szoftproj.carcassonne.model.impl.PositionInterface#getX()
+		 */
+		@Override
+		public int getX() {
+			return x;
+		}
+		
+		/* (non-Javadoc)
+		 * @see hu.elte.szoftproj.carcassonne.model.impl.PositionInterface#getY()
+		 */
+		@Override
+		public int getY() {
+			return y;
 		}
 		
 		@Override
@@ -49,53 +64,6 @@ public class BasicBoard implements Board {
 		public int hashCode() {
 			return new Integer(x+y).hashCode();
 		}
-	}
-	
-	public class BasicSquare implements Square {
-
-		Tile	 t;
-		Rotation r;
-		Position position;
-				
-		public BasicSquare(Tile t, Rotation r, Position position) {
-			super();
-			this.t = t;
-			this.r = r;
-			this.position = position;
-		}
-
-		@Override
-		public int getX() {
-			return position.x;
-		}
-
-		@Override
-		public int getY() {
-			return position.y;
-		}
-
-		@Override
-		public Tile getTile() {
-			return t;
-		}
-		
-		@Override
-		public Rotation getTileRotation() {
-			return r;
-		}
-
-		@Override
-		public Set<Slot> getSlotList() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public Slot getSlotAt(Place direction) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		
 	}
 	
 	Map<Position, BasicSquare> squares;
@@ -142,7 +110,7 @@ public class BasicBoard implements Board {
 			throw new RuntimeException("Not supported tile class");
 		}
 		
-		Position key = new Position(x,y);
+		PositionInterface key = new Position(x,y);
 		if(squares.containsKey(key)) {
 			return false;
 		}
@@ -201,7 +169,7 @@ public class BasicBoard implements Board {
 		return s;
 	}
 	
-	private Position modifyPositionFor(Position p, Place pl) {
+	private PositionInterface modifyPositionFor(Position p, Place pl) {
 		switch(pl) {
 		case TOP: return new Position(p.x, p.y-1);
 		case TOP_LEFT_TOP: return new Position(p.x, p.y-1);
@@ -227,7 +195,7 @@ public class BasicBoard implements Board {
 	private void calculateAreas(BasicSquare s) {
 		for(Place p : Place.values()) {
 			
-			Position oth = modifyPositionFor(s.position, p);
+			PositionInterface oth = modifyPositionFor(s.position, p);
 			BasicSquare otherSquare = squares.get(oth);
 			
 			BasicSlot mySlot = (BasicSlot)s.getSlotAt(p);
@@ -318,6 +286,16 @@ public class BasicBoard implements Board {
 	public Area[] getAreaList(Object type) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public hu.elte.szoftproj.carcassonne.model.PositionInterface getTopLeftPosition() {
+		return topLeft;
+	}
+	
+	@Override
+	public hu.elte.szoftproj.carcassonne.model.PositionInterface getBottomRightPosition() {
+		return bottomRight;
 	}
 
 }

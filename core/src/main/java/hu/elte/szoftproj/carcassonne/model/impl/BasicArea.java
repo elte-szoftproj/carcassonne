@@ -72,7 +72,7 @@ public class BasicArea implements Area {
 			return;
 		}
 		if (s.getSlotAt(direction).getArea() != null) {
-			throw new RuntimeException("Already already set!");
+			throw new RuntimeException("Already already set! " + direction);
 		}
 		((BasicSlot)s.getSlotAt(direction)).setArea(this);
 		if (direction != Place.CENTER) {

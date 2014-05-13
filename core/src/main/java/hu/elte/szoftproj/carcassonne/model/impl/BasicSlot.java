@@ -16,6 +16,12 @@ public class BasicSlot implements Slot {
 	Side side;
 	Area area;
 	
+	public BasicSlot(Square square, Side side) {
+		super();
+		this.square = square;
+		this.side = side;
+	}
+
 	@Override
 	public Square getSquare() {
 		return square;

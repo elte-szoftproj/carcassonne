@@ -14,6 +14,10 @@ public interface Board {
     // iterating tiles
     Square getStartSquare();
     Square getTileAt(int x, int y);
+    
+    PositionInterface getTopLeftPosition();
+    
+    PositionInterface getBottomRightPosition();
 
     boolean canPlaceTileAt(int x, int y, Tile t, Rotation r);
     
