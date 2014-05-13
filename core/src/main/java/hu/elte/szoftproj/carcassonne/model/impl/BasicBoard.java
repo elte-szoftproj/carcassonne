@@ -2,10 +2,13 @@ package hu.elte.szoftproj.carcassonne.model.impl;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import hu.elte.szoftproj.carcassonne.model.Area;
 import hu.elte.szoftproj.carcassonne.model.Board;
+import hu.elte.szoftproj.carcassonne.model.Place;
 import hu.elte.szoftproj.carcassonne.model.Rotation;
+import hu.elte.szoftproj.carcassonne.model.Slot;
 import hu.elte.szoftproj.carcassonne.model.Square;
 import hu.elte.szoftproj.carcassonne.model.Tile;
 
@@ -41,9 +44,61 @@ public class BasicBoard implements Board {
 			}
 			return 0;
 		}
+		
+		@Override
+		public int hashCode() {
+			return new Integer(x+y).hashCode();
+		}
 	}
 	
-	Map<Position, Square> squares;
+	public class BasicSquare implements Square {
+
+		Tile	 t;
+		Rotation r;
+		Position position;
+				
+		public BasicSquare(Tile t, Rotation r, Position position) {
+			super();
+			this.t = t;
+			this.r = r;
+			this.position = position;
+		}
+
+		@Override
+		public int getX() {
+			return position.x;
+		}
+
+		@Override
+		public int getY() {
+			return position.y;
+		}
+
+		@Override
+		public Tile getTile() {
+			return t;
+		}
+		
+		@Override
+		public Rotation getTileRotation() {
+			return r;
+		}
+
+		@Override
+		public Set<Slot> getSlotList() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public Slot getSlotAt(Place direction) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+	}
+	
+	Map<Position, BasicSquare> squares;
 	
 	Position topLeft;
 	Position bottomRight;
@@ -52,6 +107,11 @@ public class BasicBoard implements Board {
 		squares = new HashMap<>();
 		topLeft = new Position(0,0);
 		bottomRight = new Position(0,0);
+		
+		Position p = new Position(0,0);
+		squares.put(p, new BasicSquare(initialPiece, r, p));
+		
+		calculateAreas((BasicSquare)getStartSquare());
 	}
 	
 	@Override
@@ -65,21 +125,140 @@ public class BasicBoard implements Board {
 	}
 
 	@Override
-	public Square getStartTile() {
+	public Square getStartSquare() {
 		
-		return null;
+		return squares.get(new Position(0,0));
 	}
 
 	@Override
 	public Square getTileAt(int x, int y) {
-		// TODO Auto-generated method stub
-		return null;
+		return squares.get(new Position(x,y));
 	}
 
 	@Override
 	public boolean canPlaceTileAt(int x, int y, Tile t, Rotation r) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		if (!(t instanceof BasicTile)) {
+			throw new RuntimeException("Not supported tile class");
+		}
+		
+		Position key = new Position(x,y);
+		if(squares.containsKey(key)) {
+			return false;
+		}
+		int nearbyTiles = 0;
+		Square s = null;
+		if ((s = squares.get(new Position(x, y-1))) != null) { // top
+			if(!tileGoodThere(s, t, r, new Place[]{ Place.TOP_LEFT_TOP, Place.TOP, Place.TOP_RIGHT_TOP } )) {
+				return false;
+			}
+			nearbyTiles++;
+		}
+		if ((s = squares.get(new Position(x+1, y))) != null) { // right
+			if(!tileGoodThere(s, t, r, new Place[]{ Place.TOP_RIGHT_RIGHT, Place.RIGHT, Place.BOTTOM_RIGHT_RIGHT } )) {
+				return false;
+			}
+			nearbyTiles++;
+		}
+		if ((s = squares.get(new Position(x, y+1))) != null) { // bottom
+			if(!tileGoodThere(s, t, r, new Place[]{ Place.BOTTOM_LEFT_BOTTOM, Place.BOTTOM, Place.BOTTOM_RIGHT_BOTTOM } )) {
+				return false;
+			}
+			nearbyTiles++;
+		}
+		if ((s = squares.get(new Position(x-1, y))) != null) { // left
+			if(!tileGoodThere(s, t, r, new Place[]{ Place.TOP_LEFT_LEFT, Place.LEFT, Place.BOTTOM_LEFT_LEFT } )) {
+				return false;
+			}
+			nearbyTiles++;
+		}
+		
+		if (nearbyTiles == 0) {
+			return false;
+		}
+		
+		return true;
+	}
+
+	@Override
+	public Square placetileAt(int x, int y, Tile t, Rotation r) {
+		if (!canPlaceTileAt(x, y, t, r)) {
+			return null;
+		}
+		
+		Position p = new Position(x,y);
+		BasicSquare s = new BasicSquare(t,r,p);
+		squares.put(p, s);
+		
+		// update bounding box
+		if (x > bottomRight.x) { bottomRight.x = x; }
+		if (x < topLeft.x)     { topLeft.x = x; }
+		if (y > bottomRight.y) { bottomRight.y = y; }
+		if (y < topLeft.y)     { topLeft.y = y; }
+				
+		calculateAreas(s);
+		
+		return s;
+	}
+	
+	private Position modifyPositionFor(Position p, Place pl) {
+		switch(pl) {
+		case TOP: return new Position(p.x, p.y-1);
+		case TOP_LEFT_TOP: return new Position(p.x, p.y-1);
+		case TOP_RIGHT_TOP: return new Position(p.x, p.y-1);
+		
+		case BOTTOM: return new Position(p.x, p.y+1);
+		case BOTTOM_LEFT_BOTTOM: return new Position(p.x, p.y+1);
+		case BOTTOM_RIGHT_BOTTOM: return new Position(p.x, p.y+1);
+		
+		case LEFT: return new Position(p.x-1, p.y);
+		case BOTTOM_LEFT_LEFT: return new Position(p.x-1, p.y);
+		case TOP_LEFT_LEFT: return new Position(p.x-1, p.y);
+		
+		case RIGHT: return new Position(p.x+1, p.y);
+		case BOTTOM_RIGHT_RIGHT: return new Position(p.x+1, p.y);
+		case TOP_RIGHT_RIGHT: return new Position(p.x+1, p.y);
+		
+		case CENTER: return p;
+		}
+		throw new RuntimeException("unhandles place: " + p);
+	}
+	
+	private void calculateAreas(BasicSquare s) {
+		for(Place p : Place.values()) {
+			Position oth = modifyPositionFor(s.position, p);
+			if (!squares.containsKey(oth)) {
+				// nothing there => good for now
+				continue;
+			}
+			BasicSquare bs = squares.get(oth);
+			
+			if (s.getSlotAt(p).getArea() != null) {
+				// we already have an area there
+			} else {
+				sdasdzasdasdas
+			}
+		}
+		// create remaining areas
+		
+	}
+
+	/**
+	 * Checks the sides of the tiles if they are compatible 
+	 * @param s
+	 * @param t
+	 * @param r
+	 * @param places
+	 * @return
+	 */
+	private boolean tileGoodThere(Square s, Tile t, Rotation r, Place[] places) {
+		for(Place p: places) {
+			if (!t.getSide(p.opposite().rotateCw(r)).compatibleWith(s.getSlotAt(p).getSide())) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 
 	@Override

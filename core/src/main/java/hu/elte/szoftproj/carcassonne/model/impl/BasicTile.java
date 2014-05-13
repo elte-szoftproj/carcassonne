@@ -12,7 +12,7 @@ import hu.elte.szoftproj.carcassonne.model.Tile;
 public class BasicTile implements Tile {
 
 	Map<Place, Side> sideMap;
-	Set<BasicSide> sides;
+	Set<Side> sides;
 	
 	public class BasicSide implements Side {
 
@@ -28,6 +28,11 @@ public class BasicTile implements Tile {
 		@Override
 		public String getSlotType() {
 			return slotType;
+		}
+
+		@Override
+		public boolean compatibleWith(Side s) {
+			return s.getSlotType().equals(getSlotType());
 		}
 		
 	}
@@ -47,13 +52,13 @@ public class BasicTile implements Tile {
 			}
 			sideMap.put(p, bs);
 		}
+		sides.add(bs);
 		
 	}
 	
 	@Override
 	public Set<Side> getSideList() {
-		// TODO Auto-generated method stub
-		return null;
+		return sides;
 	}
 
 	@Override
@@ -63,8 +68,8 @@ public class BasicTile implements Tile {
 
 	@Override
 	public boolean canPlacePieceType(String pieceType) {
-		for (BasicSide bs: sides) {
-			if (bs.slotType.equals(pieceType)) {
+		for (Side bs: sides) {
+			if (((BasicSide)bs).slotType.equals(pieceType)) {
 				return true;
 			}
 		}

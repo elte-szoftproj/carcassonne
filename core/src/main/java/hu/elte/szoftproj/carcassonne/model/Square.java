@@ -1,17 +1,22 @@
 package hu.elte.szoftproj.carcassonne.model;
 
+import java.util.Set;
+
 public interface Square {
 
-    Square[] getNeighbourList();
-    Square   getNeighbour(Object direction);
-
-    int x();
-    int y();
+    int getX();
+    int getY();
 
     Tile getTile();
-    // 
-    void placeTile(Tile tile, Rotation rotation);
+    
+    Set<Slot> getSlotList();
 
-    Slot[] getSlotList();
-    Slot[] getSlotListForPosition(Position position);
+    /**
+     * Gets the slot for the given direction.
+     * 
+     * @param direction
+     * @return
+     */
+    Slot getSlotAt(Place direction);
+	Rotation getTileRotation();
 }

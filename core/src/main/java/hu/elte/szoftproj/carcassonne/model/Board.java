@@ -12,11 +12,15 @@ public interface Board {
     int height();
 
     // iterating tiles
-    Square getStartTile();
+    Square getStartSquare();
     Square getTileAt(int x, int y);
 
     boolean canPlaceTileAt(int x, int y, Tile t, Rotation r);
     
+    Square placetileAt(int x, int y, Tile t, Rotation r);
+    
     // iterating areas
     Area[] getAreaList(Object type);
+    
+	
 }
