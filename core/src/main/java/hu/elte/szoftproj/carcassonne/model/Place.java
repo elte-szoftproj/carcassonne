@@ -54,15 +54,15 @@ public enum Place {
 		
 		case CENTER: return CENTER;
 		
-		case TOP_LEFT_TOP: return BOTTOM_RIGHT_BOTTOM;
-		case BOTTOM_RIGHT_BOTTOM: return TOP_LEFT_TOP;
-		case TOP_RIGHT_TOP: return BOTTOM_LEFT_BOTTOM;
-		case BOTTOM_LEFT_BOTTOM: return TOP_RIGHT_TOP;
+		case TOP_LEFT_TOP: return BOTTOM_LEFT_BOTTOM;
+		case BOTTOM_RIGHT_BOTTOM: return TOP_RIGHT_TOP;
+		case TOP_RIGHT_TOP: return BOTTOM_RIGHT_BOTTOM;
+		case BOTTOM_LEFT_BOTTOM: return TOP_LEFT_TOP;
 		
-		case TOP_LEFT_LEFT: return BOTTOM_RIGHT_RIGHT;
-		case BOTTOM_RIGHT_RIGHT: return TOP_LEFT_LEFT;
-		case TOP_RIGHT_RIGHT: return BOTTOM_LEFT_LEFT;
-		case BOTTOM_LEFT_LEFT: return TOP_RIGHT_RIGHT;
+		case TOP_LEFT_LEFT: return TOP_RIGHT_RIGHT;
+		case BOTTOM_RIGHT_RIGHT: return BOTTOM_LEFT_LEFT;
+		case TOP_RIGHT_RIGHT: return TOP_LEFT_LEFT;
+		case BOTTOM_LEFT_LEFT: return BOTTOM_RIGHT_RIGHT;
 		}
 		
 		throw new RuntimeException("Unknown enum value!");
