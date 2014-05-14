@@ -1,5 +1,10 @@
 package hu.elte.szoftproj.carcassonne.model;
 
+/**
+ * Egy bábút leíró osztály.
+ * @author Zsolt
+ *
+ */
 public interface Piece {
 
     // returns the player for the piece

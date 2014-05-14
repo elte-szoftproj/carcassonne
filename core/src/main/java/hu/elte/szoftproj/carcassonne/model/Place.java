@@ -1,18 +1,34 @@
 package hu.elte.szoftproj.carcassonne.model;
 
+/**
+ * Egy pályaelem részpozícióinak a listája. 
+ * Ezek azok a pozíciók, amik az elemen a területek alapjait alkotják, illetve ahova a bábukat le lehet helyezni.
+ * 
+ * @author Zsolt
+ *
+ */
 public enum Place {
+	
+	// a negy alap egtaly
 	TOP, BOTTOM, LEFT, RIGHT,
+	
+	// az elem kozepe
 	CENTER,
 	
 	
-	// corners are split into two, because there can be two different slots on them, facing different sides of the square
+	// a sarkokat ket reszre kell bontani, az atloknak megfeleloen
 	TOP_LEFT_TOP, TOP_RIGHT_TOP,
 	BOTTOM_LEFT_BOTTOM, BOTTOM_RIGHT_BOTTOM,
 	
 	TOP_LEFT_LEFT, TOP_RIGHT_RIGHT,
 	BOTTOM_LEFT_LEFT, BOTTOM_RIGHT_RIGHT
 	;
-	
+
+	/**
+	 * visszaadja a poziciot az ora mutato jarasa szerint forgatva 
+	 * @param r
+	 * @return
+	 */
 	public Place rotateCw(Rotation r) {
 		if (r == Rotation.D0) {
 			return this;
@@ -45,6 +61,10 @@ public enum Place {
 		throw new RuntimeException("Unknown enum value!");
 	}
 	
+	/**
+	 * Visszaadja a pozicioval szemkozti elemet, azaz hogy a palyaelem mellett a megfelelo oldalon milyen pozicio talalhato mellette.
+	 * @return
+	 */
 	public Place opposite() {
 		switch(this) {
 		case TOP: return BOTTOM;
@@ -68,6 +88,10 @@ public enum Place {
 		throw new RuntimeException("Unknown enum value!");
 	}
 	
+	/**
+	 * Ora mutato jarasa szerinti iranyban melyik a kovetkezo elem.
+	 * @return
+	 */
 	public Place next() {
 		switch(this) {
 		case TOP: return TOP_RIGHT_TOP;
@@ -89,6 +113,11 @@ public enum Place {
 		throw new RuntimeException("Unknown enum value!");
 	}
 
+	/**
+	 * Ora mutato jarasaval ellentetes forgatast vegez.
+	 * @param r
+	 * @return
+	 */
 	public Place rotateCcw(Rotation r) {
 		if (r == Rotation.D0) {
 			return this;

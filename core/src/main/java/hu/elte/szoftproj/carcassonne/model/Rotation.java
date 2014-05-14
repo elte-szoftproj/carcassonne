@@ -1,8 +1,18 @@
 package hu.elte.szoftproj.carcassonne.model;
 
+/**
+ * 90 fokokban torteno forgatast leiro lista.
+ * @author Zsolt
+ *
+ */
 public enum Rotation {
+	// a negy lehetsges ertek
     D0, D90, D180, D270;
     
+    /**
+     * Megadja a forgatas mereteket fokokban
+     * @return
+     */
     public float getDegrees() {
     	switch(this) {
     	case D0: return 0.0f;
@@ -13,6 +23,10 @@ public enum Rotation {
     	return 0;
     }
     
+    /**
+     * Tovabb forgat meg 90 fokkal az ora mutato jarasaval megegyezoleg
+     * @return
+     */
     public Rotation next() {
     	switch(this) {
     	case D0: return D90;
@@ -24,6 +38,10 @@ public enum Rotation {
     	return D0;
     }
     
+    /**
+     * Az ora mutato jarasaval ellentetben forgat 90 fokkal
+     * @return
+     */
     public Rotation prev() {
     	switch(this) {
     	case D0: return D270;

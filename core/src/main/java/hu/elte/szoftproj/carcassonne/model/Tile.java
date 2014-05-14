@@ -6,25 +6,28 @@ import java.util.Set;
 public interface Tile {
 
 	/**
-	 * Get the list of the DIFFERENT regions on the Tile.
+	 *Visszaadja a palyaelem kulonbozo reszegysegeinek listajat
 	 * 
-	 * The size of this list will be at least 1, at most 9.
 	 * @return
 	 */
     Set<Side> getSideList();
     /**
-     * Get the Side object for the given direction.
+     * Visszaadja a pozicionak megfelelo reszegyseget
      * @param direction
      * @return
      */
     Side   getSide(Place direction);
 
     /**
-     * 
+     * Igaz, ha az elemre le lehet tenni adott tipusu babut.
      * @param pieceType
      * @return true if the given type can be placed on this tile
      */
     boolean canPlacePieceType(AreaType pieceType);
     
+    /**
+     * Visszaadja a palyaelemtipus nevet.
+     * @return
+     */
     String getName();
 }

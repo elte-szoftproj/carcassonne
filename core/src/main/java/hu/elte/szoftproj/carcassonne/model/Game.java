@@ -15,5 +15,4 @@ public interface Game {
     List<Player> getPlayerList();
     Board    getBoard();
     Deck     getDeck();
-    RuleBook getRuleBook();
 }
