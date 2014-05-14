@@ -21,7 +21,7 @@ public interface Board {
 
     boolean canPlaceTileAt(int x, int y, Tile t, Rotation r);
     
-    Square placetileAt(int x, int y, Tile t, Rotation r);
+    Square placeTileAt(int x, int y, Tile t, Rotation r);
     
     // iterating areas
     Area[] getAreaList(Object type);

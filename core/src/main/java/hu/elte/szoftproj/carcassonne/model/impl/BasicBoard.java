@@ -62,7 +62,7 @@ public class BasicBoard implements Board {
 		
 		@Override
 		public int hashCode() {
-			return new Integer(x+y).hashCode();
+			return new Integer(x+y*100000).hashCode();
 		}
 	}
 	
@@ -149,7 +149,7 @@ public class BasicBoard implements Board {
 	}
 
 	@Override
-	public Square placetileAt(int x, int y, Tile t, Rotation r) {
+	public Square placeTileAt(int x, int y, Tile t, Rotation r) {
 		if (!canPlaceTileAt(x, y, t, r)) {
 			return null;
 		}
