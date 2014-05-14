@@ -1,8 +1,12 @@
 package hu.elte.szoftproj.carcassonne.core;
 
+import hu.elte.szoftproj.carcassonne.model.Area;
 import hu.elte.szoftproj.carcassonne.model.Board;
 import hu.elte.szoftproj.carcassonne.model.Deck;
+import hu.elte.szoftproj.carcassonne.model.Place;
 import hu.elte.szoftproj.carcassonne.model.Rotation;
+import hu.elte.szoftproj.carcassonne.model.Side;
+import hu.elte.szoftproj.carcassonne.model.Slot;
 import hu.elte.szoftproj.carcassonne.model.Square;
 import hu.elte.szoftproj.carcassonne.model.Tile;
 import hu.elte.szoftproj.carcassonne.model.impl.BasicBoard;
@@ -41,6 +45,126 @@ public class GameMain implements ApplicationListener {
 	Tile nextTile;
 	Rotation nextTileRotation;
 	
+	class AreaPointer {
+		int dx;
+		int dy;
+		int gx, gy;
+		Place place;
+		Square square;
+		Area area;
+		
+		
+		public AreaPointer(int x, int y) {
+			super();
+			gx = unmapX(x);
+			gy = unmapY(y);
+			dx = x - mapX(gx);
+			dy = y - mapY(gy);
+			
+			place = decidePlace(dx, dy);
+			
+			square = gameBoard.getTileAt(gx, gy);
+			
+			System.out.println("Area pointer: (" + gx + ", " + gy + ", " + place + ")");
+			
+			if (square != null) {
+				area = square.getSlotAt(place).getArea();
+				
+				System.out.println("Selected area: " + area);
+				System.out.println("Slot count: " + area.getSlots().size());
+				for(Slot s: area.getSlots()) {
+					System.out.println(" - " + s.getSquare().getX() + ", " + s.getSquare().getY() + "[" + s.getPlaces() + "]");
+				}
+			}
+		}
+
+
+		private Place decidePlace(int dx2, int dy2) {
+			// TODO Auto-generated method stub
+			int mx = dx2 / 30;
+			int my = dy2 / 30;
+			
+			int rx = dx2 % 30;
+			int ry = dy2 % 30;
+			
+			System.out.println(mx);
+			System.out.println(my);
+			System.out.println(rx);
+			System.out.println(ry);
+			
+			if (mx == 1) {
+				switch(my) {
+				case 0: return Place.TOP;
+				case 1: return Place.CENTER;
+				case 2: return Place.BOTTOM;
+				}
+			}
+			if (mx == 0) {
+				switch(my) {
+				case 0: return rx > ry ? Place.TOP_LEFT_TOP : Place.TOP_LEFT_LEFT;
+				case 1: return Place.LEFT; 
+				case 2: return rx > 30 - ry ? Place.BOTTOM_LEFT_BOTTOM : Place.BOTTOM_LEFT_LEFT;
+				}
+			}
+			if (mx == 2) {
+				switch(my) {
+				case 0: return 30 - rx > ry ? Place.TOP_RIGHT_TOP : Place.TOP_RIGHT_RIGHT;
+				case 1: return Place.LEFT; 
+				case 2: return rx > ry ? Place.BOTTOM_RIGHT_RIGHT : Place.BOTTOM_RIGHT_BOTTOM;
+				}
+			}
+			return null;
+		}
+		
+		void rendereOverlay(ShapeRenderer sr) {
+			
+			if (area == null) return;
+			
+			shapeRenderer.begin(ShapeType.Filled);
+			shapeRenderer.setColor(new Color(1, 0, 0, 0.5f));
+			
+			for(Slot s: area.getSlots()) {
+				renderSlot(sr, s);
+			}
+			shapeRenderer.end();
+		}
+
+
+		private void renderSlot(ShapeRenderer sr, Slot s) {
+			int tx = mapX(s.getSquare().getX());
+			int ty = mapY(s.getSquare().getY());
+			
+			for(Place p: s.getPlaces()) {
+				renderPlace(sr, tx, ty, p);
+			}
+		}
+
+
+		private void renderPlace(ShapeRenderer sr, int tx, int ty, Place p) {
+			switch(p) {
+			case CENTER: sr.rect(tx+30, ty+30, 30, 30); break;
+			case LEFT: sr.rect(tx+0, ty+30, 30, 30); break;
+			case RIGHT: sr.rect(tx+60, ty+30, 30, 30); break;
+			case TOP: sr.rect(tx+30, ty+60, 30, 30); break;
+			case BOTTOM: sr.rect(tx+30, ty+0, 30, 30); break;
+			
+			case TOP_LEFT_TOP: sr.triangle(tx, ty+90, tx+30, ty+90, tx+30, ty+60); break;
+			case TOP_LEFT_LEFT: sr.triangle(tx, ty+90, tx+30, ty+60, tx, ty+60); break;
+			
+			case TOP_RIGHT_TOP: sr.triangle(tx+90, ty+90, tx+60, ty+90, tx+60, ty+60); break;
+			case TOP_RIGHT_RIGHT: sr.triangle(tx+90, ty+90, tx+60, ty+60, tx+90, ty+60); break;
+			
+			case BOTTOM_LEFT_BOTTOM: sr.triangle(tx, ty+0, tx+30, ty+0, tx+30, ty+30); break;
+			case BOTTOM_LEFT_LEFT: sr.triangle(tx, ty+0, tx+30, ty+30, tx, ty+30); break;
+			
+			case BOTTOM_RIGHT_BOTTOM: sr.triangle(tx+90, ty+0, tx+60, ty+0, tx+60, ty+30); break;
+			case BOTTOM_RIGHT_RIGHT: sr.triangle(tx+90, ty+0, tx+60, ty+30, tx+90, ty+30); break;
+			}
+		}
+	}
+	
+	AreaPointer areaPointer;
+	
 	@Override
 	public void create () {
 		px = 0; py = 0;
@@ -50,6 +174,8 @@ public class GameMain implements ApplicationListener {
 		// initialize game, for now just here
 		gameDeck = new BasicDeck();
 		gameBoard = new BasicBoard(gameDeck.getStarterTile(), Rotation.D0);
+		
+		areaPointer = null;
 		
 		shapeRenderer = new ShapeRenderer();
 		
@@ -91,12 +217,17 @@ public class GameMain implements ApplicationListener {
 			@Override
 			public boolean touchDown(int screenX, int screenY, int pointer,
 					int button) {
+				if (button == 0) {
 				if (screenX < 1080) {
 					if (gameBoard.canPlaceTileAt(unmapX(screenX), unmapY(screenY), nextTile, nextTileRotation)) {
-						System.out.println("placing tile! :) " + unmapX(screenX) + " " + unmapY(screenY));
+						System.out.println("placing tile! :) " + unmapX(screenX) + " " + unmapY(screenY) + " b: " + button);
 						gameBoard.placeTileAt(unmapX(screenX), unmapY(screenY), nextTile, nextTileRotation);
 						nextTile = null;
 					}
+				}
+				}
+				if (button == 1) { // right click
+					areaPointer = new AreaPointer(screenX, screenY);
 				}
 				return false;
 			}
@@ -199,6 +330,15 @@ public class GameMain implements ApplicationListener {
 		
 		drawRightBar();
 		
+		
+		
+		if (areaPointer != null) {
+			
+			Gdx.gl.glEnable(GL10.GL_BLEND);
+		    Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+			areaPointer.rendereOverlay(shapeRenderer);
+			Gdx.gl.glDisable(GL10.GL_BLEND);
+		}
 		
 	}
 	
