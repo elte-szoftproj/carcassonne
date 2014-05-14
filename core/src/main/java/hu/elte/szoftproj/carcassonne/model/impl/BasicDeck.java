@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import hu.elte.szoftproj.carcassonne.model.AreaType;
 import hu.elte.szoftproj.carcassonne.model.Deck;
@@ -22,7 +23,13 @@ public class BasicDeck implements Deck {
 	Map<BasicTile, Integer> remainingTiles;
 	List<BasicTile> randomHelper;
 	
+	Random random;
+	
 	public BasicDeck() {
+
+		long seed = System.nanoTime();
+		
+		random = new Random(seed);
 		
 		remainingTiles = new HashMap<>();
 		randomHelper = new ArrayList<>();
@@ -143,16 +150,10 @@ public class BasicDeck implements Deck {
 	
 	@Override
 	public Tile drawTile() {
-		
-		// quick fix
-		for(Tile t: randomHelper) {
-			if (t.getName().equals("city1")) {
-		//		return t;
-			}
-		}
-		
+				
+		Collections.shuffle(randomHelper, random);
 		while (remainingTiles.get(randomHelper.get(0)).equals(new Integer(0))) {
-			Collections.shuffle(randomHelper);
+			Collections.shuffle(randomHelper, random);
 		}
 		BasicTile next = randomHelper.get(0);
 		
