@@ -173,12 +173,12 @@ public class BasicBoard implements Board {
 	private PositionInterface modifyPositionFor(Position p, Place pl) {
 		switch(pl) {
 		case TOP: return new Position(p.x, p.y-1);
-		case TOP_LEFT_TOP: return new Position(p.x, p.y-1);
-		case TOP_RIGHT_TOP: return new Position(p.x, p.y-1);
+		case TOP_LEFT_TOP: return new Position(p.x, p.y+1);
+		case TOP_RIGHT_TOP: return new Position(p.x, p.y+1);
 		
-		case BOTTOM: return new Position(p.x, p.y+1);
-		case BOTTOM_LEFT_BOTTOM: return new Position(p.x, p.y+1);
-		case BOTTOM_RIGHT_BOTTOM: return new Position(p.x, p.y+1);
+		case BOTTOM: return new Position(p.x, p.y-1);
+		case BOTTOM_LEFT_BOTTOM: return new Position(p.x, p.y-1);
+		case BOTTOM_RIGHT_BOTTOM: return new Position(p.x, p.y-1);
 		
 		case LEFT: return new Position(p.x-1, p.y);
 		case BOTTOM_LEFT_LEFT: return new Position(p.x-1, p.y);

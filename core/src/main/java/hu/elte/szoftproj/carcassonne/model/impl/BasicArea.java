@@ -72,7 +72,8 @@ public class BasicArea implements Area {
 			return;
 		}
 		if (s.getSlotAt(direction).getArea() != null && s.getSlotAt(direction).getArea() != this) {
-			throw new RuntimeException("Already already set! " + direction);
+			//throw new RuntimeException("Already already set! " + direction);
+			return;
 		}
 		((BasicSlot)s.getSlotAt(direction)).setArea(this);
 		if (direction != Place.CENTER) {
@@ -91,11 +92,23 @@ public class BasicArea implements Area {
 	public Set<Square> getSquares() {
 		return (mergedWith == null ? squares : mergedWith.getSquares());
 	}
+	
+	public BasicArea getRoot() {
+		if (mergedWith != null) {
+			return ((BasicArea) mergedWith).getRoot();
+		} else {
+			return this;
+		}
+	}
 
 	@Override
 	public void mergeTo(Area area) {
-		if (mergedWith != null) {
-			mergedWith.mergeTo(area);
+		if (((BasicArea) area).getRoot() == this.getRoot()) {
+			return;
+		}
+		System.out.println("Merge: " + this + " -> " + area);
+		if (mergedWith != null && mergedWith != area) {
+			getRoot().mergeTo(area);
 		}
 		if (!area.getType().equals(getType())) {
 			throw new RuntimeException("Different area types!");
@@ -103,7 +116,7 @@ public class BasicArea implements Area {
 		if (!(area instanceof BasicArea)) {
 			throw new RuntimeException("Unsupported merge!");
 		}
-		BasicArea ba = (BasicArea)area;
+		BasicArea ba = ((BasicArea)area).getRoot();
 		ba.neighbours.addAll(neighbours);
 		ba.containedSlots.addAll(containedSlots);
 		ba.squares.addAll(squares);
@@ -112,6 +125,8 @@ public class BasicArea implements Area {
 		squares.clear();
 		neighbours.clear();
 		containedSlots.clear();
+		
+		mergedWith = area;
 	}
 
 	@Override

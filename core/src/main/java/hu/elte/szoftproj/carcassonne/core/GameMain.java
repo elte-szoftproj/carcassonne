@@ -59,16 +59,17 @@ public class GameMain implements ApplicationListener {
 			gx = unmapX(x);
 			gy = unmapY(y);
 			dx = x - mapX(gx);
-			dy = y - mapY(gy);
+			dy = y - mapY(-gy);
 			
 			place = decidePlace(dx, dy);
 			
 			square = gameBoard.getTileAt(gx, gy);
 			
-			System.out.println("Area pointer: (" + gx + ", " + gy + ", " + place + ")");
+			System.out.println("Area pointer: (" + gx + ", " + gy + ", " + place + ") " + dy);
 			
 			if (square != null) {
-				area = square.getSlotAt(place).getArea();
+				System.out.println(" -D " + square.getTile());
+				area = square.getSlotAt(place).getArea();				
 				
 				System.out.println("Selected area: " + area);
 				System.out.println("Slot count: " + area.getSlots().size());
@@ -87,6 +88,8 @@ public class GameMain implements ApplicationListener {
 			int rx = dx2 % 30;
 			int ry = dy2 % 30;
 			
+			System.out.println(dx2);
+			System.out.println(dy2);			
 			System.out.println(mx);
 			System.out.println(my);
 			System.out.println(rx);
