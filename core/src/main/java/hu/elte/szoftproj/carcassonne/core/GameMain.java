@@ -184,11 +184,11 @@ public class GameMain implements ApplicationListener {
 			for(int ix=gameBoard.getTopLeftPosition().getX()-1;ix<=gameBoard.getBottomRightPosition().getX()+1;ix++) {
 				Square s = gameBoard.getTileAt(ix, iy);
 				if (s != null) {
-					batch.draw(getTextureFor(s.getTile().getName()), mapX(ix), mapY(iy), 45.0f, 45.0f, 90.0f, 90.0f, 1.0f, 1.0f, s.getTileRotation().getDegrees());
+					batch.draw(getTextureFor(s.getTile().getName()), mapX(ix), mapY(iy), 45.0f, 45.0f, 90.0f, 90.0f, 1.0f, 1.0f, 360-s.getTileRotation().getDegrees());
 				} else {
 					if (nextTile != null && gameBoard.canPlaceTileAt(ix, iy, nextTile, nextTileRotation)) {
 						batch.setColor(1.0f, 1.0f, 0.5f, 0.3f);
-						batch.draw(getTextureFor(nextTile.getName()), mapX(ix), mapY(iy), 45.0f, 45.0f, 90.0f, 90.0f, 1.0f, 1.0f, nextTileRotation.getDegrees());
+						batch.draw(getTextureFor(nextTile.getName()), mapX(ix), mapY(iy), 45.0f, 45.0f, 90.0f, 90.0f, 1.0f, 1.0f, 360-nextTileRotation.getDegrees());
 						batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 					}
 				}
@@ -212,7 +212,7 @@ public class GameMain implements ApplicationListener {
 		batch.begin();
 		
 		if (nextTile != null) {
-			batch.draw(getTextureFor(nextTile.getName()), 1280-145, 1024-140, 45.0f, 45.0f, 90.0f, 90.0f, 1.0f, 1.0f, nextTileRotation.getDegrees());
+			batch.draw(getTextureFor(nextTile.getName()), 1280-145, 1024-140, 45.0f, 45.0f, 90.0f, 90.0f, 1.0f, 1.0f, 360-nextTileRotation.getDegrees());
 		}
 		
 		batch.end();

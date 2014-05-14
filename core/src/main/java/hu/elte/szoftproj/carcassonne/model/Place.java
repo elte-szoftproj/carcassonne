@@ -88,4 +88,18 @@ public enum Place {
 		
 		throw new RuntimeException("Unknown enum value!");
 	}
+
+	public Place rotateCcw(Rotation r) {
+		if (r == Rotation.D0) {
+			return this;
+		}
+		if (r == Rotation.D180) {
+			return this.rotateCcw(Rotation.D90).rotateCcw(Rotation.D90);
+		}
+		if (r == Rotation.D270) {
+			return this.rotateCcw(Rotation.D90).rotateCcw(Rotation.D90).rotateCcw(Rotation.D90);
+		}
+		
+		return rotateCw(Rotation.D270);
+	}
 }

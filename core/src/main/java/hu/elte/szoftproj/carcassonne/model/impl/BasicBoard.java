@@ -8,6 +8,7 @@ import hu.elte.szoftproj.carcassonne.model.Board;
 import hu.elte.szoftproj.carcassonne.model.Place;
 import hu.elte.szoftproj.carcassonne.model.PositionInterface;
 import hu.elte.szoftproj.carcassonne.model.Rotation;
+import hu.elte.szoftproj.carcassonne.model.Side;
 import hu.elte.szoftproj.carcassonne.model.Square;
 import hu.elte.szoftproj.carcassonne.model.Tile;
 
@@ -122,7 +123,7 @@ public class BasicBoard implements Board {
 			}
 			nearbyTiles++;
 		}
-		if ((s = squares.get(new Position(x+1, y))) != null) { // right
+		if ((s = squares.get(new Position(x-1, y))) != null) { // right
 			if(!tileGoodThere(s, t, r, new Place[]{ Place.TOP_RIGHT_RIGHT, Place.RIGHT, Place.BOTTOM_RIGHT_RIGHT } )) {
 				return false;
 			}
@@ -134,7 +135,7 @@ public class BasicBoard implements Board {
 			}
 			nearbyTiles++;
 		}
-		if ((s = squares.get(new Position(x-1, y))) != null) { // left
+		if ((s = squares.get(new Position(x+1, y))) != null) { // left
 			if(!tileGoodThere(s, t, r, new Place[]{ Place.TOP_LEFT_LEFT, Place.LEFT, Place.BOTTOM_LEFT_LEFT } )) {
 				return false;
 			}
@@ -276,7 +277,9 @@ public class BasicBoard implements Board {
 	 */
 	private boolean tileGoodThere(Square s, Tile t, Rotation r, Place[] places) {
 		for(Place p: places) {
-			if (!t.getSide(p.opposite().rotateCw(r)).compatibleWith(s.getSlotAt(p).getSide())) {
+			Side existingSide = s.getSlotAt(p).getSide();
+			Side facingSide = t.getSide((p.opposite().rotateCcw(r)));
+			if (!facingSide.compatibleWith(existingSide)) {
 				return false;
 			}
 		}

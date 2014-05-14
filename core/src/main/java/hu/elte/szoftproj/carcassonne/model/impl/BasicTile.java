@@ -104,6 +104,21 @@ public class BasicTile implements Tile {
 		}
 		return false;
 	}
+	
+	@Override
+	public String toString() {
+		String s = getName() + " [";
+		
+		for (Side bs: sides) {
+			s += "(";
+			s += ((BasicSide)bs).directions.toString();
+			s += ")";
+		}
+		
+		s +="]";
+		
+		return s;
+	}
 
 	
 }

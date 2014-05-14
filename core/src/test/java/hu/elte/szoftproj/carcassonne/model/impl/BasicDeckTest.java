@@ -29,4 +29,17 @@ public class BasicDeckTest {
 			prev = deck.getRemainingPieceCount();
 		}
 	}
+	
+	@Test
+	public void testDeck() {
+		BasicDeck bd = (BasicDeck)deck;
+		// road4 ok
+		// city3 ok
+		// road2sw ok
+		// city1 ok
+		// ...
+		for	(BasicTile bt: bd.randomHelper) {
+			System.out.println(bt);
+		}
+	}
 }

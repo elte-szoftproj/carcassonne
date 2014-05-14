@@ -143,6 +143,14 @@ public class BasicDeck implements Deck {
 	
 	@Override
 	public Tile drawTile() {
+		
+		// quick fix
+		for(Tile t: randomHelper) {
+			if (t.getName().equals("city1")) {
+		//		return t;
+			}
+		}
+		
 		while (remainingTiles.get(randomHelper.get(0)).equals(new Integer(0))) {
 			Collections.shuffle(randomHelper);
 		}
