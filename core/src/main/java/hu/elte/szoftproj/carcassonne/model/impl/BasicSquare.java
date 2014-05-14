@@ -11,12 +11,30 @@ import hu.elte.szoftproj.carcassonne.model.impl.BasicBoard.Position;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Egy lerakott teruletelem implementacioja
+ * @author Zsolt
+ *
+ */
 public class BasicSquare implements Square {
 
+	
+	/**
+	 * A teruletelem tipusa
+	 */
 	Tile	 t;
+	/**
+	 * A teruletelem elforgatasa
+	 */
 	Rotation r;
+	/**
+	 * A teruletelem pozicioja
+	 */
 	Position position;
 	
+	/**
+	 * A reszegysegek listaja
+	 */
 	Set<Slot> slots;
 			
 	public BasicSquare(Tile t, Rotation r, Position position) {

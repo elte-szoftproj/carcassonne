@@ -2,6 +2,12 @@ package hu.elte.szoftproj.carcassonne.model.impl;
 
 import hu.elte.szoftproj.carcassonne.model.Area;
 
+/**
+ * A mezo terulettipust megvalosito osztaly.
+ * 
+ * @author Zsolt
+ *
+ */
 public class FieldAreaType extends AbstractAreaType {
 
 	@Override

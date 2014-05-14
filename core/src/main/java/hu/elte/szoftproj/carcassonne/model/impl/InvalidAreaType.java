@@ -2,6 +2,11 @@ package hu.elte.szoftproj.carcassonne.model.impl;
 
 import hu.elte.szoftproj.carcassonne.model.Area;
 
+/**
+ * Nem hasznalhato terulettipust megvalosito osztaly (utkeresztezodesek)
+ * @author Zsolt
+ *
+ */
 public class InvalidAreaType extends AbstractAreaType {
 
 	@Override

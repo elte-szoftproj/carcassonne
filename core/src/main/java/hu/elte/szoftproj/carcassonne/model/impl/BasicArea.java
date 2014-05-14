@@ -10,18 +10,47 @@ import hu.elte.szoftproj.carcassonne.model.Place;
 import hu.elte.szoftproj.carcassonne.model.Slot;
 import hu.elte.szoftproj.carcassonne.model.Square;
 
+/**
+ * Egy teruletet implementalo osztaly.
+ * @author Zsolt
+ *
+ */
 public class BasicArea implements Area {
 
+	/**
+	 * A terulet tipusa
+	 */
 	private AreaType type;
 	
-	private int openPlaces;// TODO: how to manage this?
+	/**
+	 * A meg nyitott oldalak szama
+	 */
+	private int openPlaces;
 	
+	/**
+	 * A terulet reszet kepezo palyaelemek listaja
+	 */
 	private Set<Square> squares;
+	/**
+	 * A terulet reszet kepezo reszelemek
+	 */
 	private Set<Slot> containedSlots;
+	
+	/**
+	 * Szomszedos teruletek
+	 */
 	Set<Area> neighbours;
 	
+	/**
+	 * Egy masik terulet, amivel ezt egyesitettek. Ha meg nem olvasztottak ossze semmivel, null.
+	 */
 	Area mergedWith;
 	
+	/**
+	 * Terulet letrehozasa adott kezdoelem egy poziciojaval
+	 * @param s
+	 * @param direction
+	 */
 	public BasicArea(Square s, Place direction) {
 		
 		squares = new HashSet<>();
@@ -65,6 +94,7 @@ public class BasicArea implements Area {
 		openPlaces--;
 	}
 	
+	@Override
 	public void addPart(Square s, Place direction) {
 		
 		if (mergedWith != null) {
@@ -93,6 +123,10 @@ public class BasicArea implements Area {
 		return (mergedWith == null ? squares : mergedWith.getSquares());
 	}
 	
+	/**
+	 * Visszaadja az egysegesitek soran keletkezett aktualis szuloelemet.
+	 * @return
+	 */
 	public BasicArea getRoot() {
 		if (mergedWith != null) {
 			return ((BasicArea) mergedWith).getRoot();

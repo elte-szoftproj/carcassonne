@@ -10,10 +10,24 @@ import hu.elte.szoftproj.carcassonne.model.Side;
 import hu.elte.szoftproj.carcassonne.model.Slot;
 import hu.elte.szoftproj.carcassonne.model.Square;
 
+/**
+ * Egy lerakott teruletelem reszegyseget implementalo osztaly
+ * @author Zsolt
+ *
+ */
 public class BasicSlot implements Slot {
 
+	/**
+	 * A lerakott elem
+	 */
 	Square square;
+	/**
+	 * Az elem reszegysege
+	 */
 	Side side;
+	/**
+	 * A hozza tartozo terulet
+	 */
 	Area area;
 	
 	public BasicSlot(Square square, Side side) {
@@ -33,6 +47,10 @@ public class BasicSlot implements Slot {
 		return area;
 	}
 	
+	/**
+	 * Hozzarendeli a teruletet
+	 * @param area
+	 */
 	public void setArea(Area area) {
 		this.area = area;
 	}

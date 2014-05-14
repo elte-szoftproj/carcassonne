@@ -2,6 +2,11 @@ package hu.elte.szoftproj.carcassonne.model.impl;
 
 import hu.elte.szoftproj.carcassonne.model.Area;
 
+/**
+ * Templom terulettipust megvalosito osztaly
+ * @author Zsolt
+ *
+ */
 public class MonasteryAreaType extends AbstractAreaType {
 
 	@Override

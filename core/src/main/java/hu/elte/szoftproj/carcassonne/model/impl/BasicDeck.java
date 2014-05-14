@@ -14,17 +14,42 @@ import hu.elte.szoftproj.carcassonne.model.Place;
 import hu.elte.szoftproj.carcassonne.model.Side;
 import hu.elte.szoftproj.carcassonne.model.Tile;
 
+/**
+ * A carcassonne alapjatek paklijanak a megvalositasa.
+ * 
+ * A pakli a pajzsos elemek helyett sima, pajzs nelkuli elemeket tartalmaz.
+ * @author Zsolt
+ *
+ */
 public class BasicDeck implements Deck {
 
+	/**
+	 * A meg a pakliban levo elemek szama
+	 */
 	int remainingPieces;
 	
+	/**
+	 * A kezdoelem
+	 */
 	BasicTile starterTile;
 	
+	/**
+	 * Hatralevo elemek: milyen tipusubol, hany darab van hatra
+	 */
 	Map<BasicTile, Integer> remainingTiles;
+	/**
+	 * Segedtomb a paklibol torteno veletlenszeru huzashoz
+	 */
 	List<BasicTile> randomHelper;
 	
+	/**
+	 * Veletlengenerator
+	 */
 	Random random;
 	
+	/**
+	 * Feltolti a paklit
+	 */
 	public BasicDeck() {
 
 		long seed = System.nanoTime();
@@ -40,14 +65,14 @@ public class BasicDeck implements Deck {
 		addTile(createTile("city3", 	"CCCCC-CCC-CFFFC"), 4);
 		addTile(createTile("city2we", 	"CFFFC-CCC-CFFFC"), 3);
 		addTile(createTile("city2nw",	"CCCCF-CFF-CFFFF"), 5);
-		addTile(createTile("city11ne",	"FCCCC-FFC-FFFFC"), 2); // BAD, REWRITE: this is two city!
+		addTile(createTile("city11ne",	"FCCCC-FFC-FFFFC"), 2); // TODO BAD, REWRITE: this is two city!
 		addTile(createTile("city11we", 	"CFFFC-CFC-CFFFC"), 3);
 		addTile(createTile("city1", 	"FCCCF-FFF-FFFFF"), 3);
 		
 		addTile(createTile("city3r", 	"CCCCC-CCC-CFRFC"), 3);
-		addTile(createTile("city2nwr", 	"CCCCF-CFR-CFRFF"), 5); // BAD, REWRITE: roads are connected!!!
-		addTile(createTile("city1rse", 	"FCCCF-FRR-FFRFF"), 3); // BAD, ROADS!
-		addTile(createTile("city1rsw", 	"FCCCF-RRF-FFRFF"), 3); // BAD, ROADS!
+		addTile(createTile("city2nwr", 	"CCCCF-CFR-CFRFF"), 5); // TODO BAD, REWRITE: roads are connected!!!
+		addTile(createTile("city1rse", 	"FCCCF-FRR-FFRFF"), 3); // TODO BAD, ROADS!
+		addTile(createTile("city1rsw", 	"FCCCF-RRF-FFRFF"), 3); // TODO BAD, ROADS!
 		addTile(createTile("city1rswe", "FCCCF-RFR-FFRFF"), 3);
 		addTile(starterTile, 3);
 		
@@ -67,12 +92,22 @@ public class BasicDeck implements Deck {
 		return starterTile;
 	}
 	
+	/**
+	 * Hozzaadja az elemet a paklihoz
+	 * @param t
+	 * @param num
+	 */
 	protected void addTile(BasicTile t, int num) {
 		remainingTiles.put(t, new Integer(num));
 		remainingPieces+=num;
 		randomHelper.add(t);
 	}
 	
+	/**
+	 * A belso egy karakterbol allo tipusreprezentacit a terulettipusok nevenek megfelelo stringge alakitja 
+	 * @param c
+	 * @return
+	 */
 	protected String getSlotTypeFor(char c) {
 		switch(c) {
 		case 'F': return "field";
@@ -84,7 +119,12 @@ public class BasicDeck implements Deck {
 		return null;
 	}
 	
-	protected AreaType generateAt(char type) {
+	/**
+	 * A belso egy karakterbol allo tipusreprezentaciot terulettipussa alakitja
+	 * @param type
+	 * @return
+	 */
+	protected AreaType generateAreaType(char type) {
 		switch(type) {
 		case 'F': return new FieldAreaType();
 		case 'C': return new CityAreaType();
@@ -95,21 +135,38 @@ public class BasicDeck implements Deck {
 		return null;
 	}
 	
+	/**
+	 * Hozzaad egy uj reszegyseget a palyaelemhez, vagy bovit mar egy meglevot.
+	 * @param bt
+	 * @param newC
+	 * @param prevC
+	 * @param newPos
+	 * @param prevPos
+	 */
 	protected void addOneMoreSlot(BasicTile bt, char newC, char prevC, Place newPos, Place prevPos) {
 		if (prevC == newC) {
 			bt.addSideToSlot(bt.getSide(prevPos), newPos);
 		} else {
-			bt.addSlot(generateAt(newC), new Place[] { newPos });
+			bt.addSlot(generateAreaType(newC), new Place[] { newPos });
 		}
 	}
 	
+	/**
+	 * Hozzaad egy uj reszegyseget a palyaelemhez, bovit mar egy meglevot, vagy egyesit ket meglevot.
+	 * @param bt
+	 * @param newC
+	 * @param prevC
+	 * @param newPos
+	 * @param prevPos
+	 * @param collapse
+	 */
 	protected void addOneMoreSlot(BasicTile bt, char newC, char prevC, Place newPos, Place prevPos, Side collapse) {
 		if (prevC == newC) {
 			bt.addSideToSlot(bt.getSide(prevPos), newPos);
 		} else if ( collapse.getType().getName().equals(getSlotTypeFor(newC)) ){ // second direction!
 			bt.addSideToSlot(collapse, newPos);
 		} else {
-			bt.addSlot(generateAt(newC), new Place[] { newPos });
+			bt.addSlot(generateAreaType(newC), new Place[] { newPos });
 		}
 		
 		if (newC == prevC && collapse.getType().getName().equals(getSlotTypeFor(newC)) && !collapse.equals(bt.getSide(newPos))) {
@@ -120,11 +177,17 @@ public class BasicDeck implements Deck {
 		}
 	}
 	
+	/**
+	 * Felepit egy egyszeru string reprezentaciobol egy palyaelemet.
+	 * @param fileName A palyaelem kepenek a neve
+	 * @param config A palyaelemet leiro string, TTTTT-CCC-BBBBBB formatumban
+	 * @return
+	 */
 	protected BasicTile createTile(String fileName, String config) {
 		BasicTile bt = new BasicTile(fileName);
 		String[] c = config.split("-");
 		
-		bt.addSlot(generateAt(c[0].charAt(0)), new Place[] { Place.TOP_LEFT_LEFT });
+		bt.addSlot(generateAreaType(c[0].charAt(0)), new Place[] { Place.TOP_LEFT_LEFT });
 		addOneMoreSlot(bt, c[0].charAt(1), c[0].charAt(0), Place.TOP_LEFT_TOP, Place.TOP_LEFT_LEFT);
 		addOneMoreSlot(bt, c[0].charAt(2), c[0].charAt(1), Place.TOP, Place.TOP_LEFT_TOP);
 		addOneMoreSlot(bt, c[0].charAt(3), c[0].charAt(2), Place.TOP_RIGHT_TOP, Place.TOP);

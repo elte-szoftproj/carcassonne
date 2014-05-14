@@ -3,6 +3,11 @@ package hu.elte.szoftproj.carcassonne.model.impl;
 import hu.elte.szoftproj.carcassonne.model.Area;
 import hu.elte.szoftproj.carcassonne.model.AreaType;
 
+/**
+ * A varos terulettipust megvalosito osztaly
+ * @author Zsolt
+ *
+ */
 public class CityAreaType extends AbstractAreaType implements AreaType {
 
 	@Override

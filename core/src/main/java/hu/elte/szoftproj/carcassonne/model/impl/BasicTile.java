@@ -10,16 +10,41 @@ import hu.elte.szoftproj.carcassonne.model.Place;
 import hu.elte.szoftproj.carcassonne.model.Side;
 import hu.elte.szoftproj.carcassonne.model.Tile;
 
+/**
+ * Egy teruletelem tipus implementacioja
+ * @author Zsolt
+ *
+ */
 public class BasicTile implements Tile {
 
+	/**
+	 * Poziciok es reszegysegek osszerendelese
+	 */
 	Map<Place, Side> sideMap;
+	/**
+	 * Reszegysegek
+	 */
 	Set<Side> sides;
 	
+	/**
+	 * A terulettipus neve
+	 */
 	String name;
 	
+	/**
+	 * Egy reszegyseg implemetacioja
+	 * @author Zsolt
+	 *
+	 */
 	public class BasicSide implements Side {
 
+		/**
+		 * A reszegyseg tipusa
+		 */
 		AreaType slotType;
+		/**
+		 * A reszegyseget alkoto poziciok listaja
+		 */
 		Set<Place> directions;
 		
 		public BasicSide(AreaType slotType, Place[] directions) {
@@ -59,6 +84,11 @@ public class BasicTile implements Tile {
 		return name;
 	}
 	
+	/**
+	 * Felvesz egy uj reszegyseget
+	 * @param type
+	 * @param places
+	 */
 	void addSlot(AreaType type, Place[] places) {
 	
 		BasicSide bs = new BasicSide(type, places);
@@ -73,6 +103,11 @@ public class BasicTile implements Tile {
 		
 	}
 	
+	/**
+	 * Kiboviti a reszegyseget megegy pozicioval
+	 * @param s
+	 * @param p
+	 */
 	void addSideToSlot(Side s, Place p) {
 		((BasicSide)s).directions.add(p);
 		sideMap.put(p,  s);
@@ -88,6 +123,10 @@ public class BasicTile implements Tile {
 		return sideMap.get(direction);
 	}
 	
+	/**
+	 * Kitorol egy reszegyseget
+	 * @param s
+	 */
 	void deleteSide(Side s) {
 		sides.remove(s);
 		for(Place p: s.getPlaces()) {

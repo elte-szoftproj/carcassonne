@@ -12,8 +12,19 @@ import hu.elte.szoftproj.carcassonne.model.Side;
 import hu.elte.szoftproj.carcassonne.model.Square;
 import hu.elte.szoftproj.carcassonne.model.Tile;
 
+/**
+ * A jatekter implementacioja.
+ * 
+ * @author Zsolt
+ *
+ */
 public class BasicBoard implements Board {
 
+	/**
+	 * A jatekter egy pozicioja
+	 * @author Zsolt
+	 *
+	 */
 	public class Position implements Comparable<Position>, PositionInterface{
 		int x;
 		int y;
@@ -67,11 +78,25 @@ public class BasicBoard implements Board {
 		}
 	}
 	
+	/**
+	 * A jatekter elemei
+	 */
 	Map<Position, BasicSquare> squares;
 	
+	/**
+	 * A jatekter bal felso koordinataja
+	 */
 	Position topLeft;
+	/**
+	 * A jatekter jobb also koordinataja
+	 */
 	Position bottomRight;
 	
+	/**
+	 * Letrehoz egy uj palyat a kezdoelem segitsegevel
+	 * @param initialPiece
+	 * @param r
+	 */
 	public BasicBoard(Tile initialPiece, Rotation r) {
 		squares = new HashMap<>();
 		topLeft = new Position(0,0);
@@ -170,6 +195,12 @@ public class BasicBoard implements Board {
 		return s;
 	}
 	
+	/**
+	 * Megadja, hogy egy adott pozicion talalhato palyaelem adott reszpoziciojahoz milyen pozicioban kell keresnunk a szomszedos elemet.
+	 * @param p
+	 * @param pl
+	 * @return
+	 */
 	private PositionInterface modifyPositionFor(Position p, Place pl) {
 		switch(pl) {
 		case TOP: return new Position(p.x, p.y-1);
@@ -193,6 +224,12 @@ public class BasicBoard implements Board {
 		throw new RuntimeException("unhandles place: " + p);
 	}
 	
+	/**
+	 * Letrehozza / kijeloli a(z uj) palyaelemhez tartozo teruleteket. 
+	 * Amennyiben talal a reszegyseghez megfelelo szomszedos teruletet, azt hasznalja. Amennyiben nem, letrehoz egyet.
+	 * Amennyiben ket szomszedosat is talal ami megfelelne, egyesiti oket.
+	 * @param s
+	 */
 	private void calculateAreas(BasicSquare s) {
 		for(Place p : Place.values()) {
 			
@@ -268,7 +305,8 @@ public class BasicBoard implements Board {
 	}
 
 	/**
-	 * Checks the sides of the tiles if they are compatible 
+	 * Megnezi, hogy egy mar lerakott palyaelem es egy palyaelem-tipus megadott oldalai kompatibilisek e egymassal.
+	 * 
 	 * @param s
 	 * @param t
 	 * @param r
