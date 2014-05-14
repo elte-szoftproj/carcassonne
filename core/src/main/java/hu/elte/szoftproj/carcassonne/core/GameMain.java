@@ -158,7 +158,7 @@ public class GameMain implements ApplicationListener {
 	}
 	
 	int mapY(int y) {
-		return (py-y)*90+(1024/2)-45;
+		return (py+y)*90+(1024/2)-45;
 	}
 	
 	int unmapX(int x) {
@@ -166,7 +166,7 @@ public class GameMain implements ApplicationListener {
 	}
 	
 	int unmapY(int y) {
-		return (int) (Math.floor((y+45-(1024/2)) / 90.0f)+py);
+		return (int) (Math.floor((y+45-(1024/2)) / 90.0f)+py)*-1;
 	}
 
 	@Override
