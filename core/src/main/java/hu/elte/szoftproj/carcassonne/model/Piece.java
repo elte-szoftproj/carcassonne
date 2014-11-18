@@ -1,7 +1,7 @@
 package hu.elte.szoftproj.carcassonne.model;
 
 /**
- * Egy bábút leíró osztály.
+ * Egy b!b!t le!r! oszt!ly.
  * @author Zsolt
  *
  */

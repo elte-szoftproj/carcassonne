@@ -1,8 +1,8 @@
 package hu.elte.szoftproj.carcassonne.model;
 
 /**
- * Egy pályaelem részpozícióinak a listája. 
- * Ezek azok a pozíciók, amik az elemen a területek alapjait alkotják, illetve ahova a bábukat le lehet helyezni.
+ * Egy p!lyaelem r!szpoz!ci!inak a list!ja. 
+ * Ezek azok a poz!ci!k, amik az elemen a ter!letek alapjait alkotj!k, illetve ahova a b!bukat le lehet helyezni.
  * 
  * @author Zsolt
  *

@@ -32,30 +32,30 @@ public interface Area {
     Set<Area> getNeighbours();
     
     /**
-     * Visszaadja a terulet elemeit tartalmazó pályaelemek listáját
+     * Visszaadja a terulet elemeit tartalmazo palyaelemek listajat
      * @return
      */
     Set<Square> getSquares();
     
     /**
-     * Visszaadja a terület részelemeit
+     * Visszaadja a terulet reszelemeit
      * @return
      */
     Set<Slot> getSlots();
     
     /**
-     * Hozzáad egy új szomszédot a területhez
+     * Hozzaad egy uj szomszedot a terulethez
      * @param a
      */
     void addNeighbour(Area a);
 
     /**
-     * Egyesíti a két területet.
+     * Egyeseti a ket teruletet.
      */
 	void mergeTo(Area area);
 
 	/**
-	 * Hozzáad egy új elemet a területhez.
+	 * Hozzaad egy uj elemet a terulethez.
 	 * @param s
 	 * @param direction
 	 */

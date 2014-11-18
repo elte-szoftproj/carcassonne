@@ -1,20 +1,20 @@
 package hu.elte.szoftproj.carcassonne.model;
 
 /**
- * Egy területtípust leíró osztály
+ * Egy ter!0lett!pust le!r! oszt!ly
  * @author Zsolt
  *
  */
 public interface AreaType {
 
 	/**
-	 * A területtípus neve
+	 * A ter!lett!pus neve
 	 * @return
 	 */
 	public String getName();
 	
 	/**
-	 * Meghatározza a paraméterként átadott, ilyen típusú terület pontszámát
+	 * Meghat!rozza a param!terk!nt !tadott, ilyen t!pus! ter!let pontsz!m!t
 	 * @param a
 	 * @return
 	 */

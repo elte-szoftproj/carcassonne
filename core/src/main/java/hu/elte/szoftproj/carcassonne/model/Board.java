@@ -1,31 +1,31 @@
 package hu.elte.szoftproj.carcassonne.model;
 
 /**
- * A játék pályája. A kezdõelem a 0,0 pontban található, onnan bármilyen irányba tetszõleges hosszan terjeszkedhet.
+ * A jat!k p!ly!ja. A kezd!elem a 0,0 pontban tal!lhat!, onnan b!rmilyen ir!nyba tetsz!leges hosszan terjeszkedhet.
  * 
  *
  */
 public interface Board {
 
     /**
-     * A pálya aktuális szélessége
+     * A p!lya aktu!lis sz!less!ge
      * @return
      */
     int width();
     
     /**
-     * A pálya aktuális magassága
+     * A p!lya aktu!lis magass!ga
      * @return
      */
     int height();
 
     /**
-     * Visszaadja a kezdõelemet
+     * Visszaadja a kezd!elemet
      * @return
      */
     Square getStartSquare();
     /**
-     * Visszaadja az adott koordinátájú elemet
+     * Visszaadja az adott koordin!t!j! elemet
      * @param x
      * @param y
      * @return
@@ -33,29 +33,29 @@ public interface Board {
     Square getTileAt(int x, int y);
     
     /**
-     * Visszaadja a pálya bal felsõ elemének koordinátáit
+     * Visszaadja a p!lya bal fels! elem!nek koordin!t!it
      * @return
      */
     PositionInterface getTopLeftPosition();
     
     /**
-     * Visszaadja a pálya jobb alsó elemének a koordinátáit
+     * Visszaadja a p!lya jobb als! elem!nek a koordin!t!it
      * @return
      */
     PositionInterface getBottomRightPosition();
 
     /**
-     * Igaz, ha a megadott paraméterekkel le lehet tenni egy új elemet
-     * @param x az új elem x koordinátája
-     * @param y az új elem y koordinátája
-     * @param t az új elem típusa
-     * @param r az új elem elforgatása
+     * Igaz, ha a megadott param!terekkel le lehet tenni egy !j elemet
+     * @param x az !j elem x koordin!t!ja
+     * @param y az !j elem y koordin!t!ja
+     * @param t az !j elem t!pusa
+     * @param r az !j elem elforgat!sa
      * @return
      */
     boolean canPlaceTileAt(int x, int y, Tile t, Rotation r);
     
     /**
-     * Letesz egy új elemet, ha lehetséges. Ha nem, nem történik semmi. A paraméterek azonosak a canPlaceTileAt eljárással.
+     * Letesz egy !j elemet, ha lehets!ges. Ha nem, nem t!rt!nik semmi. A param!terek azonosak a canPlaceTileAt elj!r!ssal.
      * 
      * @param x
      * @param y
@@ -66,7 +66,7 @@ public interface Board {
     Square placeTileAt(int x, int y, Tile t, Rotation r);
     
     /**
-     * Visszaadja a pálya összes aktív (nem másikkal egyesített) területét
+     * Visszaadja a p!lya !sszes akt!v (nem m!sikkal egyes!tett) ter!let!t
      * @param type
      * @return
      */
