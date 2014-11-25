@@ -1,10 +1,10 @@
-package hu.elte.szoftproj.carcassonne.persistence;
+package hu.elte.szoftproj.carcassonne.service;
 
 import hu.elte.szoftproj.carcassonne.domain.Game;
 
 import java.util.List;
 
-public interface LobbyDao {
+public interface LobbyService {
 
     Game createNewGame(String initialPlayerName, String boardName);
 
@@ -14,5 +14,7 @@ public interface LobbyDao {
 
     Game getGameById(String gameId);
 
-    Game updateGameInfo(Game newGameInfo);
+    Game joinGame(String gameId, String player, boolean ai);
+
+    Game startGame(String gameId);
 }

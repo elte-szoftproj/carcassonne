@@ -4,8 +4,8 @@ package hu.elte.szoftproj.carcassonne.persistence.server.rest;
 import com.google.common.collect.ImmutableList;
 import hu.elte.szoftproj.carcassonne.domain.Game;
 import hu.elte.szoftproj.carcassonne.domain.Player;
-import hu.elte.szoftproj.carcassonne.persistence.LobbyDao;
 import hu.elte.szoftproj.carcassonne.persistence.dto.lobby.*;
+import hu.elte.szoftproj.carcassonne.service.LobbyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +18,7 @@ import java.util.LinkedList;
 public class LobbyResource {
 
     @Autowired
-    LobbyDao dao;
+    LobbyService service;
 
     @GET
      @Produces({MediaType.APPLICATION_JSON})
@@ -27,7 +27,7 @@ public class LobbyResource {
         try {
             LinkedList<GameDto> retList = new LinkedList<>();
 
-            for (Game g : dao.listWaitingGames()) {
+            for (Game g : service.listWaitingGames()) {
                 retList.push(gameToDto(g));
             }
 
@@ -44,7 +44,7 @@ public class LobbyResource {
         try {
             LinkedList<GameDto> retList = new LinkedList<>();
 
-            for (Game g : dao.listActiveGames()) {
+            for (Game g : service.listActiveGames()) {
                 retList.push(gameToDto(g));
             }
 
@@ -60,7 +60,7 @@ public class LobbyResource {
     @Path("create")
     public SingleGameDto createGame(GameCreateActionDto gcd) {
         try {
-            return new SingleGameDto(gameToDto(dao.createNewGame(gcd.getPlayerName(), gcd.getBoardName())), "OK");
+            return new SingleGameDto(gameToDto(service.createNewGame(gcd.getPlayerName(), gcd.getBoardName())), "OK");
         } catch (IllegalArgumentException e) {
             return new SingleGameDto(null, "ERROR_NO_SUCH_BOARD");
         } catch (Exception e) {
@@ -74,9 +74,9 @@ public class LobbyResource {
      @Path("join/ai")
      public SingleGameDto joinGameWithAi(GameJoinActionDto gcd) {
         try {
-            return new SingleGameDto(gameToDto(dao.joinGame(gcd.getGameId(), gcd.getPlayerName(), true)), "OK");
+            return new SingleGameDto(gameToDto(service.joinGame(gcd.getGameId(), gcd.getPlayerName(), true)), "OK");
         } catch (IllegalArgumentException e) {
-            // TODO: response is based on a dao string, that's bad!
+            // TODO: response is based on a service string, that's bad!
             return new SingleGameDto(null, "ERROR_"+e.getMessage());
         } catch (Exception e) {
             return new SingleGameDto(null, "ERROR_UNKNOWN");
@@ -89,9 +89,9 @@ public class LobbyResource {
     @Path("join")
     public SingleGameDto joinGame(GameJoinActionDto gcd) {
         try {
-            return new SingleGameDto(gameToDto(dao.joinGame(gcd.getGameId(), gcd.getPlayerName(), false)), "OK");
+            return new SingleGameDto(gameToDto(service.joinGame(gcd.getGameId(), gcd.getPlayerName(), false)), "OK");
         } catch (IllegalArgumentException e) {
-            // TODO: response is based on a dao string, that's bad!
+            // TODO: response is based on a service string, that's bad!
             return new SingleGameDto(null, "ERROR_"+e.getMessage());
         } catch (Exception e) {
             return new SingleGameDto(null, "ERROR_UNKNOWN");
@@ -104,9 +104,9 @@ public class LobbyResource {
     @Path("start")
     public SingleGameDto startGame(GameIdDto gameId) {
         try {
-            return new SingleGameDto(gameToDto(dao.startGame(gameId.getGameId())), "OK");
+            return new SingleGameDto(gameToDto(service.startGame(gameId.getGameId())), "OK");
         } catch (IllegalArgumentException e) {
-            // TODO: response is based on a dao string, that's bad!
+            // TODO: response is based on a service string, that's bad!
             return new SingleGameDto(null, "ERROR_"+e.getMessage());
         } catch (Exception e) {
             return new SingleGameDto(null, "ERROR_UNKNOWN");

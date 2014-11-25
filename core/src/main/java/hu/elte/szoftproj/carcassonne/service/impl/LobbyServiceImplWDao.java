@@ -1,4 +1,4 @@
-package hu.elte.szoftproj.carcassonne.persistence.server;
+package hu.elte.szoftproj.carcassonne.service.impl;
 
 import com.google.common.collect.ImmutableList;
 import hu.elte.szoftproj.carcassonne.domain.Game;
@@ -6,70 +6,36 @@ import hu.elte.szoftproj.carcassonne.domain.GameState;
 import hu.elte.szoftproj.carcassonne.domain.Player;
 import hu.elte.szoftproj.carcassonne.domain.PlayerType;
 import hu.elte.szoftproj.carcassonne.persistence.LobbyDao;
-import hu.elte.szoftproj.carcassonne.service.DeckFactory;
+import hu.elte.szoftproj.carcassonne.service.LobbyService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 
-public class LobbyDaoLocalImpl implements LobbyDao{
+public class LobbyServiceImplWDao implements LobbyService {
 
     @Autowired
-    DeckFactory deckFactory;
-
-    HashMap<String, Game> games;
-
-    public LobbyDaoLocalImpl() {
-        this.games = new HashMap<>();
-    }
+    LobbyDao dao;
 
     @Override
     public Game createNewGame(String initialPlayerName, String boardName) {
-        String uuid = UUID.randomUUID().toString();
-        games.put(uuid, new Game(uuid, deckFactory.getDeck(boardName), initialPlayerName));
-
-        return getGameById(uuid);
+        return dao.createNewGame(initialPlayerName, boardName);
     }
 
     @Override
     public List<Game> listActiveGames() {
-        LinkedList<Game> activeGames = new LinkedList<>();
-
-        for(Game g: games.values()) {
-            if (g.getStatus() == GameState.PLAYING) {
-                activeGames.push(g);
-            }
-        }
-
-        return activeGames;
+        return dao.listActiveGames();
     }
 
     @Override
     public List<Game> listWaitingGames() {
-        LinkedList<Game> waitingGames = new LinkedList<>();
-
-        for(Game g: games.values()) {
-            if (g.getStatus() == GameState.WAITING) {
-                waitingGames.push(g);
-            }
-        }
-
-        return waitingGames;
+        return dao.listWaitingGames();
     }
 
     @Override
     public Game getGameById(String gameId) {
-        return games.get(gameId);
+        return dao.getGameById(gameId);
     }
 
-    @Override
-    public Game updateGameInfo(Game newGameInfo) {
-        games.put(newGameInfo.getId(), newGameInfo);
-
-        return newGameInfo;
-    }
 
     @Override
     public Game joinGame(String gameId, String player, boolean ai) {
@@ -87,7 +53,7 @@ public class LobbyDaoLocalImpl implements LobbyDao{
             throw new IllegalArgumentException("ALREADY_HAS_PLAYER");
         }
 
-        return updateGameInfo(new Game(
+        return dao.updateGameInfo(new Game(
                 g.getId(),
                 (new ImmutableList.Builder<Player>().addAll(g.getPlayers()).add(new Player(player, ai ? PlayerType.AI : PlayerType.HUMAN))).build(),
                 g.getCurrentPlayer(),
@@ -113,7 +79,7 @@ public class LobbyDaoLocalImpl implements LobbyDao{
             throw new IllegalArgumentException("TOO_FEW_PLAYERS");
         }
 
-        return updateGameInfo(new Game(
+        return dao.updateGameInfo(new Game(
                 g.getId(),
                 g.getPlayers(),
                 g.getCurrentPlayer(),
@@ -122,5 +88,4 @@ public class LobbyDaoLocalImpl implements LobbyDao{
                 g.getDeck()
         ));
     }
-
 }
