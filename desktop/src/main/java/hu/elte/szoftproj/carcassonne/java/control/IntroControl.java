@@ -1,4 +1,4 @@
-package hu.elte.szoftproj.carcassonne.control;
+package hu.elte.szoftproj.carcassonne.java.control;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;

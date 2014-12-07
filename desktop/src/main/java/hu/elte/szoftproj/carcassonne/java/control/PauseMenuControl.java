@@ -1,13 +1,13 @@
-package hu.elte.szoftproj.carcassonne.control;
+package hu.elte.szoftproj.carcassonne.java.control;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class TitleMenuControl implements Control {
+public class PauseMenuControl implements Control {
 
-    public TitleMenuControl(ApplicationControl app) {
+    public PauseMenuControl(ApplicationControl app) {
         this.app = app;
     }
-
+    
     @Override
     public void create() {
     }

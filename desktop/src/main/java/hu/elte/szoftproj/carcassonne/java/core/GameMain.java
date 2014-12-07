@@ -1,4 +1,4 @@
-package hu.elte.szoftproj.carcassonne.core;
+package hu.elte.szoftproj.carcassonne.java.core;
 
 import hu.elte.szoftproj.carcassonne.model.Area;
 import hu.elte.szoftproj.carcassonne.model.Board;
