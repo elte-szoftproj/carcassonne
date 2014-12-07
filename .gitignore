@@ -24,6 +24,7 @@ android/libs
 
 # idea
 .idea
+*.iml
 
 # windows
 Thumbs.db
