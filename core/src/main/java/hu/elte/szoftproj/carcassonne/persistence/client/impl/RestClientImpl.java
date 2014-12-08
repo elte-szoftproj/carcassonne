@@ -1,11 +1,12 @@
-package hu.elte.szoftproj.carcassonne.persistence.client;
+package hu.elte.szoftproj.carcassonne.persistence.client.impl;
 
+import hu.elte.szoftproj.carcassonne.persistence.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 
-public class RestClientImpl implements RestClient{
+public class RestClientImpl implements RestClient {
 
     protected final String baseUrl;
 

@@ -18,15 +18,18 @@ public class GameDto {
 
     private List<PlayerDto> playerList;
 
+    private String boardName;
+
     private GameState status;
 
     public GameDto() {
     }
 
-    public GameDto(String id, ImmutableList<PlayerDto> playerList, GameState status) {
+    public GameDto(String id, ImmutableList<PlayerDto> playerList, String boardName, GameState status) {
         this.id = id;
         this.playerList = playerList;
         this.status = status;
+        this.boardName = boardName;
     }
 
     public String getId() {
@@ -39,5 +42,9 @@ public class GameDto {
 
     public GameState getStatus() {
         return status;
+    }
+
+    public String getBoardName() {
+        return boardName;
     }
 }

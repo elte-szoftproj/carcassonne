@@ -12,8 +12,6 @@ public interface LobbyService {
 
     List<Game> listWaitingGames();
 
-    Game getGameById(String gameId);
-
     Game joinGame(String gameId, String player, boolean ai);
 
     Game startGame(String gameId);

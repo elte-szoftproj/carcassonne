@@ -10,21 +10,21 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class SingleGameDto {
     private GameDto game; // might be null, jersey doesn't sup
 
-    private String gameStatus;
+    private String status;
 
     public SingleGameDto() {
     }
 
     public SingleGameDto(GameDto game, String status) {
         this.game = game;
-        this.gameStatus = status;
+        this.status = status;
     }
 
     public GameDto getGame() {
         return game;
     }
 
-    public String getGameStatus() {
-        return gameStatus;
+    public String getStatus() {
+        return status;
     }
 }

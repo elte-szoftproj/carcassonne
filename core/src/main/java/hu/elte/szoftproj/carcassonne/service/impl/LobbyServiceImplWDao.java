@@ -32,14 +32,8 @@ public class LobbyServiceImplWDao implements LobbyService {
     }
 
     @Override
-    public Game getGameById(String gameId) {
-        return dao.getGameById(gameId);
-    }
-
-
-    @Override
     public Game joinGame(String gameId, String player, boolean ai) {
-        Game g = getGameById(gameId);
+        Game g = dao.getGameById(gameId);
 
         if (g == null) {
             throw new IllegalArgumentException("UNKNOWN_GAME");
@@ -65,7 +59,7 @@ public class LobbyServiceImplWDao implements LobbyService {
 
     @Override
     public Game startGame(String gameId) {
-        Game g = getGameById(gameId);
+        Game g = dao.getGameById(gameId);
 
         if (g == null) {
             throw new IllegalArgumentException("UNKNOWN_GAME");

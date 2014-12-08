@@ -1,6 +1,6 @@
 package hu.elte.szoftproj.carcassonne.persistence.server.rest;
 
-import hu.elte.szoftproj.carcassonne.persistence.client.LobbyRestClient;
+import hu.elte.szoftproj.carcassonne.persistence.client.impl.LobbyRestClientImpl;
 import hu.elte.szoftproj.carcassonne.persistence.dto.lobby.GameCreateActionDto;
 
 /**
@@ -9,6 +9,6 @@ import hu.elte.szoftproj.carcassonne.persistence.dto.lobby.GameCreateActionDto;
 public class ServerTest {
 
     public static void main(String[] args) throws Exception {
-        System.out.println(new LobbyRestClient("http://localhost:8080").createGame(new GameCreateActionDto("test", "basicx")).getGameStatus());
+        System.out.println(new LobbyRestClientImpl("http://localhost:8080").createGame(new GameCreateActionDto("test", "basicx")).getStatus());
     }
 }
