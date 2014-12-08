@@ -1,5 +1,6 @@
 package hu.elte.szoftproj.carcassonne.domain;
 
+import hu.elte.szoftproj.carcassonne.domain.follower.BasicFollower;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -156,6 +157,51 @@ public class BoardTest {
             }
         }
         assertThat(cityCount , equalTo(1));
+    }
+
+    @Test
+    public void testAddFollower() {
+        Follower f = new BasicFollower(new Player("test"));
+        board = board.placeFollower(0, 0, f, 0, 3);
+
+        assertThat(board.getUsedFollowers().size(), equalTo(1));
+
+        Follower f2 = new BasicFollower(new Player("test2"));
+        board = board.placeFollower(0, 0, f2, 2, 3);
+
+        assertThat(board.getUsedFollowers().size(), equalTo(2));
+
+        int roadCount = 0;
+        for (Area a: board.getAreas()) {
+            if (a.getType().equals('R')) {
+                roadCount++;
+                assertThat(a.getFollowers().size(), equalTo(1));
+            }
+        }
+        assertThat(roadCount, equalTo(1));
+
+        int cityCount = 0;
+        for (Area a: board.getAreas()) {
+            if (a.getType().equals('C')) {
+                cityCount ++;
+                assertThat(a.getFollowers().size(), equalTo(1));
+            }
+        }
+        assertThat(cityCount , equalTo(1));
+    }
+
+    @Test
+    public void testRemoveFollower() {
+        Follower f = new BasicFollower(new Player("test"));
+        board = board.placeFollower(0, 0, f, 0, 3);
+
+        Follower f2 = new BasicFollower(new Player("test2"));
+        board = board.placeFollower(0, 0, f2, 2, 3);
+
+        board = board.removeFollowersFromArea(board.getUsedFollowers().values().asList().get(0));
+        assertThat(board.getUsedFollowers().size(), equalTo(1));
+        board = board.removeFollowersFromArea(board.getUsedFollowers().values().asList().get(0));
+        assertThat(board.getUsedFollowers().size(), equalTo(0));
     }
 }
 

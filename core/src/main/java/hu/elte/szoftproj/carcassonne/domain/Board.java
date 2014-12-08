@@ -1,9 +1,6 @@
 package hu.elte.szoftproj.carcassonne.domain;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.ImmutableSortedSet;
-import com.google.common.collect.ImmutableTable;
-import com.google.common.collect.TreeBasedTable;
+import com.google.common.collect.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +14,8 @@ public class Board {
     private ImmutableTable<Integer, Integer, Area> areaGrid;
 
     private ImmutableSet<Area> areas;
+
+    private ImmutableMap<Follower, Area> usedFollowers;
 
     public Board(Tile tile, Rotation tileRotation) {
         grid = (new ImmutableTable.Builder<Integer, Integer, Square>()).put(0, 0, new Square(tile, tileRotation)).build();
@@ -113,11 +112,59 @@ public class Board {
         return new Board(builder.build());
     }
 
+    public boolean canPlaceFollower(int y, int x, Follower f, int dy, int dx) {
+        Square s = grid.get(y, x);
+        if (!areaGrid.contains(y * 5 + dy, x * 5 + dx)) {
+            throw new IllegalArgumentException("Unknown tile");
+        }
+        if (s.canPlaceFollower(f, new Coordinate(dy, dx)) && f.canBePlacedAt(areaGrid.get(y * 5 + dy, x * 5 + dx))) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public Board placeFollower(int y, int x, Follower f, int dy, int dx) {
+        if (!canPlaceFollower(y, x, f, dy, dx)) {
+            throw new IllegalArgumentException("Can't be placed!");
+        }
+        Square s = grid.get(y, x);
+        Square newSq = s.addFollower(f, new Coordinate(dy, dx));
+
+        ImmutableTable.Builder<Integer, Integer, Square> builder = new ImmutableTable.Builder<>();
+        for (Table.Cell<Integer, Integer, Square> sq: grid.cellSet()) {
+            if (sq.getRowKey().equals(y) && sq.getColumnKey().equals(x)) {
+                builder.put(sq.getRowKey(), sq.getColumnKey(), newSq);
+            } else {
+                builder.put(sq.getRowKey(), sq.getColumnKey(), sq.getValue());
+            }
+        }
+        return new Board(builder.build());
+    }
+
+    public Board removeFollowersFromArea(Area a) {
+        ImmutableTable.Builder<Integer, Integer, Square> builder = new ImmutableTable.Builder<>();
+
+        for (Table.Cell<Integer, Integer, Square> sq : grid.cellSet()) {
+            Square s = sq.getValue();
+            for(Follower f: a.getFollowers()) {
+                if (s.getPlacedFollowers().containsValue(f)) {
+                    s = s.removeFollower(f);
+                }
+            }
+            builder.put(sq.getRowKey(), sq.getColumnKey(), s);
+        }
+
+        return new Board(builder.build());
+    }
+
     private void buildAreaGrid(ImmutableTable<Integer, Integer, Square> grid) {
         TreeBasedTable<Integer, Integer, Area> tempTable = TreeBasedTable.create();
 
         HashMap<Area, ImmutableSet.Builder<Coordinate>> areaHelper = new HashMap<>();
+        HashMap<Area, ImmutableSet.Builder<Follower>> areaFollowerHelper = new HashMap<>();
         HashMap<Area, Integer> edgeModifierMap = new HashMap<>();
+        HashMap<Follower, Area> followerMap = new HashMap<>();
 
         for (Integer iy: ImmutableSortedSet.copyOf(grid.rowKeySet())) {
             for (Integer ix: ImmutableSortedSet.copyOf(grid.columnKeySet())) {
@@ -126,14 +173,20 @@ public class Board {
                     continue;
                 }
 
-                Tile actTile = grid.get(iy, ix).getTile();
-                Rotation actRot = grid.get(iy, ix).getTileRotation();
+                Square actSq = grid.get(iy, ix);
+                Tile actTile = actSq.getTile();
+                Rotation actRot = actSq.getTileRotation();
 
                 for (int dy = 0; dy < 5; dy ++) {
                     for (int dx = 0; dx < 5 ; dx++) {
                         int ay = iy * 5 + dy;
                         int ax = ix * 5 + dx;
 
+                        Follower currentFollower = null;
+
+                        if (actSq.getPlacedFollowers().contains(dy, dx)) {
+                            currentFollower = actSq.getPlacedFollowers().get(dy, dx);
+                        }
 
                         Character type = actTile.getRepresentation(actRot).get(dy, dx);
 
@@ -152,14 +205,16 @@ public class Board {
                         if (dy==0 && sameAsAbove) edgeModifier-=2;
                         if (dx==0 && sameAsLeft)  edgeModifier-=2;
 
+                        Area curr = null;
+
                         if (sameAsLeft && sameAsAbove) {
                             if (tempTable.get(ay-1, ax).equals(tempTable.get(ay, ax-1))) {
-                                Area curr = tempTable.get(ay-1, ax);
+                                curr = tempTable.get(ay-1, ax);
                                 areaHelper.get(curr).add(new Coordinate(ay, ax));
                                 tempTable.put(ay, ax, curr);
                                 edgeModifierMap.put(curr, edgeModifierMap.get(curr)+edgeModifier);
                             } else {
-                                Area curr = tempTable.get(ay-1, ax);
+                                curr = tempTable.get(ay-1, ax);
                                 Area other = tempTable.get(ay, ax-1);
                                 ImmutableSet<Coordinate> tmp = areaHelper.get(other).build();
                                 areaHelper.get(curr).add(new Coordinate(ay, ax)).addAll(tmp);
@@ -167,27 +222,41 @@ public class Board {
                                 tempTable.put(ay, ax, curr);
                                 edgeModifierMap.put(curr, edgeModifierMap.get(curr)+edgeModifierMap.get(other)+edgeModifier);
                                 edgeModifierMap.remove(other);
+
+                                ImmutableSet<Follower> tmpF = areaFollowerHelper.get(other).build();
+                                areaFollowerHelper.put(curr, areaFollowerHelper.get(curr).addAll(tmpF));
+                                for (Follower f: tmpF) {
+                                    followerMap.put(f, curr);
+                                }
+
+                                areaFollowerHelper.remove(other);
                                 for (Coordinate c: tmp) {
                                     tempTable.put(c.getY(), c.getX(), curr);
                                 }
                             }
                         } else if (sameAsAbove) {
-                            Area curr = tempTable.get(ay-1, ax);
+                            curr = tempTable.get(ay-1, ax);
                             areaHelper.get(curr).add(new Coordinate(ay, ax));
                             tempTable.put(ay, ax, curr);
                             edgeModifierMap.put(curr, edgeModifierMap.get(curr)+edgeModifier);
                         } else if (sameAsLeft) {
-                            Area curr = tempTable.get(ay, ax-1);
+                            curr = tempTable.get(ay, ax-1);
                             areaHelper.get(curr).add(new Coordinate(ay, ax));
                             tempTable.put(ay, ax, curr);
                             edgeModifierMap.put(curr, edgeModifierMap.get(curr)+edgeModifier);
                         } else {
-                            Area curr = new Area(type);
+                            curr = new Area(type);
                             areaHelper.put(curr, new ImmutableSet.Builder<>());
                             areaHelper.get(curr).add(new Coordinate(ay, ax));
                             tempTable.put(ay, ax, curr);
                             edgeModifierMap.put(curr, 0);
                             edgeModifierMap.put(curr, edgeModifierMap.get(curr)+edgeModifier);
+                            areaFollowerHelper.put(curr, new ImmutableSet.Builder<>());
+                        }
+
+                        if(currentFollower != null) {
+                            followerMap.put(currentFollower, curr);
+                            areaFollowerHelper.get(curr).add(currentFollower);
                         }
                     }
                 }
@@ -203,13 +272,31 @@ public class Board {
             entry.getKey().setCoordinates(entry.getValue().build());
             entry.getKey().setOpenEdgeCount(edgeModifierMap.get(entry.getKey()));
             setBuilder.add(entry.getKey());
+            entry.getKey().setFollowers(areaFollowerHelper.get(entry.getKey()).build());
+
+            for (Coordinate c: entry.getKey().getCoordinates()) {
+                builder.put(c.getY(), c.getX(), entry.getKey());
+            }
         }
 
         this.areaGrid =  builder.build();
         this.areas = setBuilder.build();
+        this.usedFollowers = ImmutableMap.copyOf(followerMap);
     }
 
     public ImmutableSet<Area> getAreas() {
         return areas;
+    }
+
+    public ImmutableTable<Integer, Integer, Square> getGrid() {
+        return grid;
+    }
+
+    public ImmutableTable<Integer, Integer, Area> getAreaGrid() {
+        return areaGrid;
+    }
+
+    public ImmutableMap<Follower, Area> getUsedFollowers() {
+        return usedFollowers;
     }
 }
