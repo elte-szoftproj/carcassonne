@@ -104,4 +104,8 @@ public class Game {
     public ImmutableList<Follower> getIdleFollowersForPlayers(Player p) {
         return board.get().notUsedFollowers(p.getFollowers());
     }
+
+    public boolean isFinished() {
+        return status.equals(GameState.FINISHED);
+    }
 }
