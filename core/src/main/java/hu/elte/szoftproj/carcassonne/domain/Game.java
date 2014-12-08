@@ -3,6 +3,8 @@ package hu.elte.szoftproj.carcassonne.domain;
 import com.google.common.collect.ImmutableList;
 import hu.elte.szoftproj.carcassonne.service.Deck;
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.Optional;
 
 /**
@@ -90,5 +92,12 @@ public class Game {
 
     public boolean canPlaceFollowerNow() {
         return currentPlayer.isPresent() && currentPlayer.get().getAction().equals(GameAction.PLACE_FOLLOWER);
+    }
+
+    public ImmutableList<Player> getPlayersByScore() {
+        LinkedList<Player> ll = new LinkedList<>(players);
+        Collections.sort(ll);
+
+        return ImmutableList.copyOf(ll);
     }
 }

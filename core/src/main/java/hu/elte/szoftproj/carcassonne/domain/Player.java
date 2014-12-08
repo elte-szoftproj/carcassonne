@@ -3,7 +3,7 @@ package hu.elte.szoftproj.carcassonne.domain;
 
 import com.google.common.collect.ImmutableList;
 
-public class Player {
+public class Player implements Comparable<Player> {
 
     private String name;
 
@@ -53,5 +53,10 @@ public class Player {
         }
         Player oth = (Player)obj;
         return (oth.getName() == null && this.name == null) || oth.getName().equals(getName());
+    }
+
+    @Override
+    public int compareTo(Player o) {
+        return o.score - score;
     }
 }
