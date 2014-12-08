@@ -33,7 +33,7 @@ public class TestDeck implements Deck {
     }
 
     public void addTile(LinkedList<Tile> ll, int num, Tile t) {
-        for (int i=0;i<num;i++) {
+        for (int i = 0; i < num; i++) {
             ll.add(t);
         }
     }

@@ -116,19 +116,46 @@ public class Board {
         return new Board(builder.build(), Optional.of(t));
     }
 
+    public boolean canPlaceAFollower(int y, int x, ImmutableList<Follower> followers) {
+        for (int dy=0;dy<5;dy++) {
+            for (int dx=0;dx<5;dx++) {
+                for (Follower f: followers) {
+                    if (canPlaceFollower(y, x, f, dy, dx)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
     public boolean canPlaceFollower(int y, int x, Follower f, int dy, int dx) {
         Square s = grid.get(y, x);
         if (usedFollowers.containsKey(f)) {
             return false;
         }
         if (!areaGrid.contains(y * 5 + dy, x * 5 + dx)) {
-            throw new IllegalArgumentException("Unknown tile");
+            return false;
         }
         if (s.canPlaceFollower(f, new Coordinate(dy, dx)) && f.canBePlacedAt(areaGrid.get(y * 5 + dy, x * 5 + dx))) {
             return true;
         }
 
         return false;
+    }
+
+    public int tileCountAround(int y, int x) {
+        int t = 0;
+        for (int iy=-1;iy<2;iy++) {
+            for (int ix=-1;ix<2;ix++) {
+                if (grid.contains(y+iy, x+ix)) {
+                    t++;
+                }
+            }
+        }
+
+        return t;
     }
 
     public Board placeFollower(int y, int x, Follower f, int dy, int dx) {
@@ -170,6 +197,51 @@ public class Board {
         for (Follower f: from) {
             if (!usedFollowers.containsKey(f)) {
                 builder.add(f);
+            }
+        }
+
+        return builder.build();
+    }
+
+    public ImmutableSet<Area> getClosedNeighborAreasOfTYpe(Area center, Character type) {
+        ImmutableSet.Builder<Area> builder = new ImmutableSet.Builder<>();
+
+        if (!areas.contains(center)) {
+            throw new IllegalArgumentException("Area not found");
+        }
+
+        for (Coordinate c : center.getCoordinates()) {
+            if (    true
+                    && areaGrid.contains(c.getY()-1, c.getX())
+                    && areaGrid.get(c.getY()-1, c.getX()) != center
+                    && areaGrid.get(c.getY()-1, c.getX()).getType().equals(type)
+                    && areaGrid.get(c.getY()-1, c.getX()).isClosed()
+                    ) {
+                builder.add(areaGrid.get(c.getY()-1, c.getX()));
+            }
+            if (    true
+                    && areaGrid.contains(c.getY()+1, c.getX())
+                    && areaGrid.get(c.getY()+1, c.getX()) != center
+                    && areaGrid.get(c.getY()+1, c.getX()).getType().equals(type)
+                    && areaGrid.get(c.getY() + 1, c.getX()).isClosed()
+                    ) {
+                builder.add(areaGrid.get(c.getY()+1, c.getX()));
+            }
+            if (    true
+                    && areaGrid.contains(c.getY(), c.getX()-1)
+                    && areaGrid.get(c.getY(), c.getX()-1) != center
+                    && areaGrid.get(c.getY(), c.getX()-1).getType().equals(type)
+                    && areaGrid.get(c.getY(), c.getX() - 1).isClosed()
+                    ) {
+                builder.add(areaGrid.get(c.getY(), c.getX()-1));
+            }
+            if (    true
+                    && areaGrid.contains(c.getY(), c.getX()+1)
+                    && areaGrid.get(c.getY(), c.getX()+1) != center
+                    && areaGrid.get(c.getY(), c.getX()+1).getType().equals(type)
+                    && areaGrid.get(c.getY(), c.getX()+1).isClosed()
+                    ) {
+                builder.add(areaGrid.get(c.getY(), c.getX()+1));
             }
         }
 

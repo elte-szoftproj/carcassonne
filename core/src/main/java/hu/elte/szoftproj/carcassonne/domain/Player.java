@@ -34,6 +34,10 @@ public class Player implements Comparable<Player> {
         this.followers = followers;
     }
 
+    public Player addScore(int added) {
+        return new Player(name, score+added, type, followers);
+    }
+
     public String getName() {
         return name;
     }

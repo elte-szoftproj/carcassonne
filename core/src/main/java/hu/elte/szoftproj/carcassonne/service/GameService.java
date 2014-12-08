@@ -8,6 +8,7 @@ public interface GameService {
 
     public Game placeTile(Game g, Player owner, Tile t, Rotation r, int y, int x);
 
-    public Game placeFollower(Game g, Player owner, Follower f, int y, int x, int dx, int dy);
+    public Game placeFollower(Game g, Player owner, Follower f, int y, int x, int dy, int dx);
 
+    public Game dontPlaceFollower(Game g, Player owner);
 }
