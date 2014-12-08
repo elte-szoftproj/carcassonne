@@ -231,5 +231,18 @@ public class BoardTest {
         assertThat(scores.get(1).getScore(), equalTo(1));
         assertThat(scores.get(1).getPlayer().getName(), equalTo("test1"));
     }
+
+    @Test
+    public void testAreaSize() {
+        Follower f1 = new BasicFollower(new Player("test1"));
+        board = board.placeFollower(0, 0, f1, 0, 3);
+        Area followerArea = board.getUsedFollowers().values().asList().get(0);
+        assertThat(followerArea.getContainedTileCount(), equalTo(1));
+
+        board = board.placeTile(StandardTiles.stdCity4, Rotation.R0, -1, 0);
+        followerArea = board.getUsedFollowers().values().asList().get(0);
+        assertThat(followerArea.getContainedTileCount(), equalTo(2));
+
+    }
 }
 

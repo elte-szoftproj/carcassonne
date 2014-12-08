@@ -28,6 +28,11 @@ public class Coordinate {
     }
 
     @Override
+    public int hashCode() {
+        return x+y;
+    }
+
+    @Override
     public String toString() {
         return "[y:" + y + ",x:" + x + "]";
     }

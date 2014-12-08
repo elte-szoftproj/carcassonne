@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableSet;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 public class Area {
@@ -80,5 +81,16 @@ public class Area {
         // ground followers are calculated differently, at the endgame. others are removed during the game
         return !type.equals('G');
 
+    }
+
+    // used for score calculation
+    public int getContainedTileCount() {
+        HashSet<Coordinate> coord = new HashSet<>();
+
+        for (Coordinate c : this.coordinates) {
+            coord.add(new Coordinate(c.getY() / 5, c.getX() / 5));
+        }
+;
+        return coord.size();
     }
 }
