@@ -108,6 +108,10 @@ public class GameServiceImplWDao implements GameService {
             throw new IllegalArgumentException("NOT_YOUR_TURN");
         }
 
+        if (!f.getOwner().equals(owner)) {
+            throw new IllegalArgumentException("NOT_YOUR_FOLLOWER");
+        }
+
         if (!realGame.getCurrentPlayer().get().getAction().equals(GameAction.PLACE_FOLLOWER)) {
             throw new IllegalArgumentException("NOT_FOLLOWER_ACTION");
         }
@@ -116,6 +120,10 @@ public class GameServiceImplWDao implements GameService {
 
         if (!board.getLastPlacedTile().isPresent()) {
             throw new IllegalArgumentException("NO_LAST_PLACED_TILE");
+        }
+
+        if (!board.getGrid().contains(y, x)) {
+            throw new IllegalArgumentException("NOT_CURRENT_TILE");
         }
 
         Tile target = board.getGrid().get(y, x).getTile();
@@ -148,7 +156,7 @@ public class GameServiceImplWDao implements GameService {
         realGame = new Game(
                 realGame.getId(),
                 players,
-                Optional.of(realGame.getCurrentPlayer().get().next(realGame.getPlayers())),
+                finished ? Optional.empty() : Optional.of(realGame.getCurrentPlayer().get().next(realGame.getPlayers())),
                 Optional.of(newBoard),
                 finished ? GameState.FINISHED : realGame.getStatus(),
                 realGame.getDeck()

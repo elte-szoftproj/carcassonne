@@ -2,10 +2,12 @@ package hu.elte.szoftproj.carcassonne.service;
 
 
 import hu.elte.szoftproj.carcassonne.domain.*;
+import hu.elte.szoftproj.carcassonne.domain.follower.BigFollower;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
 
 public abstract class GameServiceTest {
 
@@ -36,7 +38,7 @@ public abstract class GameServiceTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void placeBadPlayerFails() {
+    public void placeBadPlayerFailsTest() {
         Game g = gameService.getGameById(gameId);
         Tile currentTile = g.getDeck().get().peekNext();
         Player current = g.getPlayerByName("testUser2");
@@ -44,7 +46,7 @@ public abstract class GameServiceTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void placeBadTileFails() {
+    public void placeBadTileFailsTest() {
         Game g = gameService.getGameById(gameId);
         Tile currentTile = StandardTiles.stdCity2nw;
         Player current = g.getCurrentPlayer().get().getPlayer();
@@ -52,7 +54,7 @@ public abstract class GameServiceTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void placeBadPositionFails() {
+    public void placeBadPositionFailsTest() {
         Game g = gameService.getGameById(gameId);
         Tile currentTile = g.getDeck().get().peekNext();
         Player current = g.getCurrentPlayer().get().getPlayer();
@@ -60,7 +62,7 @@ public abstract class GameServiceTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void placeBadStepFails() {
+    public void placeBadStepFailsTest() {
         Game g = gameService.getGameById(gameId);
         Tile currentTile = g.getDeck().get().peekNext();
         Player current = g.getCurrentPlayer().get().getPlayer();
@@ -68,6 +70,73 @@ public abstract class GameServiceTest {
         gameService.placeTile(g, current, currentTile, Rotation.R180, -1, 0);
     }
 
-    
+    protected void placeFirstTile() {
+        Game g = gameService.getGameById(gameId);
+        Tile currentTile = g.getDeck().get().peekNext();
+        Player current = g.getCurrentPlayer().get().getPlayer();
+        gameService.placeTile(g, current, currentTile, Rotation.R180, -1, 0);
+    }
+
+    @Test
+    public void placeFollowerTest() {
+
+        placeFirstTile();
+
+        Game g = gameService.getGameById(gameId);
+        Player current = g.getCurrentPlayer().get().getPlayer();
+        Follower f = current.getFollowers(BigFollower.class).get(0);
+        g = gameService.placeFollower(g, current, f, -1, 0, 3, 3);
+
+        assertThat(g.getBoard().get().getGrid().size(), equalTo(2));
+        assertThat(g.getCurrentPlayer().get().getPlayer(), not(equalTo(current)));
+        assertThat(g.getCurrentPlayer().get().getAction(), equalTo(GameAction.PLACE_TILE));
+        assertThat(g.getBoard().get().getUsedFollowers().size(), equalTo(1));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void placeBadPlaceFollowerFailTest() {
+
+        placeFirstTile();
+
+        Game g = gameService.getGameById(gameId);
+        Player current = g.getCurrentPlayer().get().getPlayer();
+        Follower f = current.getFollowers(BigFollower.class).get(0);
+        gameService.placeFollower(g, current, f, -1, -1, 3, 3);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void placeBadPlayerFollowerFailTest() {
+
+        placeFirstTile();
+
+        Game g = gameService.getGameById(gameId);
+        Player current = g.getPlayerByName("testUser2");
+        Follower f = current.getFollowers(BigFollower.class).get(0);
+        gameService.placeFollower(g, current, f, -1, 0, 3, 3);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void placeBadFollowerFailTest() {
+
+        placeFirstTile();
+
+        Game g = gameService.getGameById(gameId);
+        Player current = g.getCurrentPlayer().get().getPlayer();
+        Player other = g.getPlayerByName("testUser2");
+        Follower f = other.getFollowers(BigFollower.class).get(0);
+        gameService.placeFollower(g, current, f, -1, 0, 3, 3);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void placeDoubleFollowerFailTest() {
+
+        placeFirstTile();
+
+        Game g = gameService.getGameById(gameId);
+        Player current = g.getCurrentPlayer().get().getPlayer();
+        Follower f = current.getFollowers(BigFollower.class).get(0);
+        gameService.placeFollower(g, current, f, -1, 0, 3, 3);
+        gameService.placeFollower(g, current, f, -1, 0, 3, 3);
+    }
 
 }

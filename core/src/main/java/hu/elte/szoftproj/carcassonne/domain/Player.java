@@ -50,6 +50,18 @@ public class Player implements Comparable<Player> {
         return followers;
     }
 
+    public ImmutableList<Follower> getFollowers(Class c) {
+        ImmutableList.Builder<Follower> builder = new ImmutableList.Builder<>();
+
+        for(Follower f: followers) {
+            if (f.getClass().isAssignableFrom(c)) {
+                builder.add(f);
+            }
+        }
+
+        return builder.build();
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Player)) {
