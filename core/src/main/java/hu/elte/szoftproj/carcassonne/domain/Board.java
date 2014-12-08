@@ -4,9 +4,12 @@ import com.google.common.collect.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class Board {
     private ImmutableTable<Integer, Integer, Square> grid;
+
+    private Optional<Tile> lastPlacedTile;
 
     /**
      * Has different keys! gridKey = areaGridKey / 5
@@ -19,12 +22,13 @@ public class Board {
 
     public Board(Tile tile, Rotation tileRotation) {
         grid = (new ImmutableTable.Builder<Integer, Integer, Square>()).put(0, 0, new Square(tile, tileRotation)).build();
-
+        lastPlacedTile = Optional.empty();
         buildAreaGrid(grid);
     }
 
-    Board(ImmutableTable<Integer, Integer, Square> grid) {
+    Board(ImmutableTable<Integer, Integer, Square> grid, Optional<Tile> lastPlacedTile) {
         this.grid = grid;
+        this.lastPlacedTile = lastPlacedTile;
         buildAreaGrid(grid);
     }
 
@@ -109,7 +113,7 @@ public class Board {
         builder.putAll(grid);
         builder.put(y, x, new Square(t, r));
 
-        return new Board(builder.build());
+        return new Board(builder.build(), Optional.of(t));
     }
 
     public boolean canPlaceFollower(int y, int x, Follower f, int dy, int dx) {
@@ -142,7 +146,7 @@ public class Board {
                 builder.put(sq.getRowKey(), sq.getColumnKey(), sq.getValue());
             }
         }
-        return new Board(builder.build());
+        return new Board(builder.build(), Optional.empty());
     }
 
     public Board removeFollowersFromArea(Area a) {
@@ -158,7 +162,7 @@ public class Board {
             builder.put(sq.getRowKey(), sq.getColumnKey(), s);
         }
 
-        return new Board(builder.build());
+        return new Board(builder.build(), Optional.<Tile>empty());
     }
 
     public ImmutableList<Follower> notUsedFollowers(ImmutableList<Follower> from) {
@@ -354,5 +358,9 @@ public class Board {
 
     public ImmutableMap<Follower, Area> getUsedFollowers() {
         return usedFollowers;
+    }
+
+    public Optional<Tile> getLastPlacedTile() {
+        return lastPlacedTile;
     }
 }
