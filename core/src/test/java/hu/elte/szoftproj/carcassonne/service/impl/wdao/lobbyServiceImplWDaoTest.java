@@ -16,7 +16,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @ContextConfiguration(loader=AnnotationConfigWebContextLoader.class, classes=ApplicationConfig.class)
 @WebAppConfiguration
 @DirtiesContext(classMode=DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class lobbyServiceImplWDaoTest extends LobbyServiceTest {
+public class LobbyServiceImplWDaoTest extends LobbyServiceTest {
 
     @Autowired
     private LobbyServiceImplWDao service;
