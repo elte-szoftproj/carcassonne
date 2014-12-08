@@ -10,6 +10,14 @@ public class GameCreateActionDto {
     String playerName;
     String boardName;
 
+    public GameCreateActionDto(){
+    }
+
+    public GameCreateActionDto(String playerName, String boardName) {
+        this.playerName = playerName;
+        this.boardName = boardName;
+    }
+
     public String getPlayerName() {
         return playerName;
     }

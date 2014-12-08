@@ -11,6 +11,14 @@ public class GameJoinActionDto {
     String playerName;
     String gameId;
 
+    public GameJoinActionDto() {
+    }
+
+    public GameJoinActionDto(String playerName, String gameId) {
+        this.playerName = playerName;
+        this.gameId = gameId;
+    }
+
     public String getPlayerName() {
         return playerName;
     }

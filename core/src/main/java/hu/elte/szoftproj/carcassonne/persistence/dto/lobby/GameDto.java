@@ -5,6 +5,7 @@ import hu.elte.szoftproj.carcassonne.domain.GameState;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
 
 /**
  * Contains minimal information about a game
@@ -15,9 +16,12 @@ public class GameDto {
 
     private String id;
 
-    private ImmutableList<PlayerDto> playerList;
+    private List<PlayerDto> playerList;
 
     private GameState status;
+
+    public GameDto() {
+    }
 
     public GameDto(String id, ImmutableList<PlayerDto> playerList, GameState status) {
         this.id = id;
@@ -29,7 +33,7 @@ public class GameDto {
         return id;
     }
 
-    public ImmutableList<PlayerDto> getPlayerList() {
+    public List<PlayerDto> getPlayerList() {
         return playerList;
     }
 

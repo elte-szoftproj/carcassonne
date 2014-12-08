@@ -13,6 +13,9 @@ public class MultiGameDto {
 
     String status;
 
+    public MultiGameDto() {
+    }
+
     public MultiGameDto(List<GameDto> games, String status) {
         this.games = games;
         this.status = status;

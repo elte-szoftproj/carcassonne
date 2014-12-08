@@ -17,6 +17,10 @@ public class PlayerDto {
 
     private PlayerType type;
 
+    public PlayerDto() {
+    }
+
+
     public PlayerDto(String name, PlayerType type) {
         this.name = name;
         this.type=type;

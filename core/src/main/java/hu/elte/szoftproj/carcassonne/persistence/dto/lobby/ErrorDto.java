@@ -8,6 +8,9 @@ public class ErrorDto {
 
     String message;
 
+    public ErrorDto() {
+    }
+
     public ErrorDto(String status, String message) {
         this.status = status;
         this.message = message;

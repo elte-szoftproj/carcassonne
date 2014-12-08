@@ -12,6 +12,9 @@ public class SingleGameDto {
 
     private String gameStatus;
 
+    public SingleGameDto() {
+    }
+
     public SingleGameDto(GameDto game, String status) {
         this.game = game;
         this.gameStatus = status;
