@@ -1,4 +1,4 @@
-package hu.elte.szoftproj.carcassonne.persistence.server;
+package hu.elte.szoftproj.carcassonne.persistence.server.test;
 
 import org.eclipse.jetty.server.Server;
 import org.springframework.web.context.WebApplicationContext;

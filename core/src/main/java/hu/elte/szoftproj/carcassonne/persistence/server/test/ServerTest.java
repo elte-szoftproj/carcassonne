@@ -1,4 +1,4 @@
-package hu.elte.szoftproj.carcassonne.persistence.server.rest;
+package hu.elte.szoftproj.carcassonne.persistence.server.test;
 
 import hu.elte.szoftproj.carcassonne.persistence.client.impl.LobbyRestClientImpl;
 import hu.elte.szoftproj.carcassonne.persistence.dto.lobby.GameCreateActionDto;
