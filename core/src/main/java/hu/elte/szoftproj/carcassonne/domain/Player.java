@@ -1,6 +1,8 @@
 package hu.elte.szoftproj.carcassonne.domain;
 
 
+import com.google.common.collect.ImmutableList;
+
 public class Player {
 
     private String name;
@@ -9,21 +11,27 @@ public class Player {
 
     PlayerType type;
 
+    ImmutableList<Follower> followers;
+
     public Player(String name) {
         this.name = name;
         this.score = 0;
         this.type = PlayerType.HUMAN;
+        this.followers = ImmutableList.of();
     }
 
     public Player(String name, PlayerType type) {
         this.name = name;
         this.type = type;
+        this.score = 0;
+        this.followers = ImmutableList.of();
     }
 
-    public Player(String name, int score, PlayerType type) {
+    public Player(String name, int score, PlayerType type, ImmutableList<Follower> followers) {
         this.name = name;
         this.score = score;
         this.type = type;
+        this.followers = followers;
     }
 
     public String getName() {
