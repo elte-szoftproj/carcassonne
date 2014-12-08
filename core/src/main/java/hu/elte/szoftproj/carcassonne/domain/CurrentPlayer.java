@@ -31,4 +31,11 @@ public class CurrentPlayer {
     }
 
 
+    public Player getPlayer() {
+        return player;
+    }
+
+    public GameAction getAction() {
+        return action;
+    }
 }

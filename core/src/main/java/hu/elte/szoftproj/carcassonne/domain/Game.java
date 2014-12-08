@@ -79,4 +79,16 @@ public class Game {
     public Optional<Deck> getDeck() {
         return deck;
     }
+
+    public boolean isPlayersTurn(Player p) {
+        return currentPlayer.isPresent() && currentPlayer.get().getPlayer().equals(p);
+    }
+
+    public boolean canPlaceTileNow() {
+        return currentPlayer.isPresent() && currentPlayer.get().getAction().equals(GameAction.PLACE_TILE);
+    }
+
+    public boolean canPlaceFollowerNow() {
+        return currentPlayer.isPresent() && currentPlayer.get().getAction().equals(GameAction.PLACE_FOLLOWER);
+    }
 }
