@@ -2,7 +2,6 @@ package hu.elte.szoftproj.carcassonne.domain;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import hu.elte.szoftproj.carcassonne.domain.follower.BasicFollower;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -60,7 +59,7 @@ public class Area {
         HashMap<Player, AreaScore> scores = new HashMap<>();
 
         for(Follower f: followers) {
-            if (f instanceof BasicFollower) {
+            if (f.getType().equals("ownership")) {
                 if (!scores.containsKey(f.getOwner())) {
                     scores.put(f.getOwner(), new AreaScore(f.getOwner(), 0));
                 }

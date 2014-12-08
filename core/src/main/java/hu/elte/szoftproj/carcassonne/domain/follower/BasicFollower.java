@@ -13,4 +13,9 @@ public class BasicFollower extends AbstractFollower {
         return 1;
     }
 
+    @Override
+    public String getType() {
+        return "ownership";
+    }
+
 }

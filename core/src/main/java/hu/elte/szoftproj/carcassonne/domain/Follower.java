@@ -5,5 +5,7 @@ public interface Follower {
 
     int getValue();
 
+    String getType();
+
     boolean canBePlacedAt(Area area);
 }
