@@ -2,17 +2,18 @@ package hu.elte.szoftproj.carcassonne.config;
 
 import hu.elte.szoftproj.carcassonne.persistence.GameDao;
 import hu.elte.szoftproj.carcassonne.persistence.impl.GameDaoMemoryImpl;
+import hu.elte.szoftproj.carcassonne.persistence.server.ServerFactory;
 import hu.elte.szoftproj.carcassonne.service.DeckFactory;
 import hu.elte.szoftproj.carcassonne.service.LobbyService;
 import hu.elte.szoftproj.carcassonne.service.impl.DeckFactoryImpl;
 import hu.elte.szoftproj.carcassonne.service.impl.LobbyServiceImplSwitchable;
 import hu.elte.szoftproj.carcassonne.service.impl.LobbyServiceImplWDao;
 import hu.elte.szoftproj.carcassonne.service.impl.rest.LobbyServiceImplRest;
-import org.springframework.beans.factory.config.BeanDefinition;
+import org.eclipse.jetty.server.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.Primary;
 
 @Configuration
 @ComponentScan("hu.elte.szoftproj.carcassonne")
@@ -25,15 +26,25 @@ public class ApplicationConfig {
     }
 
     @Bean
-    @Scope(BeanDefinition.SCOPE_PROTOTYPE)
+    public LobbyServiceImplWDao getLobbyServiceImplWDao() {
+        return new LobbyServiceImplWDao();
+    }
+
+    @Bean
+    public LobbyServiceImplRest getLobbyServiceImplRest() {
+        return new LobbyServiceImplRest();
+    }
+
+    @Bean
+    @Primary
     public LobbyService getLobbyService() {
 
         switch (System.getProperty("server.type","desktop")) {
             case "dedicated":
-                return new LobbyServiceImplWDao();
+                return getLobbyServiceImplWDao();
             case "desktop":
             default:
-                return new LobbyServiceImplSwitchable(new LobbyServiceImplWDao(), new LobbyServiceImplRest(), false);
+                return new LobbyServiceImplSwitchable(getLobbyServiceImplWDao(), getLobbyServiceImplRest(), false);
         }
     }
 
@@ -41,5 +52,16 @@ public class ApplicationConfig {
     public DeckFactory getDeckFactory() {
         return new DeckFactoryImpl();
     }
+
+    @Bean
+    public ServerFactory getServerFactory() {
+        return new ServerFactory();
+    }
+
+    @Bean
+    public Server getRestServer() throws Exception {
+        return getServerFactory().getServer(Integer.parseInt(System.getProperty("server.port", ServerFactory.DEFAULT_PORT + "")));
+    }
+
 
 }

@@ -8,6 +8,7 @@ import hu.elte.szoftproj.carcassonne.domain.PlayerType;
 import hu.elte.szoftproj.carcassonne.persistence.GameDao;
 import hu.elte.szoftproj.carcassonne.service.LobbyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 
 import java.util.List;
 

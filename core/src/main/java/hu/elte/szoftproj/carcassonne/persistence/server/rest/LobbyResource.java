@@ -109,6 +109,7 @@ public class LobbyResource {
             // TODO: response is based on a service string, that's bad!
             return new SingleGameDto(null, "ERROR_"+e.getMessage());
         } catch (Exception e) {
+            e.printStackTrace();
             return new SingleGameDto(null, "ERROR_UNKNOWN");
         }
     }
@@ -120,6 +121,6 @@ public class LobbyResource {
             builder.add(new PlayerDto(p.getName(), p.getType()));
         }
 
-        return new GameDto(g.getId(), builder.build(), g.getStatus());
+        return new GameDto(g.getId(), builder.build(), g.getDeck().getName(), g.getStatus());
     }
 }

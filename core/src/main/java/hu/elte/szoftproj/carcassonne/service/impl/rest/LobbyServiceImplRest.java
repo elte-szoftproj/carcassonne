@@ -114,7 +114,7 @@ public class LobbyServiceImplRest implements RemoteLobbyService {
                 Optional.empty(),
                 Optional.empty(),
                 gdto.getStatus(),
-                deckFactory.getDeck(gdto.getBoardName())
+                deckFactory.getDeck(gdto.getDeckName())
             );
 
         return g;

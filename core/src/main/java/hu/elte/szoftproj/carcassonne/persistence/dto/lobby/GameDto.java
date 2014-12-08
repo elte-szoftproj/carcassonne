@@ -18,18 +18,18 @@ public class GameDto {
 
     private List<PlayerDto> playerList;
 
-    private String boardName;
+    private String deckName;
 
     private GameState status;
 
     public GameDto() {
     }
 
-    public GameDto(String id, ImmutableList<PlayerDto> playerList, String boardName, GameState status) {
+    public GameDto(String id, ImmutableList<PlayerDto> playerList, String deckName, GameState status) {
         this.id = id;
         this.playerList = playerList;
         this.status = status;
-        this.boardName = boardName;
+        this.deckName = deckName;
     }
 
     public String getId() {
@@ -44,7 +44,7 @@ public class GameDto {
         return status;
     }
 
-    public String getBoardName() {
-        return boardName;
+    public String getDeckName() {
+        return deckName;
     }
 }
