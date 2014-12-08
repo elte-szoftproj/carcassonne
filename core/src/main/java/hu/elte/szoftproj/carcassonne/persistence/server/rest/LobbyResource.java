@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableList;
 import hu.elte.szoftproj.carcassonne.domain.Game;
 import hu.elte.szoftproj.carcassonne.domain.Player;
 import hu.elte.szoftproj.carcassonne.persistence.dto.lobby.*;
-import hu.elte.szoftproj.carcassonne.service.LobbyService;
+import hu.elte.szoftproj.carcassonne.service.impl.LobbyServiceImplWDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +18,7 @@ import java.util.LinkedList;
 public class LobbyResource {
 
     @Autowired
-    LobbyService service;
+    LobbyServiceImplWDao service;
 
     @GET
      @Produces({MediaType.APPLICATION_JSON})
