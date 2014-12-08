@@ -121,6 +121,6 @@ public class LobbyResource {
             builder.add(new PlayerDto(p.getName(), p.getType()));
         }
 
-        return new GameDto(g.getId(), builder.build(), g.getDeck().getName(), g.getStatus());
+        return new GameDto(g.getId(), builder.build(), g.getDeck().get().getName(), g.getStatus());
     }
 }

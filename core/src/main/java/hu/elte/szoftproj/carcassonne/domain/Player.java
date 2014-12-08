@@ -46,6 +46,10 @@ public class Player implements Comparable<Player> {
         return type;
     }
 
+    public ImmutableList<Follower> getFollowers() {
+        return followers;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Player)) {

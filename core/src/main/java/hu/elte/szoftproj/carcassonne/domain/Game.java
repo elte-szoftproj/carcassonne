@@ -100,4 +100,8 @@ public class Game {
 
         return ImmutableList.copyOf(ll);
     }
+
+    public ImmutableList<Follower> getIdleFollowersForPlayers(Player p) {
+        return board.get().notUsedFollowers(p.getFollowers());
+    }
 }

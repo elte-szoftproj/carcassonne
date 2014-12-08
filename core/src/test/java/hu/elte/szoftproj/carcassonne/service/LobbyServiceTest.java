@@ -33,7 +33,7 @@ public abstract class LobbyServiceTest {
         Game g = serviceToTest.createNewGame("testPlayer", "basic");
 
         assertThat(g.getStatus(), equalTo(GameState.WAITING));
-        assertThat(g.getDeck().getName(), equalTo("basic"));
+        assertThat(g.getDeck().get().getName(), equalTo("basic"));
         assertThat(g.getCurrentPlayer(), equalTo(Optional.empty()));
         assertThat(g.getPlayers().size(), equalTo(1));
         assertThat(g.getPlayers().get(0).getName(), equalTo("testPlayer"));
@@ -50,7 +50,7 @@ public abstract class LobbyServiceTest {
         Game gJoin = serviceToTest.joinGame(g.getId(), "testPlayer2", false);
 
         assertThat(gJoin.getStatus(), equalTo(GameState.WAITING));
-        assertThat(gJoin.getDeck().getName(), equalTo("basic"));
+        assertThat(gJoin.getDeck().get().getName(), equalTo("basic"));
         assertThat(gJoin.getPlayers().size(), equalTo(2));
         assertThat(gJoin.getPlayers().get(0).getName(), equalTo("testPlayer"));
         assertThat(gJoin.getPlayers().get(1).getName(), equalTo("testPlayer2"));
@@ -70,7 +70,7 @@ public abstract class LobbyServiceTest {
         Game gStart = serviceToTest.startGame(g.getId());
 
         assertThat(gStart.getStatus(), equalTo(GameState.PLAYING));
-        assertThat(gStart.getDeck().getName(), equalTo("basic"));
+        assertThat(gStart.getDeck().get().getName(), equalTo("basic"));
         assertThat(gStart.getPlayers().size(), equalTo(2));
         assertThat(gStart.getPlayers().get(0).getName(), equalTo("testPlayer"));
         assertThat(gStart.getPlayers().get(1).getName(), equalTo("testPlayer2"));

@@ -6,10 +6,7 @@ import hu.elte.szoftproj.carcassonne.persistence.GameDao;
 import hu.elte.szoftproj.carcassonne.service.DeckFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class GameDaoMemoryImpl implements GameDao {
 
@@ -25,7 +22,7 @@ public class GameDaoMemoryImpl implements GameDao {
     @Override
     public Game createNewGame(String initialPlayerName, String boardName) {
         String uuid = UUID.randomUUID().toString();
-        games.put(uuid, new Game(uuid, deckFactory.getDeck(boardName), initialPlayerName));
+        games.put(uuid, new Game(uuid, Optional.of(deckFactory.getDeck(boardName)), initialPlayerName));
 
         return getGameById(uuid);
     }

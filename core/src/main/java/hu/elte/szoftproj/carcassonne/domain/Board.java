@@ -161,6 +161,17 @@ public class Board {
         return new Board(builder.build());
     }
 
+    public ImmutableList<Follower> notUsedFollowers(ImmutableList<Follower> from) {
+        ImmutableList.Builder<Follower> builder = new ImmutableList.Builder<>();
+        for (Follower f: from) {
+            if (!usedFollowers.containsKey(f)) {
+                builder.add(f);
+            }
+        }
+
+        return builder.build();
+    }
+
     private void buildAreaGrid(ImmutableTable<Integer, Integer, Square> grid) {
         TreeBasedTable<Integer, Integer, Area> tempTable = TreeBasedTable.create();
 
