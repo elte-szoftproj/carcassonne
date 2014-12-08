@@ -73,4 +73,12 @@ public class Area {
         return ImmutableList.copyOf(l);
 
     }
+
+    public boolean removeFollowersWhenClosed() {
+        // TODO: move this method elsewhere but where?
+
+        // ground followers are calculated differently, at the endgame. others are removed during the game
+        return !type.equals('G');
+
+    }
 }
