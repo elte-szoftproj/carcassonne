@@ -60,9 +60,9 @@ public class LobbyResource {
     @Path("create")
     public SingleGameDto createGame(GameCreateActionDto gcd) {
         try {
-            return new SingleGameDto(gameToDto(service.createNewGame(gcd.getPlayerName(), gcd.getBoardName())), "OK");
+            return new SingleGameDto(gameToDto(service.createNewGame(gcd.getPlayerName(), gcd.getDeckName())), "OK");
         } catch (IllegalArgumentException e) {
-            return new SingleGameDto(null, "ERROR_NO_SUCH_BOARD");
+            return new SingleGameDto(null, "ERROR_NO_SUCH_DECK");
         } catch (Exception e) {
             return new SingleGameDto(null, "ERROR_UNKNOWN");
         }

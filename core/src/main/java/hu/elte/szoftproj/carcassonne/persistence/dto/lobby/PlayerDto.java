@@ -2,7 +2,7 @@ package hu.elte.szoftproj.carcassonne.persistence.dto.lobby;
 
 
 import hu.elte.szoftproj.carcassonne.domain.PlayerType;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
