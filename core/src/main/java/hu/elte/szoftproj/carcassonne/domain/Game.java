@@ -109,4 +109,14 @@ public class Game {
     public boolean isFinished() {
         return status.equals(GameState.FINISHED);
     }
+
+    public Player getPlayerByName(String name) {
+        for (Player p: players) {
+            if (p.getName().equals(name)) {
+                return p;
+            }
+        }
+
+        throw new IllegalArgumentException("No such player");
+    }
 }

@@ -35,4 +35,39 @@ public abstract class GameServiceTest {
         assertThat(g.getCurrentPlayer().get().getAction(), equalTo(GameAction.PLACE_FOLLOWER));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void placeBadPlayerFails() {
+        Game g = gameService.getGameById(gameId);
+        Tile currentTile = g.getDeck().get().peekNext();
+        Player current = g.getPlayerByName("testUser2");
+        gameService.placeTile(g, current, currentTile, Rotation.R180, -1, 0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void placeBadTileFails() {
+        Game g = gameService.getGameById(gameId);
+        Tile currentTile = StandardTiles.stdCity2nw;
+        Player current = g.getCurrentPlayer().get().getPlayer();
+        gameService.placeTile(g, current, currentTile, Rotation.R180, -1, 0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void placeBadPositionFails() {
+        Game g = gameService.getGameById(gameId);
+        Tile currentTile = g.getDeck().get().peekNext();
+        Player current = g.getCurrentPlayer().get().getPlayer();
+        gameService.placeTile(g, current, currentTile, Rotation.R180, -1, -1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void placeBadStepFails() {
+        Game g = gameService.getGameById(gameId);
+        Tile currentTile = g.getDeck().get().peekNext();
+        Player current = g.getCurrentPlayer().get().getPlayer();
+        gameService.placeTile(g, current, currentTile, Rotation.R180, -1, 0);
+        gameService.placeTile(g, current, currentTile, Rotation.R180, -1, 0);
+    }
+
+    
+
 }
