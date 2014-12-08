@@ -1,7 +1,6 @@
 package hu.elte.szoftproj.carcassonne.domain;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableTable;
 import hu.elte.szoftproj.carcassonne.service.Deck;
 
 import java.util.Optional;
@@ -17,7 +16,7 @@ public class Game {
 
     private Optional<CurrentPlayer> currentPlayer;
 
-    Optional<ImmutableTable<Integer, Integer, Square>> board;
+    Optional<Board> board;
 
     private GameState status;
 
@@ -34,7 +33,7 @@ public class Game {
     }
 
     // constructor for modifications
-    public Game(String id, ImmutableList<Player> players, Optional<CurrentPlayer> currentPlayer, Optional<ImmutableTable<Integer, Integer, Square>> board, GameState status, Deck deck) {
+    public Game(String id, ImmutableList<Player> players, Optional<CurrentPlayer> currentPlayer, Optional<Board> board, GameState status, Deck deck) {
         this.id = id;
         this.players = players;
         this.currentPlayer = currentPlayer;
@@ -60,7 +59,7 @@ public class Game {
         return currentPlayer;
     }
 
-    public Optional<ImmutableTable<Integer, Integer, Square>> getBoard() {
+    public Optional<Board> getBoard() {
         return board;
     }
 

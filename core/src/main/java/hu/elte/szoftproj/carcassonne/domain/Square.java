@@ -2,11 +2,26 @@ package hu.elte.szoftproj.carcassonne.domain;
 
 public class Square {
 
-    // tile
+    Tile tile;
 
-    // rotation
+    Rotation tileRotation;
+
 
     // area
 
     // immutablelist<pieceplacement>
+
+
+    public Square(Tile tile, Rotation tileRotation) {
+        this.tile = tile;
+        this.tileRotation = tileRotation;
+    }
+
+    public Tile getTile() {
+        return tile;
+    }
+
+    public Rotation getTileRotation() {
+        return tileRotation;
+    }
 }
