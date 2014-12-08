@@ -2,6 +2,7 @@ package hu.elte.szoftproj.carcassonne.service;
 
 
 import hu.elte.szoftproj.carcassonne.domain.*;
+import hu.elte.szoftproj.carcassonne.domain.follower.BasicFollower;
 import hu.elte.szoftproj.carcassonne.domain.follower.BigFollower;
 import org.junit.Test;
 
@@ -137,6 +138,50 @@ public abstract class GameServiceTest {
         Follower f = current.getFollowers(BigFollower.class).get(0);
         gameService.placeFollower(g, current, f, -1, 0, 3, 3);
         gameService.placeFollower(g, current, f, -1, 0, 3, 3);
+    }
+
+    protected void placeFirstFollower() {
+        Game g = gameService.getGameById(gameId);
+        Player current = g.getCurrentPlayer().get().getPlayer();
+        Follower f = current.getFollowers(BigFollower.class).get(0);
+        g = gameService.placeFollower(g, current, f, -1, 0, 3, 3);
+    }
+
+    @Test
+    public void placeSecondPartsTest() {
+        placeFirstTile();
+        placeFirstFollower();
+
+        Game g = gameService.getGameById(gameId);
+        Player current = g.getCurrentPlayer().get().getPlayer();
+        Tile currentTile = g.getDeck().get().peekNext();
+        g = gameService.placeTile(g, current, currentTile, Rotation.R0, -1, 1);
+
+        current = g.getCurrentPlayer().get().getPlayer();
+        Follower f = current.getFollowers(BasicFollower.class).get(0);
+        g = gameService.placeFollower(g, current, f, -1, 1, 4, 4);
+
+        assertThat(g.getBoard().get().getGrid().size(), equalTo(3));
+        assertThat(g.getCurrentPlayer().get().getPlayer(), not(equalTo(current)));
+        assertThat(g.getCurrentPlayer().get().getAction(), equalTo(GameAction.PLACE_TILE));
+        assertThat(g.getBoard().get().getUsedFollowers().size(), equalTo(2));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void placeBadFollowerSecondPartsFailsTest() {
+
+        placeFirstTile();
+        placeFirstFollower();
+
+        Game g = gameService.getGameById(gameId);
+        Player current = g.getCurrentPlayer().get().getPlayer();
+        Tile currentTile = g.getDeck().get().peekNext();
+        System.out.println(currentTile.getName());
+        g = gameService.placeTile(g, current, currentTile, Rotation.R0, -1, 1);
+
+        current = g.getCurrentPlayer().get().getPlayer();
+        Follower f = current.getFollowers(BasicFollower.class).get(0);
+        g = gameService.placeFollower(g, current, f, -1, 1, 1, 1);
     }
 
 }

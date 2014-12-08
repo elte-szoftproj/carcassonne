@@ -363,4 +363,21 @@ public class Board {
     public Optional<Tile> getLastPlacedTile() {
         return lastPlacedTile;
     }
+
+    // debug
+    public void printAreaGrid() {
+        for (Integer iy : ImmutableSortedSet.copyOf(areaGrid.rowKeySet())) {
+            for (Integer ix : ImmutableSortedSet.copyOf(areaGrid.columnKeySet())) {
+
+                if (!areaGrid.contains(iy, ix)) {
+                    System.out.print(" ");
+                    continue;
+                }
+
+                System.out.print(areaGrid.get(iy, ix).getType());
+            }
+
+            System.out.println();
+        }
+    }
 }

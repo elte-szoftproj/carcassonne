@@ -132,6 +132,10 @@ public class GameServiceImplWDao implements GameService {
             throw new IllegalArgumentException("NOT_CURRENT_TILE");
         }
 
+        if (!board.canPlaceFollower(y, x, f, dy, dx)) {
+            throw new IllegalArgumentException("CANT_PLACE_THERE");
+        }
+
         Board newBoard = board.placeFollower(y, x, f, dy, dx);
 
         ImmutableList<Player> players = realGame.getPlayers();
