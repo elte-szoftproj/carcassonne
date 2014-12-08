@@ -8,6 +8,7 @@ import hu.elte.szoftproj.carcassonne.persistence.server.ServerFactory;
 import hu.elte.szoftproj.carcassonne.service.DeckFactory;
 import hu.elte.szoftproj.carcassonne.service.LobbyService;
 import hu.elte.szoftproj.carcassonne.service.impl.DeckFactoryImpl;
+import hu.elte.szoftproj.carcassonne.service.impl.GameServiceImplWDao;
 import hu.elte.szoftproj.carcassonne.service.impl.LobbyServiceImplSwitchable;
 import hu.elte.szoftproj.carcassonne.service.impl.LobbyServiceImplWDao;
 import hu.elte.szoftproj.carcassonne.service.impl.rest.LobbyServiceImplRest;
@@ -29,6 +30,11 @@ public class ApplicationConfig {
     @Bean
     public GameDao getGameDao() {
         return new GameDaoMemoryImpl();
+    }
+
+    @Bean
+    public GameServiceImplWDao getGameServiceImplWDao() {
+        return new GameServiceImplWDao();
     }
 
     @Bean

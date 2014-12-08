@@ -8,41 +8,26 @@ import hu.elte.szoftproj.carcassonne.domain.StandardTiles;
 import hu.elte.szoftproj.carcassonne.domain.Tile;
 import hu.elte.szoftproj.carcassonne.service.Deck;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 
-public class BasicDeck implements Deck {
+/**
+ * Simple deck, just enough to finish a simple test game
+ */
+public class TestDeck implements Deck {
 
     private ImmutableList<Tile> tiles;
 
-    public BasicDeck() {
+    public TestDeck() {
         LinkedList<Tile> ll = new LinkedList<>();
 
-        addTile(ll, 1, StandardTiles.stdCity4);
-        addTile(ll, 4, StandardTiles.stdCity3);
-        addTile(ll, 3, StandardTiles.stdCity2we);
-        addTile(ll, 5, StandardTiles.stdCity2nw);
-        addTile(ll, 2, StandardTiles.stdCity11ne);
-        addTile(ll, 3, StandardTiles.stdCity11we);
-        addTile(ll, 3, StandardTiles.stdCity1);
+        addTile(ll, 1, StandardTiles.stdCity3);
+        addTile(ll, 2, StandardTiles.stdCity2nw);
+        addTile(ll, 2, StandardTiles.stdCity1);
 
-        addTile(ll, 3, StandardTiles.stdCity3r);
-        addTile(ll, 5, StandardTiles.stdCity2nwr);
-        addTile(ll, 3, StandardTiles.stdCity1rse);
-        addTile(ll, 3, StandardTiles.stdCity1rsw);
-        addTile(ll, 3, StandardTiles.stdCity1rswe);
-        addTile(ll, 3, StandardTiles.stdCity1rwe); // + starter
-
-        addTile(ll, 1, StandardTiles.stdRoad4);
-        addTile(ll, 4, StandardTiles.stdRoad3);
-        addTile(ll, 8, StandardTiles.stdRoad2ns);
-        addTile(ll, 9, StandardTiles.stdRoad2sw);
-
-        addTile(ll, 4, StandardTiles.stdCloister1);
-        addTile(ll, 2, StandardTiles.stdCloister1r);
-
-        Collections.shuffle(ll);
+        addTile(ll, 2, StandardTiles.stdRoad2sw);
+        addTile(ll, 2, StandardTiles.stdRoad3);
+        addTile(ll, 1, StandardTiles.stdRoad2ns);
 
         tiles = ImmutableList.copyOf(ll);
     }
@@ -53,13 +38,13 @@ public class BasicDeck implements Deck {
         }
     }
 
-    public BasicDeck(ImmutableList<Tile> tiles) {
+    public TestDeck(ImmutableList<Tile> tiles) {
         this.tiles = tiles;
     }
 
     @Override
     public String getName() {
-        return "basic";
+        return "test";
     }
 
     @Override
@@ -93,10 +78,6 @@ public class BasicDeck implements Deck {
 
     @Override
     public Deck reshuffle() {
-        LinkedList<Tile> ll = new LinkedList<>(tiles);
-
-        Collections.shuffle(ll);
-
-        return new BasicDeck(ImmutableList.copyOf(ll));
+        return this;
     }
 }

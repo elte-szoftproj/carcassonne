@@ -3,6 +3,7 @@ package hu.elte.szoftproj.carcassonne.service.impl;
 import com.google.common.collect.ImmutableList;
 import hu.elte.szoftproj.carcassonne.domain.*;
 import hu.elte.szoftproj.carcassonne.persistence.GameDao;
+import hu.elte.szoftproj.carcassonne.service.Deck;
 import hu.elte.szoftproj.carcassonne.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -49,13 +50,40 @@ public class GameServiceImplWDao implements GameService {
 
         Board newBoard = realGame.getBoard().get().placeTile(t, r, y, x);
 
+        Deck newDeck = realGame.getDeck().get().removeNext();
+
+        if (newDeck.getRemainingPieceCount() != 0) {
+            // first ensure that there is a tile we can place
+            Deck tmp = newDeck;
+            while (tmp.getRemainingPieceCount() != 0 && !newBoard.canBePlaced(newDeck.peekNext())) {
+                tmp = tmp.removeNext();
+            }
+
+            if (tmp.getRemainingPieceCount() == 0) { // trash
+                newDeck = tmp;
+            } else {
+                while (!newBoard.canBePlaced(newDeck.peekNext())) {
+                    newDeck = newDeck.reshuffle();
+                }
+            }
+        }
+
+        CurrentPlayer nextPlayer = realGame.getCurrentPlayer().get().next(realGame.getPlayers());
+
+        // TODO: refactor this elsewhere!
+        if (newBoard.notUsedFollowers(nextPlayer.getPlayer().getFollowers()).isEmpty()) {
+            // skip follower turn if we don't have one
+            System.out.println("BUG! " + nextPlayer.getPlayer().getFollowers().size());
+            nextPlayer = nextPlayer.next(realGame.getPlayers());
+        }
+
         realGame = new Game(
                 realGame.getId(),
                 realGame.getPlayers(),
-                Optional.of(realGame.getCurrentPlayer().get().next(realGame.getPlayers())),
+                Optional.of(nextPlayer),
                 Optional.of(newBoard),
                 realGame.getStatus(),
-                Optional.of(realGame.getDeck().get().removeNext())
+                Optional.of(newDeck)
         );
 
         dao.updateGameInfo(realGame);
@@ -106,7 +134,7 @@ public class GameServiceImplWDao implements GameService {
             }
         }
 
-        boolean finished = realGame.getDeck().get().removeRemainingPieceCount() == 0;
+        boolean finished = realGame.getDeck().get().getRemainingPieceCount() == 0;
 
         if (finished) {
             // remove remaining followers & add scores

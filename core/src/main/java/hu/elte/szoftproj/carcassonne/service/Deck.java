@@ -16,7 +16,7 @@ public interface Deck {
 
     Deck removeNext();
 
-    int removeRemainingPieceCount();
+    int getRemainingPieceCount();
 
     /**
      * Called when the actual tile can't be placed anywhere

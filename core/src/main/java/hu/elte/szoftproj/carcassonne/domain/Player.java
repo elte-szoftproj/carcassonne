@@ -9,9 +9,9 @@ public class Player implements Comparable<Player> {
 
     private int score;
 
-    PlayerType type;
+    private PlayerType type;
 
-    ImmutableList<Follower> followers;
+    protected ImmutableList<Follower> followers;
 
     public Player(String name) {
         this.name = name;
@@ -62,5 +62,10 @@ public class Player implements Comparable<Player> {
     @Override
     public int compareTo(Player o) {
         return o.score - score;
+    }
+
+    @Override
+    public String toString() {
+        return getName() + "[" + getScore() + "]";
     }
 }

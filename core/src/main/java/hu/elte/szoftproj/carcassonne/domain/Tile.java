@@ -107,5 +107,9 @@ public class Tile {
 
         return true;
     }
+
+    public String getName() {
+        return name;
+    }
 }
 

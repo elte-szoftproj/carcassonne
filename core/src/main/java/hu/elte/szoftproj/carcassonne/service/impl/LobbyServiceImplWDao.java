@@ -1,16 +1,14 @@
 package hu.elte.szoftproj.carcassonne.service.impl;
 
 import com.google.common.collect.ImmutableList;
-import hu.elte.szoftproj.carcassonne.domain.Game;
-import hu.elte.szoftproj.carcassonne.domain.GameState;
-import hu.elte.szoftproj.carcassonne.domain.Player;
-import hu.elte.szoftproj.carcassonne.domain.PlayerType;
+import hu.elte.szoftproj.carcassonne.domain.*;
+import hu.elte.szoftproj.carcassonne.domain.player.StandardPlayer;
 import hu.elte.szoftproj.carcassonne.persistence.GameDao;
 import hu.elte.szoftproj.carcassonne.service.LobbyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 
 import java.util.List;
+import java.util.Optional;
 
 public class LobbyServiceImplWDao implements LobbyService {
 
@@ -50,7 +48,7 @@ public class LobbyServiceImplWDao implements LobbyService {
 
         return dao.updateGameInfo(new Game(
                 g.getId(),
-                (new ImmutableList.Builder<Player>().addAll(g.getPlayers()).add(new Player(player, ai ? PlayerType.AI : PlayerType.HUMAN))).build(),
+                (new ImmutableList.Builder<Player>().addAll(g.getPlayers()).add(new StandardPlayer(player, ai ? PlayerType.AI : PlayerType.HUMAN))).build(),
                 g.getCurrentPlayer(),
                 g.getBoard(),
                 g.getStatus(),
@@ -77,8 +75,8 @@ public class LobbyServiceImplWDao implements LobbyService {
         return dao.updateGameInfo(new Game(
                 g.getId(),
                 g.getPlayers(),
-                g.getCurrentPlayer(),
-                g.getBoard(),
+                Optional.of(new CurrentPlayer(g.getPlayers().get(0), GameAction.PLACE_TILE)),
+                Optional.of(g.getDeck().get().getStarterBoard()),
                 GameState.PLAYING,
                 g.getDeck()
         ));

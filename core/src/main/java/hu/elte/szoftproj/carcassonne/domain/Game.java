@@ -1,6 +1,7 @@
 package hu.elte.szoftproj.carcassonne.domain;
 
 import com.google.common.collect.ImmutableList;
+import hu.elte.szoftproj.carcassonne.domain.player.StandardPlayer;
 import hu.elte.szoftproj.carcassonne.service.Deck;
 
 import java.util.Collections;
@@ -27,7 +28,7 @@ public class Game {
     // constructor for new games
     public Game(String id, Optional<Deck> d, String initialPlayerName) {
         this.id = id;
-        this.players = ImmutableList.of(new Player(initialPlayerName));
+        this.players = ImmutableList.of(new StandardPlayer(initialPlayerName, PlayerType.HUMAN));
         this.currentPlayer = Optional.empty();
         this.board = Optional.empty();
         this.status = GameState.WAITING;
