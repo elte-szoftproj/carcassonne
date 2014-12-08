@@ -19,7 +19,10 @@ public class LobbyServiceImplRest implements LobbyService {
     @Autowired
     DeckFactory deckFactory;
 
-    public LobbyServiceImplRest(LobbyRestClient client) {
+    public LobbyServiceImplRest() {
+    }
+
+    public void setClient(LobbyRestClient client) {
         this.client = client;
     }
 
