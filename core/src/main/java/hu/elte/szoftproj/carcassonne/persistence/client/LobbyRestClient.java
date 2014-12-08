@@ -1,8 +1,6 @@
 package hu.elte.szoftproj.carcassonne.persistence.client;
 
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader;
 import hu.elte.szoftproj.carcassonne.persistence.dto.lobby.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
