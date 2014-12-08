@@ -5,10 +5,14 @@ import hu.elte.szoftproj.carcassonne.persistence.impl.LobbyDaoMemoryImpl;
 import hu.elte.szoftproj.carcassonne.service.DeckFactory;
 import hu.elte.szoftproj.carcassonne.service.LobbyService;
 import hu.elte.szoftproj.carcassonne.service.impl.DeckFactoryImpl;
+import hu.elte.szoftproj.carcassonne.service.impl.LobbyServiceImplSwitchable;
 import hu.elte.szoftproj.carcassonne.service.impl.LobbyServiceImplWDao;
+import hu.elte.szoftproj.carcassonne.service.impl.rest.LobbyServiceImplRest;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 @Configuration
 @ComponentScan("hu.elte.szoftproj.carcassonne")
@@ -21,9 +25,16 @@ public class ApplicationConfig {
     }
 
     @Bean
+    @Scope(BeanDefinition.SCOPE_PROTOTYPE)
     public LobbyService getLobbyService() {
-        // TODO: server specific implementation!
-        return new LobbyServiceImplWDao();
+
+        switch (System.getProperty("server.type","desktop")) {
+            case "dedicated":
+                return new LobbyServiceImplWDao();
+            case "desktop":
+            default:
+                return new LobbyServiceImplSwitchable(new LobbyServiceImplWDao(), new LobbyServiceImplRest(), false);
+        }
     }
 
     @Bean

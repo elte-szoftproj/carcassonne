@@ -6,13 +6,13 @@ import hu.elte.szoftproj.carcassonne.domain.Player;
 import hu.elte.szoftproj.carcassonne.persistence.client.LobbyRestClient;
 import hu.elte.szoftproj.carcassonne.persistence.dto.lobby.*;
 import hu.elte.szoftproj.carcassonne.service.DeckFactory;
-import hu.elte.szoftproj.carcassonne.service.LobbyService;
+import hu.elte.szoftproj.carcassonne.service.RemoteLobbyService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
 
-public class LobbyServiceImplRest implements LobbyService {
+public class LobbyServiceImplRest implements RemoteLobbyService {
 
     LobbyRestClient client;
 
@@ -22,6 +22,7 @@ public class LobbyServiceImplRest implements LobbyService {
     public LobbyServiceImplRest() {
     }
 
+    @Override
     public void setClient(LobbyRestClient client) {
         this.client = client;
     }
