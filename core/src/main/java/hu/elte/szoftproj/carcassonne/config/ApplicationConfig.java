@@ -1,7 +1,7 @@
 package hu.elte.szoftproj.carcassonne.config;
 
-import hu.elte.szoftproj.carcassonne.persistence.LobbyDao;
-import hu.elte.szoftproj.carcassonne.persistence.impl.LobbyDaoMemoryImpl;
+import hu.elte.szoftproj.carcassonne.persistence.GameDao;
+import hu.elte.szoftproj.carcassonne.persistence.impl.GameDaoMemoryImpl;
 import hu.elte.szoftproj.carcassonne.service.DeckFactory;
 import hu.elte.szoftproj.carcassonne.service.LobbyService;
 import hu.elte.szoftproj.carcassonne.service.impl.DeckFactoryImpl;
@@ -20,8 +20,8 @@ public class ApplicationConfig {
 
 
     @Bean
-    public LobbyDao getLobbyDao() {
-        return new LobbyDaoMemoryImpl();
+    public GameDao getGameDao() {
+        return new GameDaoMemoryImpl();
     }
 
     @Bean

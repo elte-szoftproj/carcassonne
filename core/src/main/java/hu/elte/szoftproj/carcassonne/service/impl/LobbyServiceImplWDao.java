@@ -5,7 +5,7 @@ import hu.elte.szoftproj.carcassonne.domain.Game;
 import hu.elte.szoftproj.carcassonne.domain.GameState;
 import hu.elte.szoftproj.carcassonne.domain.Player;
 import hu.elte.szoftproj.carcassonne.domain.PlayerType;
-import hu.elte.szoftproj.carcassonne.persistence.LobbyDao;
+import hu.elte.szoftproj.carcassonne.persistence.GameDao;
 import hu.elte.szoftproj.carcassonne.service.LobbyService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,7 +14,7 @@ import java.util.List;
 public class LobbyServiceImplWDao implements LobbyService {
 
     @Autowired
-    LobbyDao dao;
+    GameDao dao;
 
     @Override
     public Game createNewGame(String initialPlayerName, String boardName) {

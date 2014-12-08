@@ -2,7 +2,7 @@ package hu.elte.szoftproj.carcassonne.persistence.impl;
 
 import hu.elte.szoftproj.carcassonne.domain.Game;
 import hu.elte.szoftproj.carcassonne.domain.GameState;
-import hu.elte.szoftproj.carcassonne.persistence.LobbyDao;
+import hu.elte.szoftproj.carcassonne.persistence.GameDao;
 import hu.elte.szoftproj.carcassonne.service.DeckFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,14 +11,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-public class LobbyDaoMemoryImpl implements LobbyDao{
+public class GameDaoMemoryImpl implements GameDao {
 
     @Autowired
     DeckFactory deckFactory;
 
     HashMap<String, Game> games;
 
-    public LobbyDaoMemoryImpl() {
+    public GameDaoMemoryImpl() {
         this.games = new HashMap<>();
     }
 
