@@ -244,5 +244,19 @@ public class BoardTest {
         assertThat(followerArea.getContainedTileCount(), equalTo(2));
 
     }
+
+    @Test
+    public void testAreaNeighbors() {
+        Follower f1 = new BasicFollower(new Player("test1"));
+        board = board.placeFollower(0, 0, f1, 0, 3);
+        Area followerArea = board.getUsedFollowers().values().asList().get(0);
+        assertThat(board.getNeighborAreasOfTYpe(followerArea, 'R').size(), equalTo(0));
+        assertThat(board.getNeighborAreasOfTYpe(followerArea, 'G').size(), equalTo(1));
+        assertThat(board.getNeighborAreasOfTYpe(followerArea, 'C').size(), equalTo(0));
+
+        board = board.placeTile(StandardTiles.stdCity1, Rotation.R180, -1, 0);
+        followerArea = board.getUsedFollowers().values().asList().get(0);
+        assertThat(board.getNeighborAreasOfTYpe(followerArea, 'G').size(), equalTo(2));
+    }
 }
 

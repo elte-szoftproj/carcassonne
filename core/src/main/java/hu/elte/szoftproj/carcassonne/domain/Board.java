@@ -172,6 +172,48 @@ public class Board {
         return builder.build();
     }
 
+    public ImmutableSet<Area> getNeighborAreasOfTYpe(Area center, Character type) {
+        ImmutableSet.Builder<Area> builder = new ImmutableSet.Builder<>();
+
+        if (!areas.contains(center)) {
+            throw new IllegalArgumentException("Area not found");
+        }
+
+        for (Coordinate c : center.getCoordinates()) {
+            if (    true
+                    && areaGrid.contains(c.getY()-1, c.getX())
+                    && areaGrid.get(c.getY()-1, c.getX()) != center
+                    && areaGrid.get(c.getY()-1, c.getX()).getType().equals(type)
+                    ) {
+                builder.add(areaGrid.get(c.getY()-1, c.getX()));
+            }
+            if (    true
+                    && areaGrid.contains(c.getY()+1, c.getX())
+                    && areaGrid.get(c.getY()+1, c.getX()) != center
+                    && areaGrid.get(c.getY()+1, c.getX()).getType().equals(type)
+                    ) {
+                builder.add(areaGrid.get(c.getY()+1, c.getX()));
+            }
+            if (    true
+                    && areaGrid.contains(c.getY(), c.getX()-1)
+                    && areaGrid.get(c.getY(), c.getX()-1) != center
+                    && areaGrid.get(c.getY(), c.getX()-1).getType().equals(type)
+                    ) {
+                builder.add(areaGrid.get(c.getY(), c.getX()-1));
+            }
+            if (    true
+                    && areaGrid.contains(c.getY(), c.getX()+1)
+                    && areaGrid.get(c.getY(), c.getX()+1) != center
+                    && areaGrid.get(c.getY(), c.getX()+1).getType().equals(type)
+                    ) {
+                builder.add(areaGrid.get(c.getY(), c.getX()+1));
+            }
+        }
+
+        return builder.build();
+    }
+
+
     private void buildAreaGrid(ImmutableTable<Integer, Integer, Square> grid) {
         TreeBasedTable<Integer, Integer, Area> tempTable = TreeBasedTable.create();
 
