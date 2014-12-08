@@ -16,14 +16,14 @@ public class Game {
 
     private Optional<CurrentPlayer> currentPlayer;
 
-    Optional<Board> board;
+    private Optional<Board> board;
 
     private GameState status;
 
-    private Deck deck;
+    private Optional<Deck> deck;
 
     // constructor for new games
-    public Game(String id, Deck d, String initialPlayerName) {
+    public Game(String id, Optional<Deck> d, String initialPlayerName) {
         this.id = id;
         this.players = ImmutableList.of(new Player(initialPlayerName));
         this.currentPlayer = Optional.empty();
@@ -33,7 +33,7 @@ public class Game {
     }
 
     // constructor for modifications
-    public Game(String id, ImmutableList<Player> players, Optional<CurrentPlayer> currentPlayer, Optional<Board> board, GameState status, Deck deck) {
+    public Game(String id, ImmutableList<Player> players, Optional<CurrentPlayer> currentPlayer, Optional<Board> board, GameState status, Optional<Deck> deck) {
         this.id = id;
         this.players = players;
         this.currentPlayer = currentPlayer;
@@ -76,7 +76,7 @@ public class Game {
         return false;
     }
 
-    public Deck getDeck() {
+    public Optional<Deck> getDeck() {
         return deck;
     }
 }
