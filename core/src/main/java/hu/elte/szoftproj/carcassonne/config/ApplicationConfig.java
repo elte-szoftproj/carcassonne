@@ -1,6 +1,8 @@
 package hu.elte.szoftproj.carcassonne.config;
 
 import hu.elte.szoftproj.carcassonne.persistence.GameDao;
+import hu.elte.szoftproj.carcassonne.persistence.client.ClientFactory;
+import hu.elte.szoftproj.carcassonne.persistence.client.impl.ClientFactoryImpl;
 import hu.elte.szoftproj.carcassonne.persistence.impl.GameDaoMemoryImpl;
 import hu.elte.szoftproj.carcassonne.persistence.server.ServerFactory;
 import hu.elte.szoftproj.carcassonne.service.DeckFactory;
@@ -19,6 +21,10 @@ import org.springframework.context.annotation.Primary;
 @ComponentScan("hu.elte.szoftproj.carcassonne")
 public class ApplicationConfig {
 
+    @Bean
+    public ClientFactory getClientFactory() {
+        return new ClientFactoryImpl();
+    }
 
     @Bean
     public GameDao getGameDao() {
@@ -44,8 +50,13 @@ public class ApplicationConfig {
                 return getLobbyServiceImplWDao();
             case "desktop":
             default:
-                return new LobbyServiceImplSwitchable(getLobbyServiceImplWDao(), getLobbyServiceImplRest(), false);
+                return getLobbyServiceImplSwitchable();
         }
+    }
+
+    @Bean
+    public LobbyServiceImplSwitchable getLobbyServiceImplSwitchable() {
+        return new LobbyServiceImplSwitchable(getLobbyServiceImplWDao(), getLobbyServiceImplRest(), false);
     }
 
     @Bean

@@ -4,7 +4,6 @@ import hu.elte.szoftproj.carcassonne.domain.Game;
 import hu.elte.szoftproj.carcassonne.service.LobbyService;
 import hu.elte.szoftproj.carcassonne.service.RemoteLobbyService;
 
-import java.rmi.Remote;
 import java.util.List;
 
 public class LobbyServiceImplSwitchable implements LobbyService {
@@ -49,5 +48,17 @@ public class LobbyServiceImplSwitchable implements LobbyService {
     @Override
     public Game startGame(String gameId) {
         return getActiveService().startGame(gameId);
+    }
+
+    public void switchToRemote() {
+        this.remoteActive = true;
+    }
+
+    public void switchToLocal() {
+        this.remoteActive = false;
+    }
+
+    public RemoteLobbyService getRemote() {
+        return remote;
     }
 }
