@@ -7,6 +7,8 @@ import hu.elte.szoftproj.carcassonne.domain.follower.BasicFollower;
 import hu.elte.szoftproj.carcassonne.domain.follower.BigFollower;
 import org.junit.Test;
 
+import java.util.Optional;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
@@ -204,7 +206,7 @@ public abstract class GameServiceTest {
 
     protected Game placeNextTileWFollower(int y, int x, Rotation r, Class followerType, int dy, int dx) {
         Game g = placeNextTile(y, x, r, false);
-        Follower f = g.getCurrentPlayer().get().getPlayer().getFollowers(followerType).get(0);
+        Follower f = g.getBoard().get().notUsedFollowers(g.getCurrentPlayer().get().getPlayer().getFollowers(followerType)).get(0);
         Player current = g.getCurrentPlayer().get().getPlayer();
         System.out.println("Placing Follower " + f.getType() + " for player " + current.getName() + " at [y:" + y + ",x:" + x + "]:" + dy + ":" + dx);
         return gameService.placeFollower(g, current, f, y, x, dy, dx);
@@ -226,8 +228,45 @@ public abstract class GameServiceTest {
         assertThat(g.getBoard().get().getUsedFollowers().values().asList().get(0).getType(), equalTo('G'));
 
         ImmutableList<Player> scores = g.getPlayersByScore();
-        assertThat(scores.get(0).getScore(), equalTo(8));
+        assertThat(scores.get(0).getScore(), equalTo(12));
         assertThat(scores.get(1).getScore(), equalTo(0));
 
     }
+
+    @Test
+    public void finishMapTest() {
+        placeFirstTile();
+        placeFirstFollower();
+
+        placeNextTileWFollower(-1, 1, Rotation.R0, BasicFollower.class, 4, 4); // 2 city2nw
+        placeNextTile(-1, -1, Rotation.R90); // 1 city2nw
+        placeNextTile(-2, 1, Rotation.R180); // 2 city1
+        Game g = placeNextTile(-2, -1, Rotation.R180); // 1 city1
+
+        placeNextTileWFollower(-2, 0, Rotation.R0, BasicFollower.class, 2, 2); // 2 cloister
+
+        placeNextTileWFollower(0, 1, Rotation.R0, BasicFollower.class, 2, 2); // 1 road
+        placeNextTile(0, -1, Rotation.R270);
+        placeNextTile(1, 1, Rotation.R90);
+        placeNextTile(1, -1, Rotation.R270);
+        g = placeNextTile(1, 0, Rotation.R90);
+
+        assertThat(g.getStatus(), equalTo(GameState.FINISHED));
+        assertThat(g.getCurrentPlayer(), equalTo(Optional.empty()));
+
+        g.getBoard().get().printAreaGrid();
+
+        for(Area a: g.getBoard().get().getAreas()) {
+            if (a.getType().equals('G')) {
+                System.out.println("GROUND SIZE: " + a.getContainedTileCount());
+            }
+        }
+
+        ImmutableList<Player> scores = g.getPlayersByScore();
+        assertThat(scores.get(0).getScore(), equalTo(17));
+        assertThat(scores.get(0).getName(), equalTo("testUser1"));
+        assertThat(scores.get(1).getScore(), equalTo(8));
+        assertThat(scores.get(1).getName(), equalTo("testUser2"));
+    }
 }
+

@@ -88,7 +88,7 @@ public class Area {
         HashSet<Coordinate> coord = new HashSet<>();
 
         for (Coordinate c : this.coordinates) {
-            coord.add(new Coordinate(c.getY() / 5, c.getX() / 5));
+            coord.add(c.toSm5());
         }
 ;
         return coord.size();

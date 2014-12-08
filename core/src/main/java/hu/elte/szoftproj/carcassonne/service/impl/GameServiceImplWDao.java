@@ -208,20 +208,24 @@ public class GameServiceImplWDao implements GameService {
             if (a.isClosed() && a.getType().equals('C')) {
                 int toAddScore = a.getContainedTileCount() * 2;
                 updateBestScores(players, a, toAddScore);
+                System.out.println("POINTS FOR CITY: " + toAddScore);
                 newBoard = newBoard.removeFollowersFromArea(a);
             }
             if (a.isClosed() && a.getType().equals('R')) {
                 int toAddScore = a.getContainedTileCount() * 1;
                 updateBestScores(players, a, toAddScore);
+                System.out.println("POINTS FOR ROAD: " + toAddScore);
                 newBoard = newBoard.removeFollowersFromArea(a);
             }
             if (a.getType().equals('T')) {
-                Coordinate c = a.getCoordinates().asList().get(0);
-                int toAddScore = newBoard.tileCountAround(c.getY() /5, c.getX()/5);
+                Coordinate c = a.getCoordinates().asList().get(0).toSm5();
+                int toAddScore = newBoard.tileCountAround(c.getY(), c.getX());
                 if (toAddScore == 9) {
                     updateBestScores(players, a, toAddScore);
+                    System.out.println("POINTS FOR TOWER["+c.getY()+","+c.getX()+"]: " + toAddScore);
+                    newBoard = newBoard.removeFollowersFromArea(a);
                 }
-                newBoard = newBoard.removeFollowersFromArea(a);
+
             }
         }
 
@@ -234,19 +238,23 @@ public class GameServiceImplWDao implements GameService {
 
                 if (a.getType().equals('G')) {
                     int toAddScore = newBoard.getClosedNeighborAreasOfTYpe(a, 'C').size() * 2;
+                    System.out.println("POINTS FOR GROUND: " + toAddScore);
                     updateBestScores(players, a, toAddScore);
                 }
                 if (a.getType().equals('C')) {
                     int toAddScore = a.getContainedTileCount();
+                    System.out.println("POINTS FOR CITY: " + toAddScore);
                     updateBestScores(players, a, toAddScore);
                 }
                 if (a.isClosed() && a.getType().equals('R')) {
                     int toAddScore = a.getContainedTileCount() * 1;
+                    System.out.println("POINTS FOR ROAD: " + toAddScore);
                     updateBestScores(players, a, toAddScore);
                 }
                 if (a.getType().equals('T')) {
-                    Coordinate c = a.getCoordinates().asList().get(0);
-                    int toAddScore = newBoard.tileCountAround(c.getY() /5, c.getX()/5);
+                    Coordinate c = a.getCoordinates().asList().get(0).toSm5();
+                    int toAddScore = newBoard.tileCountAround(c.getY(), c.getX());
+                    System.out.println("POINTS FOR TOWER: " + toAddScore);
                     updateBestScores(players, a, toAddScore);
                 }
 

@@ -22,6 +22,6 @@ public abstract class AbstractFollower implements Follower {
 
     @Override
     public boolean canBePlacedAt(Area area) {
-        return !area.isClosed() && area.getFollowers().isEmpty();
+        return (!area.isClosed() && area.getFollowers().isEmpty()) || area.getType().equals('T');
     }
 }

@@ -36,4 +36,8 @@ public class Coordinate {
     public String toString() {
         return "[y:" + y + ",x:" + x + "]";
     }
+
+    public Coordinate toSm5() {
+        return new Coordinate((int)Math.floor(y/5.0), (int)Math.floor(x/5.0));
+    }
 }

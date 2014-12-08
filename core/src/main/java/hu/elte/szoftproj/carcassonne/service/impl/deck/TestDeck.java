@@ -25,6 +25,8 @@ public class TestDeck implements Deck {
         addTile(ll, 2, StandardTiles.stdCity2nw);
         addTile(ll, 2, StandardTiles.stdCity1);
 
+        addTile(ll, 1, StandardTiles.stdCloister1);
+
         addTile(ll, 2, StandardTiles.stdRoad2sw);
         addTile(ll, 2, StandardTiles.stdRoad3);
         addTile(ll, 1, StandardTiles.stdRoad2ns);
