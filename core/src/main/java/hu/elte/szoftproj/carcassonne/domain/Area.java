@@ -6,6 +6,8 @@ public class Area {
 
     private Character type;
 
+    int openEdgeCount;
+
     private ImmutableSet<Coordinate> coordinates;
 
     public Area(Character type) {
@@ -20,7 +22,19 @@ public class Area {
         this.coordinates = coordinates;
     }
 
+    void setOpenEdgeCount(int openEdgeCount) {
+        this.openEdgeCount = openEdgeCount;
+    }
+
     public ImmutableSet<Coordinate> getCoordinates() {
         return coordinates;
+    }
+
+    public boolean isClosed() {
+        return openEdgeCount == 0;
+    }
+
+    public int getOpenEdgeCount() {
+        return openEdgeCount;
     }
 }

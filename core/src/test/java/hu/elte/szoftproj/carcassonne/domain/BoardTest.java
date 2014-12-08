@@ -107,4 +107,55 @@ public class BoardTest {
         assertThat(board.getAreas().size(), equalTo(4+1+4));
     }
 
+    @Test
+    public void basicEdgeCounts() {
+        int roadCount = 0;
+        for (Area a: board.getAreas()) {
+            if (a.getType().equals('R')) {
+                roadCount++;
+                assertThat(a.getOpenEdgeCount(), equalTo(2));
+            }
+        }
+        assertThat(roadCount, equalTo(1));
+
+        int cityCount = 0;
+        for (Area a: board.getAreas()) {
+            if (a.getType().equals('C')) {
+                cityCount ++;
+                assertThat(a.getOpenEdgeCount(), equalTo(3));
+            }
+        }
+        assertThat(cityCount , equalTo(1));
+    }
+
+    @Test
+    public void advEdgeCounts() {
+        board = board.placeTile(StandardTiles.stdCity1, Rotation.R180, -1, 0);
+        int cityCount = 0;
+        for (Area a: board.getAreas()) {
+            if (a.getType().equals('C')) {
+                cityCount ++;
+                assertThat(a.getOpenEdgeCount(), equalTo(0));
+            }
+        }
+        assertThat(cityCount , equalTo(1));
+    }
+
+    @Test
+    public void adv2EdgeCounts() {
+        board = board.placeTile(StandardTiles.stdCity4, Rotation.R0, -1, 0);
+        board = board.placeTile(StandardTiles.stdCity1, Rotation.R180, -2, 0);
+        board = board.placeTile(StandardTiles.stdCity1, Rotation.R270, -1, 1);
+        board = board.placeTile(StandardTiles.stdCity1, Rotation.R90, -1, -1);
+
+        int cityCount = 0;
+        for (Area a: board.getAreas()) {
+            if (a.getType().equals('C')) {
+                cityCount ++;
+                assertThat(a.getOpenEdgeCount(), equalTo(0));
+            }
+        }
+        assertThat(cityCount , equalTo(1));
+    }
 }
+

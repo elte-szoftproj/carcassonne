@@ -117,6 +117,7 @@ public class Board {
         TreeBasedTable<Integer, Integer, Area> tempTable = TreeBasedTable.create();
 
         HashMap<Area, ImmutableSet.Builder<Coordinate>> areaHelper = new HashMap<>();
+        HashMap<Area, Integer> edgeModifierMap = new HashMap<>();
 
         for (Integer iy: ImmutableSortedSet.copyOf(grid.rowKeySet())) {
             for (Integer ix: ImmutableSortedSet.copyOf(grid.columnKeySet())) {
@@ -133,6 +134,7 @@ public class Board {
                         int ay = iy * 5 + dy;
                         int ax = ix * 5 + dx;
 
+
                         Character type = actTile.getRepresentation(actRot).get(dy, dx);
 
                         if (type.equals('X') || type.equals('O')) { // can't place followers there
@@ -142,11 +144,20 @@ public class Board {
                         boolean sameAsAbove = tempTable.contains(ay-1, ax) && tempTable.get(ay-1, ax).getType().equals(type);
                         boolean sameAsLeft  = tempTable.contains(ay, ax-1) && tempTable.get(ay, ax-1).getType().equals(type);
 
+                        int edgeModifier = 0;
+                        if (dy==0) edgeModifier++;
+                        if (dx==0) edgeModifier++;
+                        if (dy==4) edgeModifier++;
+                        if (dx==4) edgeModifier++;
+                        if (dy==0 && sameAsAbove) edgeModifier-=2;
+                        if (dx==0 && sameAsLeft)  edgeModifier-=2;
+
                         if (sameAsLeft && sameAsAbove) {
                             if (tempTable.get(ay-1, ax).equals(tempTable.get(ay, ax-1))) {
                                 Area curr = tempTable.get(ay-1, ax);
                                 areaHelper.get(curr).add(new Coordinate(ay, ax));
                                 tempTable.put(ay, ax, curr);
+                                edgeModifierMap.put(curr, edgeModifierMap.get(curr)+edgeModifier);
                             } else {
                                 Area curr = tempTable.get(ay-1, ax);
                                 Area other = tempTable.get(ay, ax-1);
@@ -154,6 +165,8 @@ public class Board {
                                 areaHelper.get(curr).add(new Coordinate(ay, ax)).addAll(tmp);
                                 areaHelper.remove(other);
                                 tempTable.put(ay, ax, curr);
+                                edgeModifierMap.put(curr, edgeModifierMap.get(curr)+edgeModifierMap.get(other)+edgeModifier);
+                                edgeModifierMap.remove(other);
                                 for (Coordinate c: tmp) {
                                     tempTable.put(c.getY(), c.getX(), curr);
                                 }
@@ -162,15 +175,19 @@ public class Board {
                             Area curr = tempTable.get(ay-1, ax);
                             areaHelper.get(curr).add(new Coordinate(ay, ax));
                             tempTable.put(ay, ax, curr);
+                            edgeModifierMap.put(curr, edgeModifierMap.get(curr)+edgeModifier);
                         } else if (sameAsLeft) {
                             Area curr = tempTable.get(ay, ax-1);
                             areaHelper.get(curr).add(new Coordinate(ay, ax));
                             tempTable.put(ay, ax, curr);
+                            edgeModifierMap.put(curr, edgeModifierMap.get(curr)+edgeModifier);
                         } else {
                             Area curr = new Area(type);
                             areaHelper.put(curr, new ImmutableSet.Builder<>());
                             areaHelper.get(curr).add(new Coordinate(ay, ax));
                             tempTable.put(ay, ax, curr);
+                            edgeModifierMap.put(curr, 0);
+                            edgeModifierMap.put(curr, edgeModifierMap.get(curr)+edgeModifier);
                         }
                     }
                 }
@@ -184,6 +201,7 @@ public class Board {
 
         for(Map.Entry<Area, ImmutableSet.Builder<Coordinate>> entry: areaHelper.entrySet()) {
             entry.getKey().setCoordinates(entry.getValue().build());
+            entry.getKey().setOpenEdgeCount(edgeModifierMap.get(entry.getKey()));
             setBuilder.add(entry.getKey());
         }
 
