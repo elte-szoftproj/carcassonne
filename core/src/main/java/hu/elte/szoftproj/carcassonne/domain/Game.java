@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableTable;
 import hu.elte.szoftproj.carcassonne.service.Deck;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -16,7 +15,7 @@ public class Game {
 
     private ImmutableList<Player> players;
 
-    private Optional<Player> currentPlayer;
+    private Optional<CurrentPlayer> currentPlayer;
 
     Optional<ImmutableTable<Integer, Integer, Square>> board;
 
@@ -35,7 +34,7 @@ public class Game {
     }
 
     // constructor for modifications
-    public Game(String id, ImmutableList<Player> players, Optional<Player> currentPlayer, Optional<ImmutableTable<Integer, Integer, Square>> board, GameState status, Deck deck) {
+    public Game(String id, ImmutableList<Player> players, Optional<CurrentPlayer> currentPlayer, Optional<ImmutableTable<Integer, Integer, Square>> board, GameState status, Deck deck) {
         this.id = id;
         this.players = players;
         this.currentPlayer = currentPlayer;
@@ -57,7 +56,7 @@ public class Game {
         return players;
     }
 
-    public Optional<Player> getCurrentPlayer() {
+    public Optional<CurrentPlayer> getCurrentPlayer() {
         return currentPlayer;
     }
 

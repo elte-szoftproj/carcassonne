@@ -34,11 +34,16 @@ public class Player {
         return score;
     }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
-
     public PlayerType getType() {
         return type;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Player)) {
+            return false;
+        }
+        Player oth = (Player)obj;
+        return (oth.getName() == null && this.name == null) || oth.getName().equals(getName());
     }
 }
