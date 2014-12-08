@@ -1,6 +1,12 @@
 package hu.elte.szoftproj.carcassonne.domain;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import hu.elte.szoftproj.carcassonne.domain.follower.BasicFollower;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 public class Area {
 
@@ -47,5 +53,25 @@ public class Area {
 
     public ImmutableSet<Follower> getFollowers() {
         return followers;
+    }
+
+    public ImmutableList<AreaScore> getScores() {
+
+        HashMap<Player, AreaScore> scores = new HashMap<>();
+
+        for(Follower f: followers) {
+            if (f instanceof BasicFollower) {
+                if (!scores.containsKey(f.getOwner())) {
+                    scores.put(f.getOwner(), new AreaScore(f.getOwner(), 0));
+                }
+                scores.get(f.getOwner()).addScore(f.getValue());
+            }
+        }
+
+        LinkedList<AreaScore> l = new LinkedList<>(scores.values());
+        Collections.sort(l);
+
+        return ImmutableList.copyOf(l);
+
     }
 }

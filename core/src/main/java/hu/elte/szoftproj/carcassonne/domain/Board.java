@@ -114,6 +114,9 @@ public class Board {
 
     public boolean canPlaceFollower(int y, int x, Follower f, int dy, int dx) {
         Square s = grid.get(y, x);
+        if (usedFollowers.containsKey(f)) {
+            return false;
+        }
         if (!areaGrid.contains(y * 5 + dy, x * 5 + dx)) {
             throw new IllegalArgumentException("Unknown tile");
         }
