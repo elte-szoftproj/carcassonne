@@ -2,8 +2,12 @@ package hu.elte.szoftproj.carcassonne;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import hu.elte.szoftproj.carcassonne.persistence.client.ClientFactory;
 import hu.elte.szoftproj.carcassonne.service.GameService;
 import hu.elte.szoftproj.carcassonne.service.LobbyService;
+import hu.elte.szoftproj.carcassonne.service.impl.GameServiceImplSwitchable;
+import hu.elte.szoftproj.carcassonne.service.impl.LobbyServiceImplSwitchable;
+import org.eclipse.jetty.server.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -15,19 +19,35 @@ import java.util.List;
 public class GameMainDesktop implements CarcassonneServiceProvider {
 
 	@Autowired
-	GameService gameService;
+	GameServiceImplSwitchable gameService;
 
 	@Autowired
-	LobbyService lobbyService;
+	LobbyServiceImplSwitchable lobbyService;
+
+	@Autowired
+	private Server server;
+
+	@Autowired
+	ClientFactory clientFactory;
 
 	@Override
-	public GameService getGameService() {
+	public GameServiceImplSwitchable getGameService() {
 		return gameService;
 	}
 
 	@Override
-	public LobbyService getLobbyService() {
+	public LobbyServiceImplSwitchable getLobbyService() {
 		return lobbyService;
+	}
+
+	@Override
+	public ClientFactory getClientFactory() {
+		return clientFactory;
+	}
+
+	@Override
+	public Server getServer() {
+		return server;
 	}
 
 	private static final String CONFIG_LOCATION = "hu.elte.szoftproj.carcassonne.config";
@@ -58,7 +78,7 @@ public class GameMainDesktop implements CarcassonneServiceProvider {
 		config.height = 1024;
 		config.useGL20 = true;
 
-		if (false && args.length < 3) {
+		if (false && args.length < 2) {
 			throw new RuntimeException("Requires arguments!");
 		}
 
@@ -67,11 +87,13 @@ public class GameMainDesktop implements CarcassonneServiceProvider {
 		LinkedList<String> players = new LinkedList<>(Arrays.asList(args));
 		players.removeFirst();
 		String address = null;
-		if (args[1].equals("server")) {
+		if (args[0].equals("client")) {
 			players.removeFirst();
-			address = args[2];
+			address = args[1];
 		}
 
-		new LwjglApplication(new GameMain(this, args[1], address, players), config);
+		System.out.println(players);
+
+		new LwjglApplication(new GameMain(this, args[0], address, players), config);
 	}
 }

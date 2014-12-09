@@ -6,6 +6,7 @@ import hu.elte.szoftproj.carcassonne.domain.CarcassonneGame;
 import hu.elte.szoftproj.carcassonne.screen.GameScreen;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class GameMain extends Game {
 
@@ -23,21 +24,59 @@ public class GameMain extends Game {
         this.address = address;
         this.players = players;
 
-        if (type.equals("server")) {
+        System.out.println(type);
 
+        if (type.equals("server")) {
+            try {
+                serviceProvider.getServer().start();
+                serviceProvider.getGameService().getRemote().setClient(serviceProvider.getClientFactory().getGameClient("http://localhost:8080"));
+                serviceProvider.getLobbyService().getRemote().setClient(serviceProvider.getClientFactory().getLobbyClient("http://localhost:8080"));
+                serviceProvider.getGameService().switchToRemote();
+                serviceProvider.getLobbyService().switchToRemote();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         if (type.equals("client")) {
-
+            serviceProvider.getGameService().getRemote().setClient(serviceProvider.getClientFactory().getGameClient(address));
+            serviceProvider.getLobbyService().getRemote().setClient(serviceProvider.getClientFactory().getLobbyClient(address));
+            serviceProvider.getGameService().switchToRemote();
+            serviceProvider.getLobbyService().switchToRemote();
         }
 
         System.out.println(0+" " + serviceProvider.getLobbyService() + " " + players.get(0));
-        gameId = serviceProvider.getLobbyService().createNewGame(players.get(0), "basic").getId();
+        if (!type.equals("client")) {
+            gameId = serviceProvider.getLobbyService().createNewGame(players.get(0), "basic").getId();
+        } else {
+            gameId = serviceProvider.getLobbyService().listWaitingGames().get(0).getId();
+            System.out.println("Connecting to game: " + gameId);
+        }
         System.out.println(0+"");
-        for (int i=1;i<players.size();i++) {
+        for (int i= type.equals("client") ? 0 : 1;i<players.size();i++) {
             System.out.println(i+"");
             serviceProvider.getLobbyService().joinGame(gameId, players.get(i), false);
         }
-        serviceProvider.getLobbyService().startGame(gameId);
+        if (type.equals("server")) {
+            System.out.println("Waiting 10 sec for players...");
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (!type.equals("client")) {
+            serviceProvider.getLobbyService().startGame(gameId);
+        } else {
+            while (serviceProvider.getLobbyService().listWaitingGames().size() > 0) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 
     @Override
