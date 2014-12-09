@@ -84,4 +84,16 @@ public class Player implements Comparable<Player> {
     public String toString() {
         return getName() + "[" + getScore() + "]";
     }
+
+    public ImmutableList<Follower> getFollowersOfType(String followerType) {
+        ImmutableList.Builder<Follower> builder = new ImmutableList.Builder<>();
+
+        for(Follower f: followers) {
+            if (f.getName().equals(followerType)) {
+                builder.add(f);
+            }
+        }
+
+        return builder.build();
+    }
 }

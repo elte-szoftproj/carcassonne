@@ -12,4 +12,9 @@ public class BigFollower extends BasicFollower {
     public int getValue() {
         return 2;
     }
+
+    @Override
+    public String getName() {
+        return "big";
+    }
 }

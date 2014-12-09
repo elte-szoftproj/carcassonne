@@ -7,5 +7,7 @@ public interface Follower {
 
     String getType();
 
+    String getName();
+
     boolean canBePlacedAt(Area area);
 }

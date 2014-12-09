@@ -1,5 +1,6 @@
 package hu.elte.szoftproj.carcassonne.config;
 
+import hu.elte.szoftproj.carcassonne.persistence.GameConverter;
 import hu.elte.szoftproj.carcassonne.persistence.GameDao;
 import hu.elte.szoftproj.carcassonne.persistence.client.ClientFactory;
 import hu.elte.szoftproj.carcassonne.persistence.client.impl.ClientFactoryImpl;
@@ -35,6 +36,11 @@ public class ApplicationConfig {
     @Bean
     public GameServiceImplWDao getGameServiceImplWDao() {
         return new GameServiceImplWDao();
+    }
+
+    @Bean
+    public GameConverter getGameConverter() {
+        return new GameConverter();
     }
 
     @Bean
