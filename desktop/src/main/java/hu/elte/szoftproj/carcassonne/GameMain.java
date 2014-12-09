@@ -2,7 +2,6 @@ package hu.elte.szoftproj.carcassonne;
 
 import com.badlogic.gdx.Game;
 import hu.elte.szoftproj.carcassonne.domain.CarcassonneGame;
-import hu.elte.szoftproj.carcassonne.domain.Rotation;
 import hu.elte.szoftproj.carcassonne.screen.GameScreen;
 
 public class GameMain extends Game {
@@ -20,7 +19,7 @@ public class GameMain extends Game {
         serviceProvider.getLobbyService().startGame(gameId);
 
         CarcassonneGame g =serviceProvider.getGameService().getGameById("Player1", gameId);
-        serviceProvider.getGameService().placeTile(
+        /*serviceProvider.getGameService().placeTile(
                 g,
                 g.getPlayerByName("Player1"),
                 g.getDeck().get().peekNext(),
@@ -28,7 +27,7 @@ public class GameMain extends Game {
                 -1,
                 0
                 );
-
+        */
         setScreen(new GameScreen(
                 this,
                 serviceProvider.getGameService(),
