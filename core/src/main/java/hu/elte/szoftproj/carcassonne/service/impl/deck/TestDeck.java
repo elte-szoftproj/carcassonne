@@ -70,7 +70,7 @@ public class TestDeck implements Deck {
     public Deck removeNext() {
         LinkedList<Tile> ll = new LinkedList<>(tiles);
         ll.removeFirst();
-        return new BasicDeck(ImmutableList.copyOf(ll));
+        return new TestDeck(ImmutableList.copyOf(ll));
     }
 
     @Override

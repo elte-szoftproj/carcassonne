@@ -71,7 +71,12 @@ public class GameResource {
         try {
             Game g = gameService.getGameById(placing.getGameId());
             Player p = g.getPlayerByName(placing.getPlayerName());
-            Follower f = g.getBoard().get().notUsedFollowers(p.getFollowersOfType(placing.getFollowerType())).get(0);
+            Follower f = null;
+            try {
+                f = g.getBoard().get().notUsedFollowers(p.getFollowersOfType(placing.getFollowerType())).get(0);
+            } catch(Exception e) {
+                throw new IllegalArgumentException("NO_SUCH_FOLLOWER");
+            }
             return converter.fromDao(placing.getPlayerName(), gameService.placeFollower(
                     g,
                     g.getPlayerByName(placing.getPlayerName()),

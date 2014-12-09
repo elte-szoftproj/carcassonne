@@ -18,6 +18,8 @@ public class GameConverter {
 
         boolean isCurrentPlayer = gameDao.getCurrentPlayer().isPresent() && gameDao.getCurrentPlayer().get().getPlayer().getName().equals(playerName);
 
+        boolean isPlacingTurn = gameDao.getCurrentPlayer().isPresent() && gameDao.getCurrentPlayer().get().getAction().equals(GameAction.PLACE_TILE);
+
         try {
             gameDao.getPlayerByName(playerName);
         } catch (IllegalArgumentException e) {
@@ -28,7 +30,7 @@ public class GameConverter {
                 gameDao.getId(),
                 toPlayerDtoList(gameDao.getPlayers()),
                 gameDao.getStatus(),
-                gameDao.getDeck().isPresent() ? toDeckDto(isCurrentPlayer, gameDao.getDeck().get()) : null,
+                gameDao.getDeck().isPresent() ? toDeckDto(isCurrentPlayer && isPlacingTurn, gameDao.getDeck().get()) : null,
                 gameDao.getBoard().isPresent() ? toBoardDto(gameDao.getBoard().get()) : null,
                 gameDao.getCurrentPlayer().isPresent() ? gameDao.getCurrentPlayer().get().getPlayer().getName() : null,
                 gameDao.getCurrentPlayer().isPresent() ? gameDao.getCurrentPlayer().get().getAction() : null
