@@ -175,7 +175,7 @@ public class GameScreen implements Screen, GameTextureProvider, CurrentGameInter
     }
 
     @Override
-    public boolean canPliceFollowersNow() {
+    public boolean canPlaceFollowersNow() {
         return true
                 && !currentGame.isFinished()
                 && currentGame.getCurrentPlayer().get().getAction().equals(GameAction.PLACE_FOLLOWER)
@@ -248,6 +248,15 @@ public class GameScreen implements Screen, GameTextureProvider, CurrentGameInter
                         currentFollowerSelection = Optional.of("big");
                     }
                     break;
+                }
+                case Input.Keys.P: {
+                    if (isCurrentPlayer() && currentGame.canPlaceFollowerNow()) {
+                        try {
+                            currentGame = gameService.dontPlaceFollower(currentGame, currentGame.getPlayerByName(currentPlayerName));
+                        } catch (Exception e) {
+
+                        }
+                    }
                 }
             }
 

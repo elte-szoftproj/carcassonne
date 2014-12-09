@@ -21,7 +21,7 @@ public interface CurrentGameInterface {
 
     public Optional<Tile> getCurrentTile();
 
-    public boolean canPliceFollowersNow();
+    public boolean canPlaceFollowersNow();
 
     public Follower getFollowerForType(String type);
 }

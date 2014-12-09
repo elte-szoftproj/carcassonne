@@ -114,7 +114,7 @@ public class BoardCanvas {
 
                 if (visible(ix, iy)) {
                     Coordinate currCoord = new Coordinate(iy, ix);
-                    if (currentGame.canPliceFollowersNow() && board.getLastCoordinates().get().equals(currCoord)) {
+                    if (currentGame.canPlaceFollowersNow() && board.getLastCoordinates().get().equals(currCoord)) {
                         for (int dy=0;dy<5;dy++) {
                             for (int dx=0;dx<5;dx++) {
                                 if (board.canPlaceFollower(iy, ix, currentGame.getFollowerForType(currentGame.getCurrentFollowerSelection().get()), dy, dx)) {
