@@ -1,6 +1,7 @@
 package hu.elte.szoftproj.carcassonne;
 
 import com.badlogic.gdx.Game;
+import com.google.common.collect.ImmutableList;
 import hu.elte.szoftproj.carcassonne.domain.CarcassonneGame;
 import hu.elte.szoftproj.carcassonne.screen.GameScreen;
 
@@ -18,20 +19,16 @@ public class GameMain extends Game {
         serviceProvider.getLobbyService().joinGame(gameId, "Player2", false);
         serviceProvider.getLobbyService().startGame(gameId);
 
+        ImmutableList.Builder<String> localPlayers = new ImmutableList.Builder<>();
+        localPlayers.add("Player1");
+        localPlayers.add("Player2");
+
         CarcassonneGame g =serviceProvider.getGameService().getGameById("Player1", gameId);
-        /*serviceProvider.getGameService().placeTile(
-                g,
-                g.getPlayerByName("Player1"),
-                g.getDeck().get().peekNext(),
-                Rotation.R180,
-                -1,
-                0
-                );
-        */
+
         setScreen(new GameScreen(
                 this,
                 serviceProvider.getGameService(),
-                "Player1",
+                localPlayers.build(),
                 gameId
         ));
     }

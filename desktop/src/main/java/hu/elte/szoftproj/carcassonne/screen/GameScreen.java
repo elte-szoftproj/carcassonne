@@ -6,12 +6,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.google.common.collect.ImmutableList;
 import hu.elte.szoftproj.carcassonne.domain.*;
 import hu.elte.szoftproj.carcassonne.service.Deck;
 import hu.elte.szoftproj.carcassonne.service.GameService;
 import hu.elte.szoftproj.carcassonne.ui.BoardCanvas;
 import hu.elte.szoftproj.carcassonne.ui.GameStatusCanvas;
 import hu.elte.szoftproj.carcassonne.ui.GameTextureProvider;
+import jdk.nashorn.internal.ir.annotations.Immutable;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -24,7 +26,7 @@ public class GameScreen implements Screen, GameTextureProvider, CurrentGameInter
 
     private final GameService gameService;
 
-    private final String currentPlayerName;
+    private String currentPlayerName;
 
     private final String gameId;
 
@@ -43,6 +45,7 @@ public class GameScreen implements Screen, GameTextureProvider, CurrentGameInter
     private Optional<Integer> currentFollowerId;
 
 
+    private final ImmutableList<String> localPlayers;
 
     @Override
     public TextureRegion getTextureFor(String name) {
@@ -52,10 +55,11 @@ public class GameScreen implements Screen, GameTextureProvider, CurrentGameInter
         return tileTextures.get(name);
     }
 
-    public GameScreen(Game game, GameService gameService, String playerName, String gameId) {
+    public GameScreen(Game game, GameService gameService, ImmutableList<String> players, String gameId) {
         this.game = game;
         this.gameService = gameService;
-        this.currentPlayerName = playerName;
+        this.localPlayers = players;
+        this.currentPlayerName = localPlayers.get(0);
         this.gameId = gameId;
 
         this.boardCanvas = new BoardCanvas(100, 100, 450, 450, this, this);
@@ -73,6 +77,15 @@ public class GameScreen implements Screen, GameTextureProvider, CurrentGameInter
 
     protected void updateLogic() {
         currentGame = gameService.getGameById(currentPlayerName, gameId);
+
+        if (currentGame.getCurrentPlayer().isPresent()) {
+            String playerName = currentGame.getCurrentPlayer().get().getPlayer().getName();
+            if (localPlayers.contains(playerName) && !currentPlayerName.equals(playerName)) {
+                currentPlayerName = playerName;
+
+                currentGame = gameService.getGameById(currentPlayerName, gameId);
+            }
+        }
 
         if (!currentGame.isFinished()) {
             CurrentPlayer currentPlayer = currentGame.getCurrentPlayer().get();
@@ -93,6 +106,10 @@ public class GameScreen implements Screen, GameTextureProvider, CurrentGameInter
                     currentFollowerSelection = Optional.empty();
                     currentFollowerId = Optional.empty();
                 }
+            } else {
+                currentFollowerSelection = Optional.empty();
+                currentFollowerId = Optional.empty();
+                currentTileRotation = Optional.empty();
             }
         }
     }

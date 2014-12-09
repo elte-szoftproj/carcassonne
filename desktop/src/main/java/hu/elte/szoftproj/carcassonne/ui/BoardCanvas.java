@@ -77,6 +77,10 @@ public class BoardCanvas {
         for (Integer iy: ImmutableSortedSet.copyOf(grid.rowKeySet())) {
             for (Integer ix : ImmutableSortedSet.copyOf(grid.columnKeySet())) {
 
+                if (!grid.contains(iy, ix)) {
+                    continue;
+                }
+
                 if (currentTile.isPresent()) {
                     maybeDrawPossible(batch, currentTile.get(), ix, iy - 1, currentRotation.get(), placement);
                     maybeDrawPossible(batch, currentTile.get(), ix, iy+1, currentRotation.get(), placement);
@@ -101,6 +105,11 @@ public class BoardCanvas {
 
         for (Integer iy: ImmutableSortedSet.copyOf(grid.rowKeySet())) {
             for (Integer ix : ImmutableSortedSet.copyOf(grid.columnKeySet())) {
+
+                if (!grid.contains(iy, ix)) {
+                    continue;
+                }
+
                 Square s = grid.get(iy, ix);
 
                 if (visible(ix, iy)) {
