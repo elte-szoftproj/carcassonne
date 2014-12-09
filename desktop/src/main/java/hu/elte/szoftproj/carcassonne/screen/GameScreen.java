@@ -203,7 +203,15 @@ public class GameScreen implements Screen, GameTextureProvider, CurrentGameInter
 
         @Override
         public boolean touchDown(int x, int y, int pointer, int button) {
-            System.out.println(boardCanvas.unmapTileSpace(x, Gdx.graphics.getHeight()-y) + ", " + pointer + ", " + button);
+
+            if (isCurrentPlayer() && currentGame.canPlaceTileNow()) {
+                Coordinate atTile = boardCanvas.unmapTileSpace(x, Gdx.graphics.getHeight() - y);
+                try {
+                    currentGame = gameService.placeTile(currentGame, currentGame.getPlayerByName(currentPlayerName), getCurrentTile().get(), getCurrentTileRotation().get(), atTile.getY(), atTile.getX());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
             return false;
         }
