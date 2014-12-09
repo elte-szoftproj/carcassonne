@@ -166,7 +166,7 @@ public class GameScreen implements Screen, GameTextureProvider, CurrentGameInter
         ) {
             Deck d = currentGame.getDeck().get();
 
-            if (d.peekNext() != null ){
+            if (d.getRemainingPieceCount() != 0){
                 return Optional.of(d.peekNext());
             }
         }
@@ -222,8 +222,13 @@ public class GameScreen implements Screen, GameTextureProvider, CurrentGameInter
     }
 
     @Override
-    public Follower getFollowerForType(String type) {
-        return currentGame.getCurrentPlayer().get().getPlayer().getFollowersOfType(type).get(0);
+    public Optional<Follower> getFollowerForType(String type) {
+        ImmutableList<Follower> l = currentGame.getBoard().get().notUsedFollowers(currentGame.getCurrentPlayer().get().getPlayer().getFollowersOfType(type));
+        if (l.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(l.get(0));
+        }
     }
 
     class MyInputProcessor implements InputProcessor {
@@ -289,7 +294,10 @@ public class GameScreen implements Screen, GameTextureProvider, CurrentGameInter
                 Coordinate atTile = boardCanvas.unmapTileSpace(x, Gdx.graphics.getHeight() - y);
                 Coordinate atInner = boardCanvas.unmapInnerSpace(x, Gdx.graphics.getHeight() - y);
                 try {
-                    currentGame = gameService.placeFollower(currentGame, currentGame.getPlayerByName(currentPlayerName), getFollowerForType(currentFollowerSelection.get()), atTile.getY(), atTile.getX(), atInner.getY(), atInner.getX());
+                    Optional<Follower> f = getFollowerForType(currentFollowerSelection.get());
+                    if (f.isPresent()) {
+                        currentGame = gameService.placeFollower(currentGame, currentGame.getPlayerByName(currentPlayerName), f.get(), atTile.getY(), atTile.getX(), atInner.getY(), atInner.getX());
+                    }
                 } catch (Exception e) {
 
                 }

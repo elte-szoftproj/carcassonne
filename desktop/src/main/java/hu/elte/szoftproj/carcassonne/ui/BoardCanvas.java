@@ -119,10 +119,12 @@ public class BoardCanvas {
                         drawFollowerPossibility(batch, iy, ix, c.getRowKey(), c.getColumnKey());
                     }
                     if (currentGame.canPlaceFollowersNow() && board.getLastCoordinates().get().equals(currCoord)) {
+                        System.out.println("HERE!");
                         for (int dy=0;dy<5;dy++) {
                             for (int dx=0;dx<5;dx++) {
 
-                                if (board.canPlaceFollower(iy, ix, currentGame.getFollowerForType(currentGame.getCurrentFollowerSelection().get()), dy, dx)) {
+                                Optional<Follower> f = currentGame.getFollowerForType(currentGame.getCurrentFollowerSelection().get());
+                                if (f.isPresent() && board.canPlaceFollower(iy, ix, f.get(), dy, dx)) {
                                     drawFollowerPossibility(batch, iy, ix, dy, dx);
                                 }
                             }

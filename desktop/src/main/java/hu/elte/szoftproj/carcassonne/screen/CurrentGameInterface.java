@@ -23,6 +23,6 @@ public interface CurrentGameInterface {
 
     public boolean canPlaceFollowersNow();
 
-    public Follower getFollowerForType(String type);
+    public Optional<Follower> getFollowerForType(String type);
 }
 
