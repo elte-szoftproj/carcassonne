@@ -113,4 +113,7 @@ public class ApplicationConfig {
     }
 
 
+    public ApplicationConfig() {
+        System.out.println("Constructed!");
+    }
 }

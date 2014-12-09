@@ -5,25 +5,48 @@ import com.google.common.collect.ImmutableList;
 import hu.elte.szoftproj.carcassonne.domain.CarcassonneGame;
 import hu.elte.szoftproj.carcassonne.screen.GameScreen;
 
+import java.util.List;
+
 public class GameMain extends Game {
 
     CarcassonneServiceProvider serviceProvider;
 
-    public GameMain(CarcassonneServiceProvider serviceProvider) {
+    String type;
+    String address;
+    List<String> players;
+
+    final String gameId;
+
+    public GameMain(CarcassonneServiceProvider serviceProvider, String type, String address, List<String> players) {
         this.serviceProvider = serviceProvider;
+        this.type = type;
+        this.address = address;
+        this.players = players;
+
+        if (type.equals("server")) {
+
+        }
+        if (type.equals("client")) {
+
+        }
+
+        System.out.println(0+" " + serviceProvider.getLobbyService() + " " + players.get(0));
+        gameId = serviceProvider.getLobbyService().createNewGame(players.get(0), "basic").getId();
+        System.out.println(0+"");
+        for (int i=1;i<players.size();i++) {
+            System.out.println(i+"");
+            serviceProvider.getLobbyService().joinGame(gameId, players.get(i), false);
+        }
+        serviceProvider.getLobbyService().startGame(gameId);
     }
 
     @Override
     public void create() {
-        String gameId = serviceProvider.getLobbyService().createNewGame("Player1", "test").getId();
-        serviceProvider.getLobbyService().joinGame(gameId, "Player2", false);
-        serviceProvider.getLobbyService().startGame(gameId);
+
 
         ImmutableList.Builder<String> localPlayers = new ImmutableList.Builder<>();
-        localPlayers.add("Player1");
-        localPlayers.add("Player2");
+        localPlayers.addAll(players);
 
-        CarcassonneGame g =serviceProvider.getGameService().getGameById("Player1", gameId);
 
         setScreen(new GameScreen(
                 this,
