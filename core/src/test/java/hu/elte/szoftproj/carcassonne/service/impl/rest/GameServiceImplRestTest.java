@@ -2,7 +2,8 @@ package hu.elte.szoftproj.carcassonne.service.impl.rest;
 
 import hu.elte.szoftproj.carcassonne.config.ApplicationConfig;
 import hu.elte.szoftproj.carcassonne.persistence.client.ClientFactory;
-import hu.elte.szoftproj.carcassonne.service.LobbyServiceTest;
+import hu.elte.szoftproj.carcassonne.service.GameServiceTest;
+import hu.elte.szoftproj.carcassonne.service.impl.GameServiceImplSwitchable;
 import hu.elte.szoftproj.carcassonne.service.impl.LobbyServiceImplSwitchable;
 import org.eclipse.jetty.server.Server;
 import org.junit.After;
@@ -19,8 +20,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @ContextConfiguration(loader=AnnotationConfigWebContextLoader.class, classes=ApplicationConfig.class)
 @WebAppConfiguration
 @DirtiesContext(classMode=DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class LobbyServiceImplRestTest extends LobbyServiceTest {
-
+public class GameServiceImplRestTest extends GameServiceTest {
 
     @Autowired
     private Server server;
@@ -29,19 +29,26 @@ public class LobbyServiceImplRestTest extends LobbyServiceTest {
     private ClientFactory clientFactory;
 
     @Autowired
-    private LobbyServiceImplSwitchable service;
+    private GameServiceImplSwitchable gameServ;
+
+    @Autowired
+    private LobbyServiceImplSwitchable lobbyServ;
 
     @Before
-    public void startServer() throws Exception {
+    public void createServicesAndGame() throws Exception {
         server.start();
-        service.getRemote().setClient(clientFactory.getLobbyClient("http://localhost:8080"));
-        service.switchToRemote();
-        serviceToTest = service;
+        gameServ.getRemote().setClient(clientFactory.getGameClient("http://localhost:8080"));
+        lobbyServ.getRemote().setClient(clientFactory.getLobbyClient("http://localhost:8080"));
+        gameServ.switchToRemote();
+        lobbyServ.switchToRemote();
+
+        this.gameService = gameServ;
+        this.lobbyService = lobbyServ;
+        createGame();
     }
 
     @After
     public void stopServer() throws Exception {
         server.stop();
     }
-
 }

@@ -4,11 +4,11 @@ import hu.elte.szoftproj.carcassonne.domain.*;
 
 public interface GameService {
 
-    public Game getGameById(String gameId);
+    public CarcassonneGame getGameById(String playerName, String gameId);
 
-    public Game placeTile(Game g, Player owner, Tile t, Rotation r, int y, int x);
+    public CarcassonneGame placeTile(CarcassonneGame g, Player owner, Tile t, Rotation r, int y, int x);
 
-    public Game placeFollower(Game g, Player owner, Follower f, int y, int x, int dy, int dx);
+    public CarcassonneGame placeFollower(CarcassonneGame g, Player owner, Follower f, int y, int x, int dy, int dx);
 
-    public Game dontPlaceFollower(Game g, Player owner);
+    public CarcassonneGame dontPlaceFollower(CarcassonneGame g, Player owner);
 }

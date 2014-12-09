@@ -23,7 +23,7 @@ public abstract class GameServiceTest {
 
     protected void createGame() {
         // creates a 2 player game
-        Game g = lobbyService.createNewGame("testUser1", "test");
+        CarcassonneGame g = lobbyService.createNewGame("testUser1", "test");
         lobbyService.joinGame(g.getId(), "testUser2", false);
         lobbyService.startGame(g.getId());
         this.gameId = g.getId();
@@ -31,7 +31,7 @@ public abstract class GameServiceTest {
 
     @Test
     public void placeTileTest() {
-        Game g = gameService.getGameById(gameId);
+        CarcassonneGame g = gameService.getGameById("testUser1", gameId);
         Tile currentTile = g.getDeck().get().peekNext();
         Player current = g.getCurrentPlayer().get().getPlayer();
         g = gameService.placeTile(g, current, currentTile, Rotation.R180, -1, 0);
@@ -43,7 +43,7 @@ public abstract class GameServiceTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void placeBadPlayerFailsTest() {
-        Game g = gameService.getGameById(gameId);
+        CarcassonneGame g = gameService.getGameById("testUser1", gameId);
         Tile currentTile = g.getDeck().get().peekNext();
         Player current = g.getPlayerByName("testUser2");
         gameService.placeTile(g, current, currentTile, Rotation.R180, -1, 0);
@@ -51,7 +51,7 @@ public abstract class GameServiceTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void placeBadTileFailsTest() {
-        Game g = gameService.getGameById(gameId);
+        CarcassonneGame g = gameService.getGameById("testUser1", gameId);
         Tile currentTile = StandardTiles.stdCity2nw;
         Player current = g.getCurrentPlayer().get().getPlayer();
         gameService.placeTile(g, current, currentTile, Rotation.R180, -1, 0);
@@ -59,7 +59,7 @@ public abstract class GameServiceTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void placeBadPositionFailsTest() {
-        Game g = gameService.getGameById(gameId);
+        CarcassonneGame g = gameService.getGameById("testUser1", gameId);
         Tile currentTile = g.getDeck().get().peekNext();
         Player current = g.getCurrentPlayer().get().getPlayer();
         gameService.placeTile(g, current, currentTile, Rotation.R180, -1, -1);
@@ -67,7 +67,7 @@ public abstract class GameServiceTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void placeBadStepFailsTest() {
-        Game g = gameService.getGameById(gameId);
+        CarcassonneGame g = gameService.getGameById("testUser1", gameId);
         Tile currentTile = g.getDeck().get().peekNext();
         Player current = g.getCurrentPlayer().get().getPlayer();
         gameService.placeTile(g, current, currentTile, Rotation.R180, -1, 0);
@@ -75,7 +75,7 @@ public abstract class GameServiceTest {
     }
 
     protected void placeFirstTile() {
-        Game g = gameService.getGameById(gameId);
+        CarcassonneGame g = gameService.getGameById("testUser1", gameId);
         Tile currentTile = g.getDeck().get().peekNext();
         Player current = g.getCurrentPlayer().get().getPlayer();
         gameService.placeTile(g, current, currentTile, Rotation.R180, -1, 0);
@@ -86,7 +86,7 @@ public abstract class GameServiceTest {
 
         placeFirstTile();
 
-        Game g = gameService.getGameById(gameId);
+        CarcassonneGame g = gameService.getGameById("testUser1", gameId);
         Player current = g.getCurrentPlayer().get().getPlayer();
         Follower f = current.getFollowers(BigFollower.class).get(0);
         g = gameService.placeFollower(g, current, f, -1, 0, 3, 3);
@@ -102,7 +102,7 @@ public abstract class GameServiceTest {
 
         placeFirstTile();
 
-        Game g = gameService.getGameById(gameId);
+        CarcassonneGame g = gameService.getGameById("testUser1", gameId);
         Player current = g.getCurrentPlayer().get().getPlayer();
         Follower f = current.getFollowers(BigFollower.class).get(0);
         gameService.placeFollower(g, current, f, -1, -1, 3, 3);
@@ -113,7 +113,7 @@ public abstract class GameServiceTest {
 
         placeFirstTile();
 
-        Game g = gameService.getGameById(gameId);
+        CarcassonneGame g = gameService.getGameById("testUser1", gameId);
         Player current = g.getPlayerByName("testUser2");
         Follower f = current.getFollowers(BigFollower.class).get(0);
         gameService.placeFollower(g, current, f, -1, 0, 3, 3);
@@ -124,7 +124,7 @@ public abstract class GameServiceTest {
 
         placeFirstTile();
 
-        Game g = gameService.getGameById(gameId);
+        CarcassonneGame g = gameService.getGameById("testUser1", gameId);
         Player current = g.getCurrentPlayer().get().getPlayer();
         Player other = g.getPlayerByName("testUser2");
         Follower f = other.getFollowers(BigFollower.class).get(0);
@@ -136,7 +136,7 @@ public abstract class GameServiceTest {
 
         placeFirstTile();
 
-        Game g = gameService.getGameById(gameId);
+        CarcassonneGame g = gameService.getGameById("testUser1", gameId);
         Player current = g.getCurrentPlayer().get().getPlayer();
         Follower f = current.getFollowers(BigFollower.class).get(0);
         gameService.placeFollower(g, current, f, -1, 0, 3, 3);
@@ -144,7 +144,7 @@ public abstract class GameServiceTest {
     }
 
     protected void placeFirstFollower() {
-        Game g = gameService.getGameById(gameId);
+        CarcassonneGame g = gameService.getGameById("testUser1", gameId);
         Player current = g.getCurrentPlayer().get().getPlayer();
         Follower f = current.getFollowers(BigFollower.class).get(0);
         g = gameService.placeFollower(g, current, f, -1, 0, 3, 3);
@@ -155,7 +155,7 @@ public abstract class GameServiceTest {
         placeFirstTile();
         placeFirstFollower();
 
-        Game g = gameService.getGameById(gameId);
+        CarcassonneGame g = gameService.getGameById("testUser2", gameId);
         Player current = g.getCurrentPlayer().get().getPlayer();
         Tile currentTile = g.getDeck().get().peekNext();
         g = gameService.placeTile(g, current, currentTile, Rotation.R0, -1, 1);
@@ -176,10 +176,9 @@ public abstract class GameServiceTest {
         placeFirstTile();
         placeFirstFollower();
 
-        Game g = gameService.getGameById(gameId);
+        CarcassonneGame g = gameService.getGameById("testUser2", gameId);
         Player current = g.getCurrentPlayer().get().getPlayer();
         Tile currentTile = g.getDeck().get().peekNext();
-        System.out.println(currentTile.getName());
         g = gameService.placeTile(g, current, currentTile, Rotation.R0, -1, 1);
 
         current = g.getCurrentPlayer().get().getPlayer();
@@ -187,12 +186,12 @@ public abstract class GameServiceTest {
         gameService.placeFollower(g, current, f, -1, 1, 1, 1);
     }
 
-    protected Game placeNextTile(int y, int x, Rotation r) {
-        return placeNextTile(y, x, r, true);
+    protected CarcassonneGame placeNextTile(String username, int y, int x, Rotation r) {
+        return placeNextTile(username, y, x, r, true);
     }
 
-    protected Game placeNextTile(int y, int x, Rotation r, boolean forceNoFollow) {
-        Game g = gameService.getGameById(gameId);
+    protected CarcassonneGame placeNextTile(String userName, int y, int x, Rotation r, boolean forceNoFollow) {
+        CarcassonneGame g = gameService.getGameById(userName, gameId);
         Player current = g.getCurrentPlayer().get().getPlayer();
         Tile currentTile = g.getDeck().get().peekNext();
         System.out.println("Placing Tile " + currentTile.getName() + " for palyer " + current.getName() + " at [y:" + y + ",x:" + x + "]");
@@ -204,8 +203,8 @@ public abstract class GameServiceTest {
         return g;
     }
 
-    protected Game placeNextTileWFollower(int y, int x, Rotation r, Class followerType, int dy, int dx) {
-        Game g = placeNextTile(y, x, r, false);
+    protected CarcassonneGame placeNextTileWFollower(String userName, int y, int x, Rotation r, Class followerType, int dy, int dx) {
+        CarcassonneGame g = placeNextTile(userName, y, x, r, false);
         Follower f = g.getBoard().get().notUsedFollowers(g.getCurrentPlayer().get().getPlayer().getFollowers(followerType)).get(0);
         Player current = g.getCurrentPlayer().get().getPlayer();
         System.out.println("Placing Follower " + f.getType() + " for player " + current.getName() + " at [y:" + y + ",x:" + x + "]:" + dy + ":" + dx);
@@ -217,10 +216,10 @@ public abstract class GameServiceTest {
         placeFirstTile();
         placeFirstFollower();
 
-        placeNextTileWFollower(-1, 1, Rotation.R0, BasicFollower.class, 4, 4); // 2 city2nw
-        placeNextTile(-1, -1, Rotation.R90); // 1 city2nw
-        placeNextTile(-2, 1, Rotation.R180); // 2 city1
-        Game g = placeNextTile(-2, -1, Rotation.R180); // 1 city1
+        placeNextTileWFollower("testUser2", -1, 1, Rotation.R0, BasicFollower.class, 4, 4); // 2 city2nw
+        placeNextTile("testUser1",  - 1, -1, Rotation.R90); // 1 city2nw
+        placeNextTile("testUser2", -2, 1, Rotation.R180); // 2 city1
+        CarcassonneGame g = placeNextTile("testUser1", -2, -1, Rotation.R180); // 1 city1
 
         g.getBoard().get().printAreaGrid();
 
@@ -238,18 +237,18 @@ public abstract class GameServiceTest {
         placeFirstTile();
         placeFirstFollower();
 
-        placeNextTileWFollower(-1, 1, Rotation.R0, BasicFollower.class, 4, 4); // 2 city2nw
-        placeNextTile(-1, -1, Rotation.R90); // 1 city2nw
-        placeNextTile(-2, 1, Rotation.R180); // 2 city1
-        Game g = placeNextTile(-2, -1, Rotation.R180); // 1 city1
+        placeNextTileWFollower("testUser2", -1, 1, Rotation.R0, BasicFollower.class, 4, 4); // 2 city2nw
+        placeNextTile("testUser1", -1, -1, Rotation.R90); // 1 city2nw
+        placeNextTile("testUser2", -2, 1, Rotation.R180); // 2 city1
+        placeNextTile("testUser1", -2, -1, Rotation.R180); // 1 city1
 
-        placeNextTileWFollower(-2, 0, Rotation.R0, BasicFollower.class, 2, 2); // 2 cloister
+        placeNextTileWFollower("testUser2", -2, 0, Rotation.R0, BasicFollower.class, 2, 2); // 2 cloister
 
-        placeNextTileWFollower(0, 1, Rotation.R0, BasicFollower.class, 2, 2); // 1 road
-        placeNextTile(0, -1, Rotation.R270);
-        placeNextTile(1, 1, Rotation.R90);
-        placeNextTile(1, -1, Rotation.R270);
-        g = placeNextTile(1, 0, Rotation.R90);
+        placeNextTileWFollower("testUser1", 0, 1, Rotation.R0, BasicFollower.class, 2, 2); // 1 road
+        placeNextTile("testUser2", 0, -1, Rotation.R270);
+        placeNextTile("testUser1", 1, 1, Rotation.R90);
+        placeNextTile("testUser2", 1, -1, Rotation.R270);
+        CarcassonneGame g = placeNextTile("testUser1", 1, 0, Rotation.R90);
 
         assertThat(g.getStatus(), equalTo(GameState.FINISHED));
         assertThat(g.getCurrentPlayer(), equalTo(Optional.empty()));

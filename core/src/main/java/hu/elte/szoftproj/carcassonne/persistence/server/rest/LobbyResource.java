@@ -2,7 +2,7 @@ package hu.elte.szoftproj.carcassonne.persistence.server.rest;
 
 
 import com.google.common.collect.ImmutableList;
-import hu.elte.szoftproj.carcassonne.domain.Game;
+import hu.elte.szoftproj.carcassonne.domain.CarcassonneGame;
 import hu.elte.szoftproj.carcassonne.domain.Player;
 import hu.elte.szoftproj.carcassonne.persistence.dto.lobby.*;
 import hu.elte.szoftproj.carcassonne.service.impl.LobbyServiceImplWDao;
@@ -27,7 +27,7 @@ public class LobbyResource {
         try {
             LinkedList<GameDto> retList = new LinkedList<>();
 
-            for (Game g : service.listWaitingGames()) {
+            for (CarcassonneGame g : service.listWaitingGames()) {
                 retList.push(gameToDto(g));
             }
 
@@ -44,7 +44,7 @@ public class LobbyResource {
         try {
             LinkedList<GameDto> retList = new LinkedList<>();
 
-            for (Game g : service.listActiveGames()) {
+            for (CarcassonneGame g : service.listActiveGames()) {
                 retList.push(gameToDto(g));
             }
 
@@ -114,7 +114,7 @@ public class LobbyResource {
         }
     }
 
-    public GameDto gameToDto(Game g) {
+    public GameDto gameToDto(CarcassonneGame g) {
         ImmutableList.Builder<PlayerDto> builder = new ImmutableList.Builder<>();
 
         for (Player p: g.getPlayers()) {

@@ -7,11 +7,11 @@ import hu.elte.szoftproj.carcassonne.persistence.client.impl.ClientFactoryImpl;
 import hu.elte.szoftproj.carcassonne.persistence.impl.GameDaoMemoryImpl;
 import hu.elte.szoftproj.carcassonne.persistence.server.ServerFactory;
 import hu.elte.szoftproj.carcassonne.service.DeckFactory;
+import hu.elte.szoftproj.carcassonne.service.FollowerFactory;
+import hu.elte.szoftproj.carcassonne.service.GameService;
 import hu.elte.szoftproj.carcassonne.service.LobbyService;
-import hu.elte.szoftproj.carcassonne.service.impl.DeckFactoryImpl;
-import hu.elte.szoftproj.carcassonne.service.impl.GameServiceImplWDao;
-import hu.elte.szoftproj.carcassonne.service.impl.LobbyServiceImplSwitchable;
-import hu.elte.szoftproj.carcassonne.service.impl.LobbyServiceImplWDao;
+import hu.elte.szoftproj.carcassonne.service.impl.*;
+import hu.elte.szoftproj.carcassonne.service.impl.rest.GameServiceImplRest;
 import hu.elte.szoftproj.carcassonne.service.impl.rest.LobbyServiceImplRest;
 import org.eclipse.jetty.server.Server;
 import org.springframework.context.annotation.Bean;
@@ -34,13 +34,40 @@ public class ApplicationConfig {
     }
 
     @Bean
+    public GameServiceImplRest getGameServiceImplRest() {
+        return new GameServiceImplRest();
+    }
+
+    @Bean
     public GameServiceImplWDao getGameServiceImplWDao() {
         return new GameServiceImplWDao();
     }
 
     @Bean
+    public GameServiceImplSwitchable getGameServiceImplSwitchable() {
+        return new GameServiceImplSwitchable(getGameServiceImplWDao(), getGameServiceImplRest(), false);
+    }
+
+    @Bean
+    @Primary
+    public GameService getGameService() {
+        switch (System.getProperty("server.type","desktop")) {
+            case "dedicated":
+                return getGameServiceImplWDao();
+            case "desktop":
+            default:
+                return getGameServiceImplSwitchable();
+        }
+    }
+
+    @Bean
     public GameConverter getGameConverter() {
         return new GameConverter();
+    }
+
+    @Bean
+    public FollowerFactory getFollowerFactory() {
+        return new FollowerFactoryImpl();
     }
 
     @Bean
@@ -56,7 +83,6 @@ public class ApplicationConfig {
     @Bean
     @Primary
     public LobbyService getLobbyService() {
-
         switch (System.getProperty("server.type","desktop")) {
             case "dedicated":
                 return getLobbyServiceImplWDao();

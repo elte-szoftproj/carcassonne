@@ -2,6 +2,9 @@ package hu.elte.szoftproj.carcassonne.domain;
 
 
 import com.google.common.collect.ImmutableList;
+import hu.elte.szoftproj.carcassonne.service.FollowerFactory;
+
+import java.util.List;
 
 public class Player implements Comparable<Player> {
 
@@ -32,6 +35,20 @@ public class Player implements Comparable<Player> {
         this.score = score;
         this.type = type;
         this.followers = followers;
+    }
+
+    public Player(String name, int score, PlayerType type, FollowerFactory factory, List<String> followerList) {
+        this.name = name;
+        this.score = score;
+        this.type = type;
+
+        ImmutableList.Builder<Follower> fB = new ImmutableList.Builder<>();
+
+        for(String s: followerList) {
+            fB.add(factory.createFollower(s, this));
+        }
+
+        this.followers = fB.build();
     }
 
     public Player addScore(int added) {

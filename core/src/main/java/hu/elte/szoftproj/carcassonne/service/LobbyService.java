@@ -1,18 +1,18 @@
 package hu.elte.szoftproj.carcassonne.service;
 
-import hu.elte.szoftproj.carcassonne.domain.Game;
+import hu.elte.szoftproj.carcassonne.domain.CarcassonneGame;
 
 import java.util.List;
 
 public interface LobbyService {
 
-    Game createNewGame(String initialPlayerName, String boardName);
+    CarcassonneGame createNewGame(String initialPlayerName, String boardName);
 
-    List<Game> listActiveGames();
+    List<CarcassonneGame> listActiveGames();
 
-    List<Game> listWaitingGames();
+    List<CarcassonneGame> listWaitingGames();
 
-    Game joinGame(String gameId, String player, boolean ai);
+    CarcassonneGame joinGame(String gameId, String player, boolean ai);
 
-    Game startGame(String gameId);
+    CarcassonneGame startGame(String gameId);
 }

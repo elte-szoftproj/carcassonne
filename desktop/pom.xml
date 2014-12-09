@@ -13,7 +13,7 @@
 	<name>GameMain desktop</name>
 
 	<properties>
-		<mainClass>hu.elte.szoftproj.carcassonne.java.GameMainDesktop</mainClass>
+		<mainClass>hu.elte.szoftproj.carcassonne.GameMainDesktop</mainClass>
 	</properties>
 
 	<dependencies>

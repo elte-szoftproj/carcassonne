@@ -30,4 +30,35 @@ public class StandardTiles {
     // temples
     public static final Tile stdCloister1   =  new Tile("GGGGG-GGGGG-GGTGG-GGGGG-GGGGG", "cloister");
     public static final Tile stdCloister1r  =  new Tile("GGGGG-GGGGG-GGTGG-GGRGG-GGRGG", "cloisterr");
+
+    public static Tile get(String name) {
+        // TOOD: refactor! ... this entire class
+
+        switch(name) {
+            case "city1rwe": return stdCity1rwe;
+
+            case "city4": return stdCity4;
+            case "city3": return stdCity3;
+            case "city2we": return stdCity2we;
+            case "city2nw": return stdCity2nw;
+            case "city11ne": return stdCity11ne;
+            case "city11we": return stdCity11we;
+            case "city1": return stdCity1;
+
+            case "city3r": return stdCity3r;
+            case "city2nwr": return stdCity2nwr;
+            case "city1rse": return stdCity1rse;
+            case "city1rsw": return stdCity1rsw;
+            case "city1rswe": return stdCity1rswe;
+
+            case "road4": return stdRoad4;
+            case "road3": return stdRoad3;
+            case "road2ns": return stdRoad2ns;
+            case "road2sw": return stdRoad2sw;
+
+            case "cloister": return stdCloister1;
+            case "cloisterr": return stdCloister1r;
+        }
+        throw new IllegalArgumentException("NO_SUCH_TILE");
+    }
 }

@@ -16,23 +16,23 @@ public class LobbyServiceImplWDao implements LobbyService {
     GameDao dao;
 
     @Override
-    public Game createNewGame(String initialPlayerName, String boardName) {
+    public CarcassonneGame createNewGame(String initialPlayerName, String boardName) {
         return dao.createNewGame(initialPlayerName, boardName);
     }
 
     @Override
-    public List<Game> listActiveGames() {
+    public List<CarcassonneGame> listActiveGames() {
         return dao.listActiveGames();
     }
 
     @Override
-    public List<Game> listWaitingGames() {
+    public List<CarcassonneGame> listWaitingGames() {
         return dao.listWaitingGames();
     }
 
     @Override
-    public Game joinGame(String gameId, String player, boolean ai) {
-        Game g = dao.getGameById(gameId);
+    public CarcassonneGame joinGame(String gameId, String player, boolean ai) {
+        CarcassonneGame g = dao.getGameById(gameId);
 
         if (g == null) {
             throw new IllegalArgumentException("UNKNOWN_GAME");
@@ -46,7 +46,7 @@ public class LobbyServiceImplWDao implements LobbyService {
             throw new IllegalArgumentException("ALREADY_HAS_PLAYER");
         }
 
-        return dao.updateGameInfo(new Game(
+        return dao.updateGameInfo(new CarcassonneGame(
                 g.getId(),
                 (new ImmutableList.Builder<Player>().addAll(g.getPlayers()).add(new StandardPlayer(player, ai ? PlayerType.AI : PlayerType.HUMAN))).build(),
                 g.getCurrentPlayer(),
@@ -57,8 +57,8 @@ public class LobbyServiceImplWDao implements LobbyService {
     }
 
     @Override
-    public Game startGame(String gameId) {
-        Game g = dao.getGameById(gameId);
+    public CarcassonneGame startGame(String gameId) {
+        CarcassonneGame g = dao.getGameById(gameId);
 
         if (g == null) {
             throw new IllegalArgumentException("UNKNOWN_GAME");
@@ -72,7 +72,7 @@ public class LobbyServiceImplWDao implements LobbyService {
             throw new IllegalArgumentException("TOO_FEW_PLAYERS");
         }
 
-        return dao.updateGameInfo(new Game(
+        return dao.updateGameInfo(new CarcassonneGame(
                 g.getId(),
                 g.getPlayers(),
                 Optional.of(new CurrentPlayer(g.getPlayers().get(0), GameAction.PLACE_TILE)),

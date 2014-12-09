@@ -17,8 +17,8 @@ public class GameServiceImplWDao implements GameService {
     GameDao dao;
 
     @Override
-    public Game getGameById(String gameId) {
-        Game g = dao.getGameById(gameId);
+    public CarcassonneGame getGameById(String playerName, String gameId) {
+        CarcassonneGame g = dao.getGameById(gameId);
         if (g==null) {
             throw new IllegalArgumentException("NO_SUCH_GAME");
         }
@@ -27,8 +27,8 @@ public class GameServiceImplWDao implements GameService {
     }
 
     @Override
-    public Game placeTile(Game g, Player owner, Tile t, Rotation r, int y, int x) {
-        Game realGame = dao.getGameById(g.getId());
+    public CarcassonneGame placeTile(CarcassonneGame g, Player owner, Tile t, Rotation r, int y, int x) {
+        CarcassonneGame realGame = dao.getGameById(g.getId());
 
         if (realGame.isFinished()) {
             throw new IllegalArgumentException("ALREADY_FINISHED");
@@ -85,7 +85,7 @@ public class GameServiceImplWDao implements GameService {
 
 
 
-        realGame = new Game(
+        realGame = new CarcassonneGame(
                 realGame.getId(),
                 realGame.getPlayers(),
                 Optional.of(nextPlayer),
@@ -100,9 +100,9 @@ public class GameServiceImplWDao implements GameService {
     }
 
     @Override
-    public Game placeFollower(Game g, Player owner, Follower f, int y, int x, int dy, int dx) {
+    public CarcassonneGame placeFollower(CarcassonneGame g, Player owner, Follower f, int y, int x, int dy, int dx) {
 
-        Game realGame = dao.getGameById(g.getId());
+        CarcassonneGame realGame = dao.getGameById(g.getId());
 
         if (realGame.isFinished()) {
             throw new IllegalArgumentException("ALREADY_FINISHED");
@@ -150,8 +150,8 @@ public class GameServiceImplWDao implements GameService {
     }
 
     @Override
-    public Game dontPlaceFollower(Game g, Player owner) {
-        Game realGame = dao.getGameById(g.getId());
+    public CarcassonneGame dontPlaceFollower(CarcassonneGame g, Player owner) {
+        CarcassonneGame realGame = dao.getGameById(g.getId());
 
         if (realGame.isFinished()) {
             throw new IllegalArgumentException("ALREADY_FINISHED");
@@ -203,7 +203,7 @@ public class GameServiceImplWDao implements GameService {
         }
     }
 
-    protected Game updateGameAfterFollower(Board newBoard, Game realGame) {
+    protected CarcassonneGame updateGameAfterFollower(Board newBoard, CarcassonneGame realGame) {
 
         LinkedList<Player> players = new LinkedList<>(realGame.getPlayers());
 
@@ -266,7 +266,7 @@ public class GameServiceImplWDao implements GameService {
             }
         }
 
-        realGame = new Game(
+        realGame = new CarcassonneGame(
                 realGame.getId(),
                 ImmutableList.copyOf(players),
                 finished ? Optional.empty() : Optional.of(realGame.getCurrentPlayer().get().next(realGame.getPlayers())),
