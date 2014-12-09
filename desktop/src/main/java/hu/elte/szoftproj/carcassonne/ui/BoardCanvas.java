@@ -71,7 +71,7 @@ public class BoardCanvas {
             for (Integer ix : ImmutableSortedSet.copyOf(grid.columnKeySet())) {
 
                 if (currentTile.isPresent()) {
-                    maybeDrawPossible(batch, currentTile.get(), ix, iy-1, currentRotation.get(), placement);
+                    maybeDrawPossible(batch, currentTile.get(), ix, iy - 1, currentRotation.get(), placement);
                     maybeDrawPossible(batch, currentTile.get(), ix, iy+1, currentRotation.get(), placement);
                     maybeDrawPossible(batch, currentTile.get(), ix-1, iy, currentRotation.get(), placement);
                     maybeDrawPossible(batch, currentTile.get(), ix+1, iy, currentRotation.get(), placement);
@@ -99,15 +99,24 @@ public class BoardCanvas {
     }
 
     int mapY(int ty) {
-        return (int)Math.floor(-(ty+centerY) * TILESIZE + ((bottomY-topY) / 2)-TILESIZE/2) + topY;
+        ty += centerY;
+        double centerPos = topY + ((bottomY - topY) / 2.0) + TILESIZE/2.0;
+        return (int)Math.floor( centerPos - ty*TILESIZE );
     }
 
     int unmapX(int tx) {
-        return (int) (Math.floor((tx-topX+(TILESIZE/2)- ((bottomX-topX) / 2) ) / TILESIZE)-centerX);
+        return (int) (Math.floor((tx-topX+(TILESIZE/2)- ((bottomX-topX) / 2) ))-centerX*TILESIZE);
     }
 
     int unmapY(int ty) {
-        return (int) (Math.floor((ty-topY+(TILESIZE/2) - ((bottomY-topY) / 2) ) / TILESIZE)+centerY)*-1;
+        return - (ty - mapY(0) );
+    }
+
+    public Coordinate unmapTileSpace(int x, int y) {
+        x = unmapX(x);
+        y = unmapY(y);
+
+        return new Coordinate((int)Math.ceil(y / TILESIZE), (int)Math.floor(x/TILESIZE));
     }
 
     public void cameraUp() {

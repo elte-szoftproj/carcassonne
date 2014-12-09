@@ -53,7 +53,7 @@ public class GameScreen implements Screen, GameTextureProvider, CurrentGameInter
         this.currentPlayerName = playerName;
         this.gameId = gameId;
 
-        this.boardCanvas = new BoardCanvas(100, 100, 600, 600, this, this);
+        this.boardCanvas = new BoardCanvas(100, 100, 450, 450, this, this);
         this.gameStatusCanvas = new GameStatusCanvas(0, 100, 600, 0, this);
 
         this.tileTextures = new HashMap<>();
@@ -202,7 +202,9 @@ public class GameScreen implements Screen, GameTextureProvider, CurrentGameInter
         }
 
         @Override
-        public boolean touchDown(int i, int i1, int i2, int i3) {
+        public boolean touchDown(int x, int y, int pointer, int button) {
+            System.out.println(boardCanvas.unmapTileSpace(x, Gdx.graphics.getHeight()-y) + ", " + pointer + ", " + button);
+
             return false;
         }
 
