@@ -1,6 +1,6 @@
 package hu.elte.szoftproj.carcassonne.service;
 
-import hu.elte.szoftproj.carcassonne.domain.Game;
+import hu.elte.szoftproj.carcassonne.domain.CarcassonneGame;
 import hu.elte.szoftproj.carcassonne.domain.GameState;
 import org.junit.Test;
 
@@ -16,21 +16,21 @@ public abstract class LobbyServiceTest {
 
     @Test
     public void testEmptyWaitingListSuccess() {
-        List<Game> result = serviceToTest.listWaitingGames();
+        List<CarcassonneGame> result = serviceToTest.listWaitingGames();
 
         assertThat(result.size(), equalTo(0));
     }
 
     @Test
     public void testEmptyActiveListSuccess() {
-        List<Game> result = serviceToTest.listActiveGames();
+        List<CarcassonneGame> result = serviceToTest.listActiveGames();
 
         assertThat(result.size(), equalTo(0));
     }
 
     @Test
     public void testCreateSuccess() {
-        Game g = serviceToTest.createNewGame("testPlayer", "basic");
+        CarcassonneGame g = serviceToTest.createNewGame("testPlayer", "basic");
 
         assertThat(g.getStatus(), equalTo(GameState.WAITING));
         assertThat(g.getDeck().get().getName(), equalTo("basic"));
@@ -46,8 +46,8 @@ public abstract class LobbyServiceTest {
 
     @Test
     public void testJoinSuccess() {
-        Game g = serviceToTest.createNewGame("testPlayer", "basic");
-        Game gJoin = serviceToTest.joinGame(g.getId(), "testPlayer2", false);
+        CarcassonneGame g = serviceToTest.createNewGame("testPlayer", "basic");
+        CarcassonneGame gJoin = serviceToTest.joinGame(g.getId(), "testPlayer2", false);
 
         assertThat(gJoin.getStatus(), equalTo(GameState.WAITING));
         assertThat(gJoin.getDeck().get().getName(), equalTo("basic"));
@@ -59,15 +59,15 @@ public abstract class LobbyServiceTest {
 
     @Test(expected=IllegalArgumentException.class)
     public void testJoinFailSame() {
-        Game g = serviceToTest.createNewGame("testPlayer", "basic");
+        CarcassonneGame g = serviceToTest.createNewGame("testPlayer", "basic");
         serviceToTest.joinGame(g.getId(), "testPlayer", false);
     }
 
     @Test
     public void testStartSuccess() {
-        Game g = serviceToTest.createNewGame("testPlayer", "basic");
+        CarcassonneGame g = serviceToTest.createNewGame("testPlayer", "basic");
         serviceToTest.joinGame(g.getId(), "testPlayer2", false);
-        Game gStart = serviceToTest.startGame(g.getId());
+        CarcassonneGame gStart = serviceToTest.startGame(g.getId());
 
         assertThat(gStart.getStatus(), equalTo(GameState.PLAYING));
         assertThat(gStart.getDeck().get().getName(), equalTo("basic"));
@@ -79,13 +79,13 @@ public abstract class LobbyServiceTest {
 
     @Test(expected=IllegalArgumentException.class)
     public void testStartFailWithOnePlayer() {
-        Game g = serviceToTest.createNewGame("testPlayer", "basic");
+        CarcassonneGame g = serviceToTest.createNewGame("testPlayer", "basic");
         serviceToTest.startGame(g.getId());
     }
 
     @Test(expected=IllegalArgumentException.class)
     public void testStartFailDouble() {
-        Game g = serviceToTest.createNewGame("testPlayer", "basic");
+        CarcassonneGame g = serviceToTest.createNewGame("testPlayer", "basic");
         serviceToTest.joinGame(g.getId(), "testPlayer2", false);
         serviceToTest.startGame(g.getId());
         serviceToTest.startGame(g.getId());

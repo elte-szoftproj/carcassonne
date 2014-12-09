@@ -29,12 +29,12 @@ public class GameServiceImplRest implements RemoteGameService {
     }
 
     @Override
-    public Game getGameById(String playerName, String gameId) {
+    public CarcassonneGame getGameById(String playerName, String gameId) {
         return converter.fromDto(client.getGameById(new ActionDto(gameId, playerName)));
     }
 
     @Override
-    public Game placeTile(Game g, Player owner, Tile t, Rotation r, int y, int x) {
+    public CarcassonneGame placeTile(CarcassonneGame g, Player owner, Tile t, Rotation r, int y, int x) {
         if (!t.equals(g.getDeck().get().peekNext())) {
             throw new IllegalArgumentException("NOT_CURRENT_TILE");
         }
@@ -42,7 +42,7 @@ public class GameServiceImplRest implements RemoteGameService {
     }
 
     @Override
-    public Game placeFollower(Game g, Player owner, Follower f, int y, int x, int dy, int dx) {
+    public CarcassonneGame placeFollower(CarcassonneGame g, Player owner, Follower f, int y, int x, int dy, int dx) {
         if (!f.getOwner().equals(owner)) {
             throw new IllegalArgumentException("NOT_YOUR_FOLLOWER");
         }
@@ -50,7 +50,7 @@ public class GameServiceImplRest implements RemoteGameService {
     }
 
     @Override
-    public Game dontPlaceFollower(Game g, Player owner) {
+    public CarcassonneGame dontPlaceFollower(CarcassonneGame g, Player owner) {
         return converter.fromDto(client.skipFollower(new ActionDto(g.getId(), owner.getName())));
     }
 }

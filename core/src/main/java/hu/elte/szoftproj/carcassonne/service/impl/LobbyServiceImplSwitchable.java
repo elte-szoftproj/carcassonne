@@ -1,6 +1,6 @@
 package hu.elte.szoftproj.carcassonne.service.impl;
 
-import hu.elte.szoftproj.carcassonne.domain.Game;
+import hu.elte.szoftproj.carcassonne.domain.CarcassonneGame;
 import hu.elte.szoftproj.carcassonne.service.LobbyService;
 import hu.elte.szoftproj.carcassonne.service.RemoteLobbyService;
 
@@ -26,27 +26,27 @@ public class LobbyServiceImplSwitchable implements LobbyService {
 
 
     @Override
-    public Game createNewGame(String initialPlayerName, String boardName) {
+    public CarcassonneGame createNewGame(String initialPlayerName, String boardName) {
         return getActiveService().createNewGame(initialPlayerName, boardName);
     }
 
     @Override
-    public List<Game> listActiveGames() {
+    public List<CarcassonneGame> listActiveGames() {
         return getActiveService().listActiveGames();
     }
 
     @Override
-    public List<Game> listWaitingGames() {
+    public List<CarcassonneGame> listWaitingGames() {
         return getActiveService().listWaitingGames();
     }
 
     @Override
-    public Game joinGame(String gameId, String player, boolean ai) {
+    public CarcassonneGame joinGame(String gameId, String player, boolean ai) {
         return getActiveService().joinGame(gameId, player, ai);
     }
 
     @Override
-    public Game startGame(String gameId) {
+    public CarcassonneGame startGame(String gameId) {
         return getActiveService().startGame(gameId);
     }
 

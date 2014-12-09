@@ -1,7 +1,7 @@
 package hu.elte.szoftproj.carcassonne.service.impl.rest;
 
 import com.google.common.collect.ImmutableList;
-import hu.elte.szoftproj.carcassonne.domain.Game;
+import hu.elte.szoftproj.carcassonne.domain.CarcassonneGame;
 import hu.elte.szoftproj.carcassonne.domain.Player;
 import hu.elte.szoftproj.carcassonne.persistence.client.LobbyRestClient;
 import hu.elte.szoftproj.carcassonne.persistence.dto.lobby.*;
@@ -28,7 +28,7 @@ public class LobbyServiceImplRest implements RemoteLobbyService {
     }
 
     @Override
-    public Game createNewGame(String initialPlayerName, String boardName) {
+    public CarcassonneGame createNewGame(String initialPlayerName, String boardName) {
         SingleGameDto gdto = client.createGame(new GameCreateActionDto(initialPlayerName, boardName));
 
         if (!gdto.getStatus().equals("OK")) {
@@ -39,14 +39,14 @@ public class LobbyServiceImplRest implements RemoteLobbyService {
     }
 
     @Override
-    public List<Game> listActiveGames() {
+    public List<CarcassonneGame> listActiveGames() {
         MultiGameDto mgdto = client.getActiveGameList();
 
         if (!mgdto.getStatus().equals("OK")) {
             throw new IllegalArgumentException(mgdto.getStatus());
         }
 
-        ImmutableList.Builder<Game> listBuilder = new ImmutableList.Builder<>();
+        ImmutableList.Builder<CarcassonneGame> listBuilder = new ImmutableList.Builder<>();
 
         for(GameDto gd: mgdto.getGames()) {
             listBuilder.add(convertToGameObject(gd));
@@ -56,14 +56,14 @@ public class LobbyServiceImplRest implements RemoteLobbyService {
     }
 
     @Override
-    public List<Game> listWaitingGames() {
+    public List<CarcassonneGame> listWaitingGames() {
         MultiGameDto mgdto = client.getWaitingGameList();
 
         if (!mgdto.getStatus().equals("OK")) {
             throw new IllegalArgumentException(mgdto.getStatus());
         }
 
-        ImmutableList.Builder<Game> listBuilder = new ImmutableList.Builder<>();
+        ImmutableList.Builder<CarcassonneGame> listBuilder = new ImmutableList.Builder<>();
 
         for(GameDto gd: mgdto.getGames()) {
             listBuilder.add(convertToGameObject(gd));
@@ -73,7 +73,7 @@ public class LobbyServiceImplRest implements RemoteLobbyService {
     }
 
     @Override
-    public Game joinGame(String gameId, String player, boolean ai) {
+    public CarcassonneGame joinGame(String gameId, String player, boolean ai) {
         SingleGameDto gdto = null;
         if (ai) {
             gdto = client.joinGameWithAi(new GameJoinActionDto(player, gameId));
@@ -89,7 +89,7 @@ public class LobbyServiceImplRest implements RemoteLobbyService {
     }
 
     @Override
-    public Game startGame(String gameId) {
+    public CarcassonneGame startGame(String gameId) {
         SingleGameDto gdto = client.startGame(new GameIdDto(gameId));
 
         if (!gdto.getStatus().equals("OK")) {
@@ -100,7 +100,7 @@ public class LobbyServiceImplRest implements RemoteLobbyService {
     }
 
 
-    private Game convertToGameObject(GameDto gdto) {
+    private CarcassonneGame convertToGameObject(GameDto gdto) {
 
         ImmutableList.Builder<Player> listBuilder = new ImmutableList.Builder<Player>();
 
@@ -108,7 +108,7 @@ public class LobbyServiceImplRest implements RemoteLobbyService {
             listBuilder.add(new Player(pd.getName()));
         }
 
-        Game g = new Game(
+        CarcassonneGame g = new CarcassonneGame(
                 gdto.getId(),
                 listBuilder.build(),
                 Optional.empty(),

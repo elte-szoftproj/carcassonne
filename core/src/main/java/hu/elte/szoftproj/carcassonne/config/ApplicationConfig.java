@@ -83,7 +83,6 @@ public class ApplicationConfig {
     @Bean
     @Primary
     public LobbyService getLobbyService() {
-
         switch (System.getProperty("server.type","desktop")) {
             case "dedicated":
                 return getLobbyServiceImplWDao();

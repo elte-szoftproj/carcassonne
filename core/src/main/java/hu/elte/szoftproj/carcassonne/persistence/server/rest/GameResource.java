@@ -1,7 +1,7 @@
 package hu.elte.szoftproj.carcassonne.persistence.server.rest;
 
 import hu.elte.szoftproj.carcassonne.domain.Follower;
-import hu.elte.szoftproj.carcassonne.domain.Game;
+import hu.elte.szoftproj.carcassonne.domain.CarcassonneGame;
 import hu.elte.szoftproj.carcassonne.domain.Player;
 import hu.elte.szoftproj.carcassonne.persistence.GameConverter;
 import hu.elte.szoftproj.carcassonne.persistence.dto.game.ActionDto;
@@ -47,7 +47,7 @@ public class GameResource {
     @Path("place/tile")
     public GameDetailDto placeTile(PlaceDto placing) {
         try {
-            Game g = gameService.getGameById(placing.getPlayerName(), placing.getGameId());
+            CarcassonneGame g = gameService.getGameById(placing.getPlayerName(), placing.getGameId());
             return converter.fromDao(placing.getPlayerName(), gameService.placeTile(
                     g,
                     g.getPlayerByName(placing.getPlayerName()),
@@ -69,7 +69,7 @@ public class GameResource {
     @Path("place/follower")
     public GameDetailDto placeFollower(FollowerDto placing) {
         try {
-            Game g = gameService.getGameById(placing.getPlayerName(), placing.getGameId());
+            CarcassonneGame g = gameService.getGameById(placing.getPlayerName(), placing.getGameId());
             Player p = g.getPlayerByName(placing.getPlayerName());
             Follower f = null;
             try {
@@ -99,7 +99,7 @@ public class GameResource {
     @Path("skip/follower")
     public GameDetailDto skipFollower(ActionDto placing) {
         try {
-            Game g = gameService.getGameById(placing.getPlayerName(), placing.getGameId());
+            CarcassonneGame g = gameService.getGameById(placing.getPlayerName(), placing.getGameId());
             Player p = g.getPlayerByName(placing.getPlayerName());
             return converter.fromDao(placing.getPlayerName(), gameService.dontPlaceFollower(g,
                     g.getPlayerByName(placing.getPlayerName())

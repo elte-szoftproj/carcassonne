@@ -11,7 +11,7 @@ import java.util.Optional;
 /**
  * Stores information about a game
  */
-public class Game {
+public class CarcassonneGame {
 
     private String id;
 
@@ -26,7 +26,7 @@ public class Game {
     private Optional<Deck> deck;
 
     // constructor for new games
-    public Game(String id, Optional<Deck> d, String initialPlayerName) {
+    public CarcassonneGame(String id, Optional<Deck> d, String initialPlayerName) {
         this.id = id;
         this.players = ImmutableList.of(new StandardPlayer(initialPlayerName, PlayerType.HUMAN));
         this.currentPlayer = Optional.empty();
@@ -36,7 +36,7 @@ public class Game {
     }
 
     // constructor for modifications
-    public Game(String id, ImmutableList<Player> players, Optional<CurrentPlayer> currentPlayer, Optional<Board> board, GameState status, Optional<Deck> deck) {
+    public CarcassonneGame(String id, ImmutableList<Player> players, Optional<CurrentPlayer> currentPlayer, Optional<Board> board, GameState status, Optional<Deck> deck) {
         this.id = id;
         this.players = players;
         this.currentPlayer = currentPlayer;

@@ -36,22 +36,22 @@ public class GameServiceImplSwitchable implements GameService {
 
 
     @Override
-    public Game getGameById(String playerName, String gameId) {
+    public CarcassonneGame getGameById(String playerName, String gameId) {
         return getActiveService().getGameById(playerName, gameId);
     }
 
     @Override
-    public Game placeTile(Game g, Player owner, Tile t, Rotation r, int y, int x) {
+    public CarcassonneGame placeTile(CarcassonneGame g, Player owner, Tile t, Rotation r, int y, int x) {
         return getActiveService().placeTile(g, owner, t, r, y, x);
     }
 
     @Override
-    public Game placeFollower(Game g, Player owner, Follower f, int y, int x, int dy, int dx) {
+    public CarcassonneGame placeFollower(CarcassonneGame g, Player owner, Follower f, int y, int x, int dy, int dx) {
         return getActiveService().placeFollower(g, owner, f, y, x, dy, dx);
     }
 
     @Override
-    public Game dontPlaceFollower(Game g, Player owner) {
+    public CarcassonneGame dontPlaceFollower(CarcassonneGame g, Player owner) {
         return getActiveService().dontPlaceFollower(g, owner);
     }
 }

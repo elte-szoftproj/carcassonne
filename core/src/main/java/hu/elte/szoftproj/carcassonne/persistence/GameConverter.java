@@ -18,7 +18,7 @@ public class GameConverter {
     @Autowired
     FollowerFactory followerFactory;
 
-    public Game fromDto(GameDetailDto gameDto) {
+    public CarcassonneGame fromDto(GameDetailDto gameDto) {
 
         if (!gameDto.getStatus().equals("OK")) {
             throw new IllegalArgumentException(gameDto.getStatus());
@@ -26,7 +26,7 @@ public class GameConverter {
 
         ImmutableList<Player> players = buildPlayerDao(gameDto.getPlayers());
 
-        return new Game(
+        return new CarcassonneGame(
                 gameDto.getGameId(),
                 players,
                 getPlayer(players, gameDto.getCurrentPlayerName(), gameDto.getCurrentStepType()),
@@ -95,7 +95,7 @@ public class GameConverter {
         return pBuilder.build();
     }
 
-    public GameDetailDto fromDao(String playerName, Game gameDao) {
+    public GameDetailDto fromDao(String playerName, CarcassonneGame gameDao) {
 
         boolean isCurrentPlayer = gameDao.getCurrentPlayer().isPresent() && gameDao.getCurrentPlayer().get().getPlayer().getName().equals(playerName);
 
