@@ -161,6 +161,17 @@ public class BoardCanvas {
         return - (ty - mapY(0) );
     }
 
+    public Coordinate unmapInnerSpace(int x, int y) {
+        Coordinate tileCoord = unmapTileSpace(x, y);
+
+        final int SIZE = (int)Math.floor(TILESIZE/5);
+
+        x -= mapX(tileCoord.getX());
+        y -= mapY(tileCoord.getY());
+
+        return new Coordinate(4 - (int)Math.floor(y / SIZE), (int)Math.floor(x / SIZE));
+    }
+
     public Coordinate unmapTileSpace(int x, int y) {
         x = unmapX(x);
         y = unmapY(y);

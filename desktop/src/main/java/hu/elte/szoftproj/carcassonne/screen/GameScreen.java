@@ -259,6 +259,16 @@ public class GameScreen implements Screen, GameTextureProvider, CurrentGameInter
                 }
             }
 
+            if (isCurrentPlayer() && currentGame.canPlaceFollowerNow()) {
+                Coordinate atTile = boardCanvas.unmapTileSpace(x, Gdx.graphics.getHeight() - y);
+                Coordinate atInner = boardCanvas.unmapInnerSpace(x, Gdx.graphics.getHeight() - y);
+                try {
+                    currentGame = gameService.placeFollower(currentGame, currentGame.getPlayerByName(currentPlayerName), getFollowerForType(currentFollowerSelection.get()), atTile.getY(), atTile.getX(), atInner.getY(), atInner.getX());
+                } catch (Exception e) {
+
+                }
+            }
+
             return false;
         }
 
