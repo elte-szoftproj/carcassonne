@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.ImmutableTable;
+import com.google.common.collect.Table;
 import hu.elte.szoftproj.carcassonne.domain.*;
 import hu.elte.szoftproj.carcassonne.screen.CurrentGameInterface;
 
@@ -114,9 +115,13 @@ public class BoardCanvas {
 
                 if (visible(ix, iy)) {
                     Coordinate currCoord = new Coordinate(iy, ix);
+                    for (Table.Cell<Integer,Integer,Follower> c : s.getPlacedFollowers().cellSet()) {
+                        drawFollowerPossibility(batch, iy, ix, c.getRowKey(), c.getColumnKey());
+                    }
                     if (currentGame.canPlaceFollowersNow() && board.getLastCoordinates().get().equals(currCoord)) {
                         for (int dy=0;dy<5;dy++) {
                             for (int dx=0;dx<5;dx++) {
+
                                 if (board.canPlaceFollower(iy, ix, currentGame.getFollowerForType(currentGame.getCurrentFollowerSelection().get()), dy, dx)) {
                                     drawFollowerPossibility(batch, iy, ix, dy, dx);
                                 }
