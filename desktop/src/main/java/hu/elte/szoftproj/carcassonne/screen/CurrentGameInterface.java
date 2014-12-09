@@ -1,6 +1,7 @@
 package hu.elte.szoftproj.carcassonne.screen;
 
 import hu.elte.szoftproj.carcassonne.domain.CarcassonneGame;
+import hu.elte.szoftproj.carcassonne.domain.Follower;
 import hu.elte.szoftproj.carcassonne.domain.Rotation;
 import hu.elte.szoftproj.carcassonne.domain.Tile;
 
@@ -19,4 +20,9 @@ public interface CurrentGameInterface {
     public Optional<Rotation> getCurrentTileRotation();
 
     public Optional<Tile> getCurrentTile();
+
+    public boolean canPliceFollowersNow();
+
+    public Follower getFollowerForType(String type);
 }
+

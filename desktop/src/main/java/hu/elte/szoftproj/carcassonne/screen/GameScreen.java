@@ -2,6 +2,7 @@ package hu.elte.szoftproj.carcassonne.screen;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 public class GameScreen implements Screen, GameTextureProvider, CurrentGameInterface {
 
+    static final String[] POSSIBLE_FOLLOWERS = { "basic", "big" };
 
     private Game game;
 
@@ -38,6 +40,9 @@ public class GameScreen implements Screen, GameTextureProvider, CurrentGameInter
 
     private MyInputProcessor inputProcessor;
     private Optional<String> currentFollowerSelection;
+    private Optional<Integer> currentFollowerId;
+
+
 
     @Override
     public TextureRegion getTextureFor(String name) {
@@ -63,6 +68,7 @@ public class GameScreen implements Screen, GameTextureProvider, CurrentGameInter
 
         this.currentTileRotation = Optional.empty();
         this.currentFollowerSelection = Optional.empty();
+        this.currentFollowerId = Optional.empty();
     }
 
     protected void updateLogic() {
@@ -78,8 +84,14 @@ public class GameScreen implements Screen, GameTextureProvider, CurrentGameInter
                 } else {
                     currentTileRotation = Optional.empty();
                 }
-                if (currentPlayer.getAction().equals(GameAction.PLACE_FOLLOWER) && !currentFollowerSelection.isPresent()) {
-
+                if (currentPlayer.getAction().equals(GameAction.PLACE_FOLLOWER)) {
+                    if (!currentFollowerSelection.isPresent()) {
+                        currentFollowerSelection = Optional.of("basic");
+                        currentFollowerId = Optional.of(0);
+                    }
+                } else {
+                    currentFollowerSelection = Optional.empty();
+                    currentFollowerId = Optional.empty();
                 }
             }
         }
@@ -146,6 +158,15 @@ public class GameScreen implements Screen, GameTextureProvider, CurrentGameInter
     }
 
     @Override
+    public boolean canPliceFollowersNow() {
+        return true
+                && !currentGame.isFinished()
+                && currentGame.getCurrentPlayer().get().getAction().equals(GameAction.PLACE_FOLLOWER)
+                && isCurrentPlayer()
+                ;
+    }
+
+    @Override
     public Optional<String> getCurrentFollowerSelection() {
         return currentFollowerSelection;
     }
@@ -183,6 +204,11 @@ public class GameScreen implements Screen, GameTextureProvider, CurrentGameInter
         tileTextures.clear();
     }
 
+    @Override
+    public Follower getFollowerForType(String type) {
+        return currentGame.getCurrentPlayer().get().getPlayer().getFollowersOfType(type).get(0);
+    }
+
     class MyInputProcessor implements InputProcessor {
 
         @Override
@@ -194,6 +220,18 @@ public class GameScreen implements Screen, GameTextureProvider, CurrentGameInter
                 case Input.Keys.RIGHT: boardCanvas.cameraRight(); break;
                 case Input.Keys.PAGE_UP: if (currentTileRotation.isPresent()) { currentTileRotation = Optional.of(currentTileRotation.get().prev()); } break;
                 case Input.Keys.PAGE_DOWN: if (currentTileRotation.isPresent()) { currentTileRotation = Optional.of(currentTileRotation.get().next()); } break;
+                case Input.Keys.Q: {
+                    if (currentFollowerSelection.isPresent() && !currentGame.getCurrentPlayer().get().getPlayer().getFollowersOfType("basic").isEmpty()) {
+                        currentFollowerSelection = Optional.of("basic");
+                    }
+                    break;
+                }
+                case Input.Keys.W: {
+                    if (currentFollowerSelection.isPresent() && !currentGame.getCurrentPlayer().get().getPlayer().getFollowersOfType("big").isEmpty()) {
+                        currentFollowerSelection = Optional.of("big");
+                    }
+                    break;
+                }
             }
 
             return false;

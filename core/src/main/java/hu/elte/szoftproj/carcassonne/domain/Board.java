@@ -10,6 +10,7 @@ public class Board {
     private ImmutableTable<Integer, Integer, Square> grid;
 
     private Optional<Tile> lastPlacedTile;
+    private Optional<Coordinate> lastCoordinates;
 
     /**
      * Has different keys! gridKey = areaGridKey / 5
@@ -25,15 +26,21 @@ public class Board {
     public Board(Tile tile, Rotation tileRotation) {
         grid = (new ImmutableTable.Builder<Integer, Integer, Square>()).put(0, 0, new Square(tile, tileRotation)).build();
         lastPlacedTile = Optional.empty();
+        lastCoordinates = Optional.empty();
         placementOrder = ImmutableList.of(grid.cellSet().asList().get(0));
         buildAreaGrid(grid);
     }
 
-    Board(ImmutableTable<Integer, Integer, Square> grid, ImmutableList<Table.Cell<Integer, Integer, Square>> placementOrder, Optional<Tile> lastPlacedTile) {
+    Board(ImmutableTable<Integer, Integer, Square> grid, ImmutableList<Table.Cell<Integer, Integer, Square>> placementOrder, Optional<Tile> lastPlacedTile, Optional<Coordinate> lastCoordinate) {
         this.grid = grid;
         this.lastPlacedTile = lastPlacedTile;
+        this.lastCoordinates = lastCoordinate;
         this.placementOrder = placementOrder;
         buildAreaGrid(grid);
+    }
+
+    public Optional<Coordinate> getLastCoordinates() {
+        return lastCoordinates;
     }
 
     public ImmutableList<Table.Cell<Integer, Integer, Square>> getPlacementOrder() {
@@ -133,7 +140,7 @@ public class Board {
             }
         }
 
-        return new Board(newGrid, lB.build(), Optional.of(t));
+        return new Board(newGrid, lB.build(), Optional.of(t), Optional.of(new Coordinate(y, x)));
     }
 
     public boolean canPlaceAFollower(int y, int x, ImmutableList<Follower> followers) {
@@ -193,7 +200,7 @@ public class Board {
                 builder.put(sq.getRowKey(), sq.getColumnKey(), sq.getValue());
             }
         }
-        return new Board(builder.build(), placementOrder, Optional.empty());
+        return new Board(builder.build(), placementOrder, Optional.empty(), Optional.empty());
     }
 
     public Board removeFollowersFromArea(Area a) {
@@ -209,7 +216,7 @@ public class Board {
             builder.put(sq.getRowKey(), sq.getColumnKey(), s);
         }
 
-        return new Board(builder.build(), placementOrder, Optional.<Tile>empty());
+        return new Board(builder.build(), placementOrder, Optional.<Tile>empty(), Optional.empty());
     }
 
     public ImmutableList<Follower> notUsedFollowers(ImmutableList<Follower> from) {

@@ -89,6 +89,10 @@ public class GameStatusCanvas {
             builder.append(e.getKey() + ": " + e.getValue() + "    ");
         }
 
+        if (currentGame.canPliceFollowersNow()) {
+            builder.append("    SELECTED: " + currentGame.getCurrentFollowerSelection().get());
+        }
+
         return builder.toString();
     }
 }
