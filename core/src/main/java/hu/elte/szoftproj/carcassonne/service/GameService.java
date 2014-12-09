@@ -4,7 +4,7 @@ import hu.elte.szoftproj.carcassonne.domain.*;
 
 public interface GameService {
 
-    public Game getGameById(String gameId);
+    public Game getGameById(String playerName, String gameId);
 
     public Game placeTile(Game g, Player owner, Tile t, Rotation r, int y, int x);
 

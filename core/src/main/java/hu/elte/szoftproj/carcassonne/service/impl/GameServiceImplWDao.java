@@ -17,7 +17,7 @@ public class GameServiceImplWDao implements GameService {
     GameDao dao;
 
     @Override
-    public Game getGameById(String gameId) {
+    public Game getGameById(String playerName, String gameId) {
         Game g = dao.getGameById(gameId);
         if (g==null) {
             throw new IllegalArgumentException("NO_SUCH_GAME");

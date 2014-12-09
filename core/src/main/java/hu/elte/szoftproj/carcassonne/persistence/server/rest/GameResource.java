@@ -33,7 +33,7 @@ public class GameResource {
     @Path("get")
     public GameDetailDto getGameById(ActionDto params) {
         try {
-            return converter.fromDao(params.getPlayerName(), gameService.getGameById(params.getGameId()));
+            return converter.fromDao(params.getPlayerName(), gameService.getGameById(params.getPlayerName(), params.getGameId()));
         } catch (IllegalArgumentException e) {
             return new GameDetailDto("ERROR_"+e.getMessage());
         } catch (Exception e) {
@@ -47,7 +47,7 @@ public class GameResource {
     @Path("place/tile")
     public GameDetailDto placeTile(PlaceDto placing) {
         try {
-            Game g = gameService.getGameById(placing.getGameId());
+            Game g = gameService.getGameById(placing.getPlayerName(), placing.getGameId());
             return converter.fromDao(placing.getPlayerName(), gameService.placeTile(
                     g,
                     g.getPlayerByName(placing.getPlayerName()),
@@ -69,7 +69,7 @@ public class GameResource {
     @Path("place/follower")
     public GameDetailDto placeFollower(FollowerDto placing) {
         try {
-            Game g = gameService.getGameById(placing.getGameId());
+            Game g = gameService.getGameById(placing.getPlayerName(), placing.getGameId());
             Player p = g.getPlayerByName(placing.getPlayerName());
             Follower f = null;
             try {
@@ -99,7 +99,7 @@ public class GameResource {
     @Path("skip/follower")
     public GameDetailDto skipFollower(ActionDto placing) {
         try {
-            Game g = gameService.getGameById(placing.getGameId());
+            Game g = gameService.getGameById(placing.getPlayerName(), placing.getGameId());
             Player p = g.getPlayerByName(placing.getPlayerName());
             return converter.fromDao(placing.getPlayerName(), gameService.dontPlaceFollower(g,
                     g.getPlayerByName(placing.getPlayerName())

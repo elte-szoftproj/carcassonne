@@ -1,12 +1,14 @@
 package hu.elte.szoftproj.carcassonne.persistence.dto.game;
 
+import hu.elte.szoftproj.carcassonne.domain.PlayerType;
+
 import java.util.List;
 
 public class PlayerDetailDto {
 
     private String name;
 
-    private String type;
+    private PlayerType type;
 
     private int score;
 
@@ -16,7 +18,7 @@ public class PlayerDetailDto {
 
     }
 
-    public PlayerDetailDto(String name, String type, int score, List<String> followers) {
+    public PlayerDetailDto(String name, PlayerType type, int score, List<String> followers) {
         this.name = name;
         this.type = type;
         this.score = score;
@@ -27,7 +29,7 @@ public class PlayerDetailDto {
         return name;
     }
 
-    public String getType() {
+    public PlayerType getType() {
         return type;
     }
 
