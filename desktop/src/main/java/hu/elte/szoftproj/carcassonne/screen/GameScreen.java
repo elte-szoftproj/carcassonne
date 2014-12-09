@@ -71,8 +71,12 @@ public class GameScreen implements Screen, GameTextureProvider, CurrentGameInter
         if (!currentGame.isFinished()) {
             CurrentPlayer currentPlayer = currentGame.getCurrentPlayer().get();
             if (isCurrentPlayer()) {
-                if (currentPlayer.getAction().equals(GameAction.PLACE_TILE) && !currentTileRotation.isPresent()) {
-                    currentTileRotation = Optional.of(Rotation.R0);
+                if (currentPlayer.getAction().equals(GameAction.PLACE_TILE)) {
+                    if (!currentTileRotation.isPresent()) {
+                        currentTileRotation = Optional.of(Rotation.R0);
+                    }
+                } else {
+                    currentTileRotation = Optional.empty();
                 }
                 if (currentPlayer.getAction().equals(GameAction.PLACE_FOLLOWER) && !currentFollowerSelection.isPresent()) {
 
@@ -126,7 +130,11 @@ public class GameScreen implements Screen, GameTextureProvider, CurrentGameInter
 
     @Override
     public Optional<Tile> getCurrentTile() {
-        if (currentGame.getDeck().isPresent() && isCurrentPlayer()) {
+        if (
+                currentGame.getDeck().isPresent() &&
+                        isCurrentPlayer() &&
+                        getCurrentGame().getCurrentPlayer().get().getAction().equals(GameAction.PLACE_TILE)
+        ) {
             Deck d = currentGame.getDeck().get();
 
             if (d.peekNext() != null ){
